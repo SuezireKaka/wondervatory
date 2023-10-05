@@ -181,7 +181,7 @@ create index idx_login_id on t_account(login_id);
 
 -- work --
 create table t_work(
-	id				varchar(16) primary key comment 'series, post, reply 순서',
+	id				varchar(255) primary key comment 'series, post, reply 순서',
 	writer_id		char(4),
 	h_level			tinyint,
 	content			text(10000),
