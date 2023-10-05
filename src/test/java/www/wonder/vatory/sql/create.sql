@@ -62,13 +62,16 @@ FROM T_I2 a, T_I2 b
 ;
 
 
-
+create table T_IDSEED(
+   SEQ integer primary key,
+   SEED char(4)
+);
 	
 -- 문자랑 순번을  T_ID_SEED테이블에 집어넣기	
 insert into T_IDSEED(SEED, SEQ)
 	SELECT tid.id iid, @ROWNUM:=@ROWNUM+1 AS rowNum
 	FROM T_I4 as tid, (SELECT @ROWNUM:=0) AS R
-	order by iid asc;	
+	order by iid asc;
 
 	
 
@@ -76,7 +79,8 @@ CREATE TABLE t_sequence (
 	NAME VARCHAR(255) PRIMARY KEY,
 	NUM INT NOT NULL DEFAULT 0
 );
-INSERT INTO t_sequence (NAME) VALUES ('S_bulitine_board');
+
+--INSERT INTO t_sequence (NAME) VALUES ('S_bulitine_board');--
 
 DELIMITER $$
 CREATE OR REPLACE FUNCTION NEXT_PK(t_NAME VARCHAR(255)) RETURNS char(4)
