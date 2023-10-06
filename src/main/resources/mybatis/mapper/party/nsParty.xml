@@ -14,7 +14,6 @@
 			resultMap="rmContactPointVO">
 		</collection>
 		
-		<!--  인가(Authorization) 처리를 위한 것임. -->
 		<collection property="accountList" columnPrefix="acc_"
 			resultMap="rmAccountVO">
 		</collection>
@@ -50,6 +49,26 @@
 			resultMap="www.wonder.vatory.party.mapper" />
 		<association property="response" columnPrefix="rsp_" notNullColumn="id"
 			resultMap="www.wonder.vatory.party.mapper" />
+			
+		<!--  인가(Authorization) 처리를 위한 것임. -->
+		<collection property="roleList" columnPrefix="role_"
+			resultMap="rmRoleVO">
+		</collection>
+	</resultMap>
+	
+	<resultMap id="rmRoleVO"
+		type="www.wonder.vatory.party.model.RoleVO">
+		<id property="role" column="role" />
+		<result property="manual" column="manual" />
+		<collection property="allowedActsList" columnPrefix="allow_"
+			resultMap="rmActVO">
+		</collection>
+	</resultMap>
+	
+	<resultMap id="rmActVO"
+		type="www.wonder.vatory.party.model.ActVO">
+		<id property="action" column="action" />
+		<result property="manual" column="manual" />
 	</resultMap>
 
 	<!-- 	public List<PersonVO> listAllMember(String ownerId); -->
