@@ -5,7 +5,7 @@
 
 <mapper namespace="www.wonder.vatory.framework.mapper.CodeMapper">
 	<resultMap id="rmCodeVO" type="www.wonder.vatory.framework.model.CodeVO">
-		<result property="codeType" column="code_type" />
+		<result property="codeType" column="Code_type" />
 		<result property="codeVal" column="code_val" />
 		<result property="validationRe" column="validation_re" />
 	</resultMap>

@@ -14,9 +14,9 @@ import www.wonder.vatory.iis.repository.TagRepository;
 
 @Service
 public class TagService {
-	@Autowired
+	@Autowired(required = false)
 	private TagRepository tagRepository;
-	@Autowired
+	@Autowired(required = false)
 	private TagRelRepository tagRelRepository;
 
 	public List<TagVO> getAll() {
