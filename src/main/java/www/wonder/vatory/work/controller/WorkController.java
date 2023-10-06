@@ -1,18 +1,16 @@
-package www.wonder.vatory.party.controller;
+package www.wonder.vatory.work.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import www.wonder.vatory.party.service.PartyService;
-
-
+import www.wonder.vatory.tool.service.ToolService;
 
 @RestController	
 @CrossOrigin
 @RequestMapping("/party")
-public class PartyController {
+public class WorkController {
 	@Autowired
-	private PartyService partyService;
+	private ToolService toolService;
 }
