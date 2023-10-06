@@ -10,8 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class PostVO extends ReplyVO {
-	String title;
-	boolean isComplete;
-	boolean isFree;
+public class PostVO extends SemiPostVO {
+	private boolean isFree;
 }

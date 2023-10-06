@@ -54,9 +54,11 @@
 
 	<!-- 	public List<PersonVO> listAllMember(String ownerId); -->
 	<select id="listAllMember" resultMap="rmPartyVO">
-		SELECT mem.*, cp.cp_type cp_cp_type, cp.cp_val cp_cp_val
-		  FROM T_Accountability role, T_party mem
-				LEFT OUTER JOIN T_contact_Point cp
+		SELECT acc.*
+		  FROM T_Account acc, T_party owner
+		  LEFT OUTER JOIN T_party cp
+		    on mem.id = cp.owner_id
+		  LEFT OUTER JOIN T_contact_Point cp
 		    on mem.id = cp.owner_id
 		 where role.owner_id = #{ownerId}
 		   and role.alive = true

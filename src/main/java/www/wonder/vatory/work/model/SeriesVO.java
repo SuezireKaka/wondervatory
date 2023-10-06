@@ -12,9 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class SeriesVO extends ReplyVO  {
-	String title;
-	boolean isComplete;
-	
-	List<PostVO> postsList;
+public class SeriesVO extends SemiPostVO  {
+	private String seriesState;
+	private List<PostVO> postsList;
 }
