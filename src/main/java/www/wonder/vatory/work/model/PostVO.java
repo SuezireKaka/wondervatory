@@ -12,7 +12,6 @@ import lombok.Setter;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PostVO extends ReplyVO {
 	String title;
-	int readCount;
 	boolean isComplete;
 	boolean isFree;
 }

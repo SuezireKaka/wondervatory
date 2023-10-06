@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import www.wonder.vatory.framework.model.TimeEntity;
+import www.wonder.vatory.framework.model.Entity;
 
 @Getter
 @Setter
@@ -18,14 +18,9 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class PartyVO extends TimeEntity {
-	private String accountType;
-	private String ownerId;	//주인으로서
-	private String responsId;	//대상으로서
-	private boolean alive;
-	
+public class PartyVO extends Entity {	
 	String name;
-	Date BirthDate; // 회사의 경우 설립일
+	Date birthDate; // 회사의 경우 설립일
 	List<ContactPointVO> contactPointList;
 	List<AccountVO> accountList;
 	

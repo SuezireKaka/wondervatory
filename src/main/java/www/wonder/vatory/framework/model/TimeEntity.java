@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public abstract class TimeEntity extends Entity {
 	private Date regDt;
-	private Date updDt;
+	private Date uptDt;
 
 	public TimeEntity(String id) {
 		super(id);
@@ -29,6 +29,6 @@ public abstract class TimeEntity extends Entity {
 	
 	@Override
 	public String toString() {
-		return super.toString() + ", regDt=" + regDt + ", uptDt=" + updDt;
+		return super.toString() + ", regDt=" + regDt + ", uptDt=" + uptDt;
 	}
 }

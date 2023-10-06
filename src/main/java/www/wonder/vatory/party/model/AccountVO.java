@@ -22,11 +22,10 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @AllArgsConstructor
 @JsonIgnoreProperties(value={"passWord"}, allowSetters=true) //pswd는 화면에 노출하는 대상이 아님! 보안!
 public class AccountVO extends TimeEntity implements UserDetails {
-	private OrganizationVO owner;	//주인으로서
-	private PersonVO response;	//대상으로서
-	private boolean alive;
 	private String loginId;
 	private String passWord;
+	private OrganizationVO owner;	//주인으로서
+	private PersonVO response;	//대상으로서
 	private String nick; // 화면에 표시되는 필명 - 중복검사할거임!
 	private String introduction;
 	private boolean isAlive;

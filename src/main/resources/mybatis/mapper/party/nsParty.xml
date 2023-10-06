@@ -3,20 +3,20 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="www.dream.bbs.party.mapper.PartyMapper">
-	<resultMap id="rmPartyVO" extends="nsEntity.rmMasterEntity"
-		type="www.dream.bbs.party.model.PartyVO">
+<mapper namespace="www.wonder.vatory.party.mapper.PartyMapper">
+	<resultMap id="rmPartyVO" extends="nsEntity.rmEntity"
+		type="www.wonder.vatory.party.model.PartyVO">
 		<result property="name" column="name" />
-		<result property="nick" column="nick" />
-		<result property="pwd" column="pwd" />
+		<result property="birthDate" column="birth" />
+		
 		<!-- 1:N query. 성능 향상 -->
-		<collection property="listContactPoint" columnPrefix="cp_"
+		<collection property="contactPointList" columnPrefix="cp_"
 			resultMap="rmContactPointVO">
 		</collection>
 		
 		<!--  인가(Authorization) 처리를 위한 것임. -->
-		<collection property="listAccountability" columnPrefix="role_"
-			resultMap="rmAccountabilityVO">
+		<collection property="accountList" columnPrefix="acc_"
+			resultMap="rmAccountVO">
 		</collection>
 		
 		<discriminator javaType="String" column="descrim">
@@ -26,25 +26,30 @@
 	</resultMap>
 
 	<resultMap id="rmPersonVO" extends="rmPartyVO"
-		type="www.dream.bbs.party.model.PersonVO" >
+		type="www.wonder.vatory.party.model.PersonVO" >
 		<result property="sex" column="sex" />
 	</resultMap>
 	
 	<resultMap id="rmOrganizationVO" extends="rmPartyVO"
-		type="www.dream.bbs.party.model.OrganizationVO" />
+		type="www.wonder.vatory.party.model.OrganizationVO" />
 
 	<resultMap id="rmContactPointVO"
-		type="www.dream.bbs.party.model.ContactPointVO">
+		type="www.wonder.vatory.party.model.ContactPointVO">
 		<id property="cpType" column="cp_type" />
 		<result property="cpVal" column="cp_val" />
 	</resultMap>
 	
-	<resultMap id="rmAccountabilityVO" extends="nsEntity.rmMasterEntity"
-		type="www.dream.bbs.party.model.AccountabilityVO">
-		<result property="accountType" column="account_type" />
-		<result property="ownerId" column="owner_id" />
-		<result property="responsId" column="respons_id" />
-		<result property="alive" column="alive" />
+	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
+		type=" www.wonder.vatory.party.model.AccountVO">
+		<result property="loginId" column="login_id" />
+		<result property="passWord" column="pass_word" />
+		<result property="nick" column="nick" />
+		<result property="introduction" column="intro" />
+		<result property="isAlive" column="alive" />
+		<association property="owner" columnPrefix="own_" notNullColumn="id"
+			resultMap="www.wonder.vatory.party.mapper" />
+		<association property="response" columnPrefix="rsp_" notNullColumn="id"
+			resultMap="www.wonder.vatory.party.mapper" />
 	</resultMap>
 
 	<!-- 	public List<PersonVO> listAllMember(String ownerId); -->
@@ -54,11 +59,10 @@
 				LEFT OUTER JOIN T_contact_Point cp
 		    on mem.id = cp.owner_id
 		 where role.owner_id = #{ownerId}
-		   and role.account_type = 'member'
 		   and role.alive = true
 		   and role.respons_id = mem.id
 	</select>
-	<!-- public PartyVO findByNick(String nick); -->
+	<!-- public AccountVO findByNick(String nick); -->
 	<select id="findByNick" resultMap="rmPartyVO">
 		SELECT p.*, 
 			role.id role_id, role.account_type role_account_type, role.owner_id role_owner_id, 
