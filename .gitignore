@@ -31,4 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-*.properties
+
+## 추가한것
+.properties
