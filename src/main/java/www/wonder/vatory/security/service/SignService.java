@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.framework.CommonResponse;
 import www.wonder.vatory.framework.exception.BusinessException;
 import www.wonder.vatory.framework.exception.ErrorCode;
+import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.PartyVO;
 import www.wonder.vatory.security.config.JwtTokenProvider;
 import www.wonder.vatory.security.dto.SignInDTO;
@@ -21,7 +22,7 @@ import www.wonder.vatory.security.dto.SignUpResultDto;
 @Service
 public class SignService {
 	private final Logger LOGGER = LoggerFactory.getLogger(SignService.class);
-/*복사 주석처리
+	/* 복사 주석처리
 	private PartyMapper partyMapper;
 	public JwtTokenProvider jwtTokenProvider;
 	public PasswordEncoder passwordEncoder;
@@ -35,6 +36,7 @@ public class SignService {
 	}
 
 	/** 로그인 처리 
+
 	public SignInResultDto signIn(SignInDTO signInDTO) {
 		LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
 		PartyVO user = partyMapper.findByNick(signInDTO.getId());
@@ -80,5 +82,5 @@ public class SignService {
 		result.setCode(CommonResponse.FAIL.getCode());
 		result.setMsg(CommonResponse.FAIL.getMsg());
 	}
-	*/
+*/
 }
