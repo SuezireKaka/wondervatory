@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ## 추가한것
-.properties
+/src/main/resources/application.properties
