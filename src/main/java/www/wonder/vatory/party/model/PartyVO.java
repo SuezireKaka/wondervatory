@@ -19,11 +19,6 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PartyVO extends TimeEntity {
-	private String accountType;
-	private String ownerId;	//주인으로서
-	private String responsId;	//대상으로서
-	private boolean alive;
-	
 	String name;
 	Date BirthDate; // 회사의 경우 설립일
 	List<ContactPointVO> contactPointList;
