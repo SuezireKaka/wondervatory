@@ -9,7 +9,7 @@ import www.wonder.vatory.tool.service.ToolService;
 
 @RestController	
 @CrossOrigin
-@RequestMapping("/work")
+@RequestMapping("/party")
 public class WorkController {
 	@Autowired
 	private ToolService toolService;
