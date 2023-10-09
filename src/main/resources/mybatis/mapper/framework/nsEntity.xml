@@ -19,7 +19,7 @@
 	</resultMap>
 	
 	<resultMap id="rmSpaceEntity" extends="rmEntity"
-		type="www.dream.bbs.framework.model.SpaceEntity">
+		type="www.wonder.vatory.framework.model.SpaceEntity">
 		<result property="xPos" column="x_pos" />
 		<result property="yPos" column="y_pos" />
 		<result property="xSize" column="x_size" />

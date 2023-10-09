@@ -39,7 +39,7 @@
 	</resultMap>
 	
 	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
-		type=" www.wonder.vatory.party.model.AccountVO">
+		type="www.wonder.vatory.party.model.AccountVO">
 		<result property="loginId" column="login_id" />
 		<result property="passWord" column="pass_word" />
 		<result property="nick" column="nick" />

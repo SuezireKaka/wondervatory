@@ -11,7 +11,7 @@ import www.wonder.vatory.framework.model.CodeVO;
 
 @Service
 public class CodeService {
-	@Autowired(required = false)
+	@Autowired
 	private CodeMapper codeMapper;
 
 	public List<CodeVO> listAll() {
