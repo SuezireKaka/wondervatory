@@ -19,7 +19,7 @@ import www.wonder.vatory.work.service.WorkService;
 
 @RestController	
 @CrossOrigin
-@RequestMapping("/work")
+@RequestMapping("/party")
 public class WorkController {
 	@Autowired
 	private WorkService workService;
