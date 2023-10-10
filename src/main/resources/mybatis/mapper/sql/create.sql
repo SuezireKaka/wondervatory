@@ -254,11 +254,13 @@ values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free, showcase_name)
 	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1, "쇼케이스");
 
+insert into t_party(id, descrim, name, birth)
+	values("0000", "Organization", "회사11", "800110");
 insert into t_party(id, descrim, name, birth, sex)
 	values("0001", "Person", "홍길동", "900110", "남성");
 
 insert into t_account(id, login_id, pass_word, owner_id, response_id, nick, intro, alive)
-	values("0001","aaaa","aaaa","0001","0000","홍", "abc","1" );
+	values("0001","aaaa","aaaa","0000","0001","홍", "abc","1" );
 
 
 	select SQL_CALC_FOUND_ROWS w.*, p.id p_id, p.descrim p_descrim, p.name w_name, p.birth p_birth, p.sex p_sex, a.id a_id, a.login_id a_login_id, a.response_id a_response_id, a.nick a_nick, a.intro a_intro, a.alive a_alive, a.reg_dt a_reg_dt, a.upt_dt a_upt_dt

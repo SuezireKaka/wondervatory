@@ -14,7 +14,11 @@
 		<result property="dislikeCount" column="dis_cnt" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
-
+<discriminator javaType="String" column="descrim">
+         <case value="Series" resultMap="rmSeriesVO" />
+         <case value="Post" resultMap="rmPostVO" />
+ 
+      </discriminator>
 	</resultMap>
 <!-- extends : 확장하기 = 상속 -->
 	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
