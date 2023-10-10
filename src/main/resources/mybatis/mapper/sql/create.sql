@@ -261,6 +261,24 @@ insert into t_party(id, descrim, name, birth, sex)
 insert into t_account(id, login_id, pass_word, owner_id, response_id, nick, intro, alive)
 	values("0001","aaaa","aaaa","0000","0001","홍", "abc","1" );
 
+insert into t_tool(id, x_tool_size, y_tool_size, name, parent_id, parent_type)
+	values("0000", 1024, 768, "처음툴", "0000", "Series");
+
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id)
+	values("0000", "Entity", 0, 0, 100, 200, "Restful City",
+				"#123456", "#fedcba", "0000");
+
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id)
+	values("0001", "Entity", 300, 0, 100, 200, "Java City",
+				"#123456", "#fedcba", "0000");
+
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id, one_id, other_id)
+	values("0002", "Relation", 300, 300, 50, 50, "Java City",
+				"#000000", "#aa7700", "0000", "0000", "0001");
+
 
 	select SQL_CALC_FOUND_ROWS w.*, p.id p_id, p.descrim p_descrim, p.name w_name, p.birth p_birth, p.sex p_sex, a.id a_id, a.login_id a_login_id, a.response_id a_response_id, a.nick a_nick, a.intro a_intro, a.alive a_alive, a.reg_dt a_reg_dt, a.upt_dt a_upt_dt
 	  from T_work w LEFT OUTER JOIN t_party p

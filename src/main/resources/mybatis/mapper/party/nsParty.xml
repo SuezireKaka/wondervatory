@@ -8,12 +8,10 @@
 		type="www.wonder.vatory.party.model.PartyVO">
 		<result property="name" column="name" />
 		<result property="birthDate" column="birth" />
-		
 		<!-- 1:N query. 성능 향상 -->
 		<collection property="contactPointList" columnPrefix="cp_"
 			resultMap="rmContactPointVO">
 		</collection>
-		
 	</resultMap>
 
 	<resultMap id="rmPersonVO" extends="rmPartyVO"

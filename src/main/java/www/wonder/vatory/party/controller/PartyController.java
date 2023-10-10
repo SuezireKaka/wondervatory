@@ -26,9 +26,9 @@ public class PartyController {
 	private PartyService partyService;
 	
 	// /party/anonymous/listAllAccount/0000/1
-		@GetMapping("/anonymous/listAllAccount/{ownerId}/{page}")
-		public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(@PathVariable String ownerId, @PathVariable int page) {
-			DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		}
+	@GetMapping("/anonymous/listAllAccount/{ownerId}/{page}")
+	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(@PathVariable String ownerId, @PathVariable int page) {
+		DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }
