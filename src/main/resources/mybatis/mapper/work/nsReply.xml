@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.work.mapper.WorkMapper">
+	<!-- resultMap : PROJECTION 결과를 객체 속성에 바인딩 -->
+	<resultMap id="rmReplyVO" extends="nsEntity.rmTimeEntity"
+		type="www.wonder.vatory.work.model.ReplyVO">
+		<result property="content" column="content" />
+		<result property="hTier" column="h_tier" />
+		<result property="readCount" column="read_cnt" />
+		<result property="likeCount" column="like_cnt" />
+		<result property="dislikeCount" column="dis_cnt" />
+		<association property="boardVO" columnPrefix="bb_"
+				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
+
+	</resultMap>
+<!-- extends : 확장하기 = 상속 -->
+	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
+		type="www.wonder.vatory.work.model.SemiPostVO">
+		<result property="title" column="title" />
+		<result property="isComplete" column="complete" />
+	</resultMap>
+	
+	<resultMap id="rmPostVO" extends="rmSemiPostVO"
+		type="www.wonder.vatory.work.model.PostVO">
+		<result property="isFree" column="free" />
+	</resultMap>
+	
+	<resultMap id="rmSeriesVO" extends="rmSemiPostVO"
+		type="www.wonder.vatory.work.model.SeriesVO">
+		<result property="seriesState" column="series_status" />
+
+	</resultMap>
+
+	<!-- public long getFoundRows(); -->
+	<select id="getFoundRows" resultType="long">
+		SELECT FOUND_ROWS()
+	</select>
+	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllPost(@PathVariable String boardId, @PathVariable int page); -->
+	<select id="listAllPost" resultMap="rmReplyVO">
+	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip
+	  from T_work w LEFT OUTER JOIN t_bb b
+	       ON w.bb_id = b.id
+	where w.bb_id = #{boardId}
+	 order by w.id DESC
+	 limit #{paging.limit} offset #{paging.offset}
+	 <!--  limit #{paging.limit} offset #{paging.offset} -->
+	</select>
+	
+</mapper>
