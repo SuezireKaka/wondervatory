@@ -194,7 +194,6 @@ create table t_work(
 	complete		tinyint,
 	series_status	varchar(16),
 	free			tinyint,
-	showcase_name	varchar(255),
 	reg_dt			timestamp default current_timestamp(),
 	upt_dt			timestamp default current_timestamp() on update current_timestamp()
 );
@@ -251,8 +250,8 @@ insert into T_bb(id, name, descrip)
 values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
 
 
-insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free, showcase_name)
-	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1, "쇼케이스");
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 
 insert into t_party(id, descrim, name, birth)
 	values("0000", "Organization", "회사11", "800110");

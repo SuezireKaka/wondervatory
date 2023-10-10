@@ -14,10 +14,6 @@
 			resultMap="rmContactPointVO">
 		</collection>
 		
-		<collection property="accountList" columnPrefix="acc_"
-			resultMap="rmAccountVO">
-		</collection>
-		
 		<discriminator javaType="String" column="descrim">
 			<case value="Person" resultMap="rmPersonVO" />
 			<case value="Organization" resultMap="rmOrganizationVO" />
@@ -27,6 +23,10 @@
 	<resultMap id="rmPersonVO" extends="rmPartyVO"
 		type="www.wonder.vatory.party.model.PersonVO" >
 		<result property="sex" column="sex" />
+
+		<collection property="accountList" columnPrefix="acc_"
+			resultMap="rmAccountVO">
+		</collection>
 	</resultMap>
 	
 	<resultMap id="rmOrganizationVO" extends="rmPartyVO"
@@ -46,10 +46,9 @@
 		<result property="introduction" column="intro" />
 		<result property="isAlive" column="alive" />
 		<association property="owner" columnPrefix="own_" notNullColumn="id"
-			resultMap="www.wonder.vatory.party.mapper" />
+			resultMap="rmOrganizationVO" />
 		<association property="response" columnPrefix="rsp_" notNullColumn="id"
-			resultMap="www.wonder.vatory.party.mapper" />
-			
+			resultMap="rmPersonVO" />
 		<!--  인가(Authorization) 처리를 위한 것임. -->
 		<collection property="roleList" columnPrefix="role_"
 			resultMap="rmRoleVO">
@@ -70,18 +69,26 @@
 		<id property="action" column="action" />
 		<result property="manual" column="manual" />
 	</resultMap>
+	
+	<!-- public long getFoundRows(); -->
+	<select id="getFoundRows" resultType="long">
+		SELECT FOUND_ROWS()
+	</select>
 
-	<!-- 	public List<PersonVO> listAllMember(String ownerId); -->
-	<select id="listAllMember" resultMap="rmPartyVO">
-		SELECT acc.*
-		  FROM T_Account acc, T_party owner
-		  LEFT OUTER JOIN T_party cp
-		    on mem.id = cp.owner_id
+	<!-- 	public List<AccountVO> listAllAccount(String ownerId, PagingDTO paging); -->
+	<select id="listAllAccount" resultMap="rmPartyVO">
+		SELECT SQL_CALC_FOUND_ROWS acc.*,
+			owner.id own_id, owner.name own_name,
+			mem.id rsp_id, mem.name rsp_name
+		  FROM T_Account acc
+		  LEFT OUTER JOIN T_party owner
+		    on owner.id = acc.owner_id
+		  LEFT OUTER JOIN T_party mem
+		    on mem.id = acc.response_id
 		  LEFT OUTER JOIN T_contact_Point cp
 		    on mem.id = cp.owner_id
-		 where role.owner_id = #{ownerId}
-		   and role.alive = true
-		   and role.respons_id = mem.id
+		 where acc.owner_id = #{ownerId}
+		   AND acc.alive = 1;
 	</select>
 	<!-- public AccountVO findByNick(String nick); -->
 	<select id="findByNick" resultMap="rmPartyVO">

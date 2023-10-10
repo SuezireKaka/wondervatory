@@ -16,12 +16,12 @@ public class WorkService {
 	private WorkMapper workMapper;
 
 	/** 게시판의 모든 원글 목록 조회 */ 
-	public DreamPair<List<ReplyVO>, PagingDTO> listAllPost(String boardId, int page) {
+	public DreamPair<List<ReplyVO>, PagingDTO> listAllSeries(String boardId, int page) {
 		PagingDTO paging = new PagingDTO(page);
-		List<ReplyVO> listResult = workMapper.listAllPost(boardId, paging);
+		List<ReplyVO> listResult = workMapper.listAllSeries(boardId, paging);
 		long dataCount = workMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 
-		return new DreamPair(listResult, paging);
+		return new DreamPair<List<ReplyVO>, PagingDTO>(listResult, paging);
 	}
 }

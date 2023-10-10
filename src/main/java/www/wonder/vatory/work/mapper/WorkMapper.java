@@ -11,5 +11,5 @@ import www.wonder.vatory.work.model.ReplyVO;
 @Mapper
 public interface WorkMapper {
 	public long getFoundRows();
-	public List<ReplyVO> listAllPost(@Param("boardId") String boardId, @Param("paging") PagingDTO paging);
+	public List<ReplyVO> listAllSeries(@Param("boardId") String boardId, @Param("paging") PagingDTO paging);
 }
