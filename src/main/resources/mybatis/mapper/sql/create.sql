@@ -184,6 +184,7 @@ create table t_work(
 	id				varchar(255) primary key comment 'series, post, reply 순서',
 	writer_id		char(4),
 	bb_id			char(4),
+	descrim			varchar(16),
 	h_level			tinyint,
 	title			varchar(255),
 	content			text(10000),
@@ -246,10 +247,12 @@ insert into T_bb(id, name, descrip)
 values(NEXT_PK('S_bb'), 'Q&A', '질문게시판');
 insert into T_bb(id, name, descrip)
 values(NEXT_PK('S_bb'), '쇼케이스', '쇼케이스');
+insert into T_bb(id, name, descrip)
+values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
 
 
-insert into t_work(id, writer_id, bb_id, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free, showcase_name)
-	values("0000", "0001", "0001", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1, "쇼케이스");
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free, showcase_name)
+	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1, "쇼케이스");
 
 insert into t_party(id, descrim, name, birth, sex)
 	values("0001", "Person", "홍길동", "900110", "남성");
@@ -265,7 +268,7 @@ insert into t_account(id, login_id, pass_word, owner_id, response_id, nick, intr
 	      on p.id = a.owner_id
 	where w.bb_id = "0001"
 	 order by w.id DESC
-	 limit 1 offset 0
+	 limit 1 offset 0;
 
 
 
