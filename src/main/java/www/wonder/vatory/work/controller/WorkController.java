@@ -30,12 +30,22 @@ public class WorkController {
 		DreamPair<List<ReplyVO>, PagingDTO> result = workService.listAllPost(boardId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
-	/*
-	// /post/anonymous/listAll/000n
-	@GetMapping("/anonymous/listAll/{boardId}/{page}")
-	public ResponseEntity<DreamPair<List<PostVO>, PagingDTO>> listAllPost(@PathVariable String boardId, @PathVariable int page) {
-		DreamPair<List<PostVO>, PagingDTO> result = workService.listAllPost(boardId, page);
+	// /work/anonymous/listAll/0001/0001/1
+	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
+	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId, @PathVariable String search, @PathVariable int page) {
+		DreamPair<List<ReplyVO>, PagingDTO> result = workService.search(boardId, search, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}*/
+	}
+	
+	/** 원글 상세. 첨부파일 목록, 댓글, 대댓 목록이 내부 변수에 채워짐 */
+	// /post/anonymous/getPost/p001
+	@GetMapping("/anonymous/getPost/{id}")
+	public ResponseEntity<ReplyVO> findById(@PathVariable String id) {
+		ReplyVO post = workService.findById(id);
+		if (post == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			
+		return new ResponseEntity<>(post, HttpStatus.OK);
+	}
+	
 }

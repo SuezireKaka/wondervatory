@@ -23,7 +23,7 @@ public class ReplyVO extends TimeEntity {
 	private AccountVO writer;	//게시물 작성자
 	private int hTier;
 	private String content;	//내용, series에서는 줄거리
-	int readCount;
+	private int readCount;
 	private int likeCount; //series는 post 총합
 	private int dislikeCount; //series는 post 총합
 	// compose pattern
@@ -42,4 +42,10 @@ public class ReplyVO extends TimeEntity {
 	public void appendReply(ReplyVO reply) {
 		repliesList.add(reply);
 	}
+	
+	public void incReadCount() {
+		readCount++;
+	}
+	
+
 }

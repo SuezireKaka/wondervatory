@@ -14,11 +14,7 @@
 		<result property="dislikeCount" column="dis_cnt" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
-<discriminator javaType="String" column="descrim">
-         <case value="Series" resultMap="rmSeriesVO" />
-         <case value="Post" resultMap="rmPostVO" />
- 
-      </discriminator>
+
 	</resultMap>
 <!-- extends : 확장하기 = 상속 -->
 	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
@@ -52,5 +48,21 @@
 	 limit #{paging.limit} offset #{paging.offset}
 	 <!--  limit #{paging.limit} offset #{paging.offset} -->
 	</select>
+	
+	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
+			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
+	
+	
+	<!-- public ResponseEntity<ReplyVO> findById(@PathVariable String id) -->
+	<select id="findById" resultMap="rmReplyVO">
+	select r.*, 
+		w.id w_id, w.descrim w_descrim, w.name w_name, w.nick w_nick, w.sex w_sex,
+		 w.reg_dt w_reg_dt, w.upt_dt w_upt_dt
+	  from T_reply r LEFT OUTER JOIN T_party w
+	       ON r.writer_id = w.id
+	 where r.id like CONCAT(#{id}, '%');
+	</select>
+	
+	
 	
 </mapper>

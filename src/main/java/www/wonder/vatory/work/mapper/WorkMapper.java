@@ -12,4 +12,10 @@ import www.wonder.vatory.work.model.ReplyVO;
 public interface WorkMapper {
 	public long getFoundRows();
 	public List<ReplyVO> listAllPost(@Param("boardId") String boardId, @Param("paging") PagingDTO paging);
+	
+	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
+			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);
+	
+	public List<ReplyVO> findById(String id);
+	public void incReadCount(String id);
 }
