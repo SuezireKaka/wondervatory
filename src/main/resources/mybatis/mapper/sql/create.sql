@@ -253,6 +253,8 @@ values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
 	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 
+
+
 insert into t_party(id, descrim, name, birth)
 	values("0000", "Organization", "회사11", "800110");
 insert into t_party(id, descrim, name, birth, sex)
@@ -273,6 +275,28 @@ insert into t_account(id, login_id, pass_word, owner_id, response_id, nick, intr
 
 
 
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000000", "0001", "0001", "Post", 0, "하위글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 
 
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000001", "0001", "0001", "Post", 0, "하위글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 
+
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0001", "0001", "0001", "Post", 0, "상위글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
+	
+	
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("000000010000", "0001", "0001", "Post", 0, "댓글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0000000100000000", "0001", "0001", "Post", 0, "대댓글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
+	
+	
+insert into T_TAG(id, word)
+	values("0000", "타이틀");
+
+insert into T_TGT_TAG(tgt_name, tgt_id, tag_id, tf)
+	values("T_work", "0000", "0000", 1);
+
+	

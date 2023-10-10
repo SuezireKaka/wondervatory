@@ -41,9 +41,9 @@
 		<result property="nick" column="nick" />
 		<result property="introduction" column="intro" />
 		<result property="isAlive" column="alive" />
-		<association property="owner" columnPrefix="own_" notNullColumn="id"
+		<association property="owner" columnPrefix="own_"
 			resultMap="rmOrganizationVO" />
-		<association property="response" columnPrefix="rsp_" notNullColumn="id"
+		<association property="response" columnPrefix="rsp_"
 			resultMap="rmPersonVO" />
 		<!--  인가(Authorization) 처리를 위한 것임. -->
 		<collection property="roleList" columnPrefix="role_"

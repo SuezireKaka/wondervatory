@@ -14,6 +14,8 @@
 		<result property="dislikeCount" column="dis_cnt" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
+		<association property="writer" columnPrefix="acc_"
+				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />	
 		<discriminator javaType="String" column="descrim">
          	<case value="Series" resultMap="rmSeriesVO" />
          	<case value="Post" resultMap="rmPostVO" />
@@ -41,11 +43,14 @@
 	<select id="getFoundRows" resultType="long">
 		SELECT FOUND_ROWS()
 	</select>
-	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllPost(@PathVariable String boardId, @PathVariable int page); -->
+	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page); -->
 	<select id="listAllSeries" resultMap="rmReplyVO">
-	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip
+	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
+	 		a.id acc_id, a.login_id acc_login_id, a.nick acc_nick
 	  from T_work w LEFT OUTER JOIN t_bb b
 	       ON w.bb_id = b.id
+	       LEFT OUTER JOIN t_account a
+	       ON w.writer_id = a.id
 	where w.bb_id = #{boardId}
 	  and w.descrim = 'Series'
 	 order by w.id DESC
@@ -53,20 +58,93 @@
 	 <!--  limit #{paging.limit} offset #{paging.offset} -->
 	</select>
 	
-	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
-			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
-	
-	
-	<!-- public ResponseEntity<ReplyVO> findById(@PathVariable String id) -->
-	<select id="findById" resultMap="rmReplyVO">
-	select r.*, 
-		w.id w_id, w.descrim w_descrim, w.name w_name, w.nick w_nick, w.sex w_sex,
-		 w.reg_dt w_reg_dt, w.upt_dt w_upt_dt
-	  from T_reply r LEFT OUTER JOIN T_party w
-	       ON r.writer_id = w.id
-	 where r.id like CONCAT(#{id}, '%');
+	<!-- public List<PostVO> listAllPost(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging); -->
+	<select id="listAllPost" resultMap="rmReplyVO">
+	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
+	 		a.id acc_id, a.login_id acc_login_id, a.nick acc_nick
+	  from T_work w LEFT OUTER JOIN t_bb b
+	       ON w.bb_id = b.id
+	       LEFT OUTER JOIN t_account a
+	       ON w.writer_id = a.id
+	where w.id like CONCAT(#{seriesId}, '%')
+	  and LENGTH(w.id) = 8
+	  and w.descrim = 'Post'
+	 order by w.id DESC
+	 limit #{paging.limit} offset #{paging.offset}
+	 <!--  limit #{paging.limit} offset #{paging.offset} -->
 	</select>
 	
 	
+	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
+			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
+	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId, @Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
+	<select id="searchByTfIdf" resultMap="rmPostVO">
+	select SQL_CALC_FOUND_ROWS
+			w.*, a.login_id acc_login_id
+	  from (select w.id wid, sum(r.tf) * log(b.post_cnt / (count(w.id) + 1)) importance
+		  from t_tag t, t_tgt_tag r, T_work w, t_bb b
+	 WHERE t.word IN 
+			<foreach item="word" collection="arrSearch" open="(" separator="," close=")">
+				#{word}
+			</foreach>
+		   and t.id = r.tag_id
+		   and r.tgt_name = 'T_work'
+		   and r.tgt_id = w.id
+		   and w.descrim = 'Series'
+		   and w.bb_id = b.id
+		   and b.id = #{boardId}
+	  group by a.id) pst,
+	  T_work w LEFT OUTER JOIN t_account a
+	       ON w.writer_id = a.id
+	 where pst.pid = w.id
+	 order by pst.importance desc
+	 limit #{paging.limit} offset #{paging.offset}
+	</select>
 	
+	<!-- public List<ReplyVO> findById(String id); -->
+	<select id="findById" resultMap="rmReplyVO">
+	select w.*, 
+	a.id acc_id, a.login_id acc_login_id, a.owner_id acc_owner_id, a.response_id acc_response_id, a.nick acc_nick, a.intro acc_intro,
+	 a.alive a_alive, a.reg_dt a_reg_dt, a.upt_dt a_upt_dt
+	  from T_work w LEFT OUTER JOIN T_account a
+	       ON w.writer_id = a.id
+	 where w.id like CONCAT(#{id}, '%')
+	    and LENGTH(w.id) > 8
+	</select>
+	
+		
+	<!-- public void incReadCount(String id); -->
+	<update id="incReadCount">
+	update T_work
+	   set 	upt_dt = upt_dt,
+			read_cnt = read_cnt + 1
+	 where id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<!-- public int updatePost(PostVO post);-->
+	<update id="updatePost">
+	update T_work
+	   set TITLE = #{title},
+	       content = #{content}
+	 where id = #{id} 
+	</update>
+	<!-- public int updateReply(ReplyVO reply);-->
+	<update id="updateReply">
+	update T_work
+	   set content = #{content}
+	 where id = #{id} 
+	</update>
+	
+	<!-- public int deleteReply(String id);-->
+	<delete id="deleteReply">
+	delete from T_work
+	 where id like CONCAT(#{id}, '%');
+	</delete>
+
 </mapper>
