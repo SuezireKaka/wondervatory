@@ -14,9 +14,12 @@
 		<result property="dislikeCount" column="dis_cnt" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
-
+		<discriminator javaType="String" column="descrim">
+         	<case value="Series" resultMap="rmSeriesVO" />
+         	<case value="Post" resultMap="rmPostVO" />
+        </discriminator>
 	</resultMap>
-<!-- extends : 확장하기 = 상속 -->
+	<!-- extends : 확장하기 = 상속 -->
 	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
 		type="www.wonder.vatory.work.model.SemiPostVO">
 		<result property="title" column="title" />
@@ -39,11 +42,12 @@
 		SELECT FOUND_ROWS()
 	</select>
 	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllPost(@PathVariable String boardId, @PathVariable int page); -->
-	<select id="listAllPost" resultMap="rmReplyVO">
+	<select id="listAllSeries" resultMap="rmReplyVO">
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip
 	  from T_work w LEFT OUTER JOIN t_bb b
 	       ON w.bb_id = b.id
 	where w.bb_id = #{boardId}
+	  and w.descrim = 'Series'
 	 order by w.id DESC
 	 limit #{paging.limit} offset #{paging.offset}
 	 <!--  limit #{paging.limit} offset #{paging.offset} -->

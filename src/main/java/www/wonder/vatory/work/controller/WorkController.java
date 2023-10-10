@@ -24,10 +24,10 @@ public class WorkController {
 	@Autowired
 	private WorkService workService;
 	
-	// /work/anonymous/listAll/0001/1
-	@GetMapping("/anonymous/listAll/{boardId}/{page}")
-	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllPost(@PathVariable String boardId, @PathVariable int page) {
-		DreamPair<List<ReplyVO>, PagingDTO> result = workService.listAllPost(boardId, page);
+	// /work/anonymous/listAllSeries/0001/1
+	@GetMapping("/anonymous/listAllSeries/{boardId}/{page}")
+	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page) {
+		DreamPair<List<ReplyVO>, PagingDTO> result = workService.listAllSeries(boardId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	// /work/anonymous/listAll/0001/0001/1

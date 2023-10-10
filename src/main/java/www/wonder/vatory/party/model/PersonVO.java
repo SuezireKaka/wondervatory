@@ -1,5 +1,7 @@
 package www.wonder.vatory.party.model;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +18,9 @@ public class PersonVO extends PartyVO {
 	public static final int MAX_ACCOUNT_NUMBER = 1;
 	
 	private String sex; // Male or Female
+	List<AccountVO> accountList;
+	
+	public void addAccount(AccountVO acc) {
+		accountList.add(acc);
+	}
 }

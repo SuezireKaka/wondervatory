@@ -22,13 +22,8 @@ public class PartyVO extends Entity {
 	String name;
 	Date birthDate; // 회사의 경우 설립일
 	List<ContactPointVO> contactPointList;
-	List<AccountVO> accountList;
 	
 	public void addCP(ContactPointVO cp) {
 		contactPointList.add(cp);
-	}
-
-	public void addAccount(AccountVO o) {
-		accountList.add(o);
 	}
 }
