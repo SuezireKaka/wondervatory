@@ -43,7 +43,7 @@ public class WorkController {
 	}
 	
 	
-	// /work/anonymous/listAll/0001/타이틀/1
+	// /work/anonymous/listAll/0001/타이틀/1         검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
 	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId, @PathVariable String search, @PathVariable int page) {
 		DreamPair<List<ReplyVO>, PagingDTO> result = workService.search(boardId, search, page);
