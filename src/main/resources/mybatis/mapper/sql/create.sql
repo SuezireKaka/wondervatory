@@ -344,3 +344,10 @@ insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
 				"#000000", "#aa7700", "0001", "0003", "0004");
 
 	
+--231012  00 -----------
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000002", "0001", "0001", "Post", 0, "하위글2" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000003", "0001", "0001", "Post", 0, "하위글3" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000004", "0001", "0001", "Post", 0, "하위글4" ,"내용", 10, 5, 100, 1, "유료화", 1);
