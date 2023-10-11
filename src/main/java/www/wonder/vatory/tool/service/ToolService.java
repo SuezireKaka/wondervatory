@@ -32,4 +32,12 @@ public class ToolService {
 		return result;
 	}
 
+	public ToolVO getToolByEntity(String entityId) {
+		ToolVO result = toolMapper.getToolByEntity(entityId);
+		String toolId = result.getId();
+		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
+		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
+		return result;
+	}
+
 }

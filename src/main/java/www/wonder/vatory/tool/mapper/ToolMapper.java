@@ -18,5 +18,6 @@ public interface ToolMapper {
 	public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);
 	
 	public ToolVO getToolById(@Param("toolId") String toolId);
+	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
 }

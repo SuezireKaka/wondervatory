@@ -36,4 +36,11 @@ public class ToolController {
 		ToolVO result = toolService.getToolById(toolId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	// /tool/anonymous/getToolByEntity/0000
+	@GetMapping("/anonymous/getToolByEntity/{entityId}")
+	public ResponseEntity<ToolVO> getToolByEntity(@PathVariable String entityId) {
+		ToolVO result = toolService.getToolByEntity(entityId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }

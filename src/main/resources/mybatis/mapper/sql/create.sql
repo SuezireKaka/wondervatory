@@ -278,7 +278,7 @@ insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
 
 insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
 				inner_color, outer_color, parent_id, one_id, other_id)
-	values("0002", "Relation", 300, 300, 50, 50, "Java City",
+	values("0002", "Relation", 300, 300, 50, 50, "Long War",
 				"#000000", "#aa7700", "0000", "0000", "0001");
 
 
@@ -309,12 +309,38 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 	values("000000010000", "0001", "0001", "Post", 0, "댓글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
 	values("0000000100000000", "0001", "0001", "Post", 0, "대댓글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
-	
+
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0002", "0001", "0002", "Series", 0, "야호" ,"신난다", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0003", "0001", "0002", "Series", 0, "이건" ,"진짜야", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0004", "0001", "0002", "Series", 0, "몰라" ,"누가 뭐래?", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0005", "0001", "0002", "Series", 0, "그럼" ,"나중에 보자", 10, 5, 100, 1, "유료화", 1);
 	
 insert into T_TAG(id, word)
 	values("0000", "타이틀");
 
 insert into T_TGT_TAG(tgt_name, tgt_id, tag_id, tf)
 	values("T_work", "0000", "0000", 1);
+	
+insert into t_tool(id, x_tool_size, y_tool_size, name, parent_id, parent_type)
+	values("0001", 1024, 768, "자바시티 map", "0001", "Entity");
+	
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id)
+	values("0003", "Entity", 100, 300, 100, 200, "Class Area",
+				"#123456", "#fedcba", "0001");
+
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id)
+	values("0004", "Entity", 600, 400, 100, 200, "Object Area",
+				"#123456", "#fedcba", "0001");
+
+insert into t_custom_obj(id, descrim, x_pos, y_pos, x_size, y_size, name,
+				inner_color, outer_color, parent_id, one_id, other_id)
+	values("0005", "Relation", 600, 120, 50, 80, "Instance Road",
+				"#000000", "#aa7700", "0001", "0003", "0004");
 
 	

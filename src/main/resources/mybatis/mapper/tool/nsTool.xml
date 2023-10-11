@@ -45,10 +45,10 @@
 
 	<!--public List<ToolVO> listAllFromSeries(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging); -->
 	<select id="listAllFromSeries" resultMap="rmToolVO">
-		SELECT SQL_CALC_FOUND_ROWS t.*
-		  FROM t_tool t
-		 where t.parent_id = '0000'
-		   and t.parent_type = 'Series'
+		SELECT SQL_CALC_FOUND_ROWS *
+		  FROM t_tool
+		 where parent_id = '0000'
+		   and parent_type = 'Series'
 	</select>
 	
 	<!-- public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);  -->
@@ -72,6 +72,14 @@
 		SELECT *
 		  from t_tool
 		 where id = #{toolId}
+	</select>
+	
+	<!-- public ToolVO getToolByEntity(@Param("entityId") String entityId); -->
+	<select id="getToolByEntity" resultMap="rmToolVO">
+		SELECT *
+		  from t_tool
+		 where parent_id = #{entityId}
+		   and parent_type = 'Entity'
 	</select>
 
 </mapper>
