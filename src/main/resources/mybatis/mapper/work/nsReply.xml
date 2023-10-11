@@ -51,7 +51,8 @@
 	       ON w.bb_id = b.id
 	       LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
-	where w.bb_id = #{boardId}
+	where w.id = #{seriesId}
+	  and LENGTH(w.id) = 4
 	  and w.descrim = 'Series'
 	 order by w.id DESC
 	 limit #{paging.limit} offset #{paging.offset}

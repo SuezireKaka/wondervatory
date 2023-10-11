@@ -29,14 +29,14 @@ public class WorkController {
 	private WorkService workService;
 	
 	// /work/anonymous/listAllSeries/0001/1
-	@GetMapping("/anonymous/listAllSeries/{boardId}/{page}")
+	@GetMapping("/anonymous/listAllSeries/{seriesId}/{page}")
 	public ResponseEntity<DreamPair<List<SeriesVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page) {
 		DreamPair<List<SeriesVO>, PagingDTO> result = workService.listAllSeries(boardId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	// /work/anonymous/listAllSeries/0000/1
-	@GetMapping("/anonymous/listAllPost/{seriesId}/{page}")
+	@GetMapping("/anonymous/listAllPost/{postId}/{page}")
 	public ResponseEntity<DreamPair<List<PostVO>, PagingDTO>> listAllPost(@PathVariable String seriesId, @PathVariable int page) {
 		DreamPair<List<PostVO>, PagingDTO> result = workService.listAllPost(seriesId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);

@@ -251,7 +251,7 @@ values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
 
 
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
-	values("0000", "0001", "0001", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
+	values("0000", "0001", "0002", "Series", 0, "타이틀" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 
 
 
@@ -302,7 +302,7 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 
 
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
-	values("0001", "0001", "0001", "Post", 0, "상위글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
+	values("0001", "0001", "0002", "Post", 0, "상위글" ,"컨텐츠", 10, 5, 100, 1, "유료화", 1);
 	
 	
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
