@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +20,6 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value={"passWord"}, allowSetters=true) //pswd는 화면에 노출하는 대상이 아님! 보안!
 public class AccountVO extends TimeEntity implements UserDetails {
 	private String loginId;
 	private String passWord;

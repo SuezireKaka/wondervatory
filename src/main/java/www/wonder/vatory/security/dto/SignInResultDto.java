@@ -16,19 +16,19 @@ import lombok.ToString;
 public class SignInResultDto extends SignUpResultDto {
 	private String token;	//JWT
 	private String userId;
-	private String userName;
+	private String userLoginId;
 	private String userNick;
 	private List<String> roles;
 	
 	
 	@Builder
 	public SignInResultDto(boolean success, int code, 
-			String msg, String token, List<String> roles, String userId, String userName, String userNick) {
+			String msg, String token, List<String> roles, String userId, String userLoginId, String userNick) {
 		super(success, code, msg);
 		this.token = token;
 		this.roles = roles;
 		this.userId = userId;
-		this.userName = userName;
+		this.userLoginId = userLoginId;
 		this.userNick = userNick;
 	}
 

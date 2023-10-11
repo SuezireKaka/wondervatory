@@ -153,4 +153,34 @@
 		INSERT INTO T_Accountability(id, account_type, owner_id, respons_id)
 		VALUES (#{id}, #{accountType}, #{ownerId}, #{responsId});
 	</insert>
+	
+	<!-- 	public int createPerson(PersonVO person); OGNL 사용함 -->
+	<insert id="createPerson">
+		<selectKey keyProperty="id" resultType="String"
+			order="BEFORE">
+			select NEXT_PK('s_party')
+		</selectKey>
+
+		INSERT INTO T_party(id, descrim, name, sex)
+		VALUES (#{id}, 'Person', #{name}, #{sex});
+
+	  <if test="!(contactPointList.isEmpty())">
+			INSERT INTO T_contact_Point(owner_id, cp_type, cp_val)
+			VALUES
+			<foreach item="cp" collection="contactPointList" separator=","
+				close=";">
+				(#{id}, #{cp.cpType}, #{cp.cpVal})
+			</foreach>
+	  </if>
+	</insert>
+	
+	<!-- 	public int createAccount(AccountVO account); -->
+	<insert id="createAccount">
+		<selectKey keyProperty="id" resultType="String"
+			order="BEFORE">
+			select NEXT_PK('s_account')
+		</selectKey>
+		INSERT INTO T_Account(id, login_id, pass_word, owner_id, response_id, nick, intro)
+		VALUES (#{id}, #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introdution});
+	</insert>
 </mapper>
