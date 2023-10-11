@@ -36,7 +36,7 @@ public class WorkController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /work/anonymous/listAllPost/0000/1
+	// /work/anonymous/listAllSeries/0000/1
 	@GetMapping("/anonymous/listAllPost/{seriesId}/{page}")
 	public ResponseEntity<DreamPair<List<PostVO>, PagingDTO>> listAllPost(@PathVariable String seriesId, @PathVariable int page) {
 		DreamPair<List<PostVO>, PagingDTO> result = workService.listAllPost(seriesId, page);
