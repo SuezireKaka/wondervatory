@@ -51,8 +51,8 @@ public class WorkController {
 	}
 	
 	/** 원글 상세. 첨부파일 목록, 댓글, 대댓 목록이 내부 변수에 채워짐 */
-	// /work/anonymous/getPost/0000           //4글자나 8글자 전부 찾기 가능 댓글과 대댓글만나오게 조건을 8글자이상으로함
-	@GetMapping("/anonymous/getPost/{id}")
+	// /work/anonymous/findById/0000           //4글자나 8글자 전부 찾기 가능 댓글과 대댓글만나오게 조건을 8글자이상으로함
+	@GetMapping("/anonymous/findById/{id}")
 	public ResponseEntity<ReplyVO> findById(@PathVariable String id) {
 		ReplyVO post = workService.findById(id);
 		if (post == null)

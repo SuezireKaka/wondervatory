@@ -82,16 +82,19 @@ public class WorkService {
 		//List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		//ret.setListAttachFile(attachFileList);
 		
-		Map<String, ReplyVO> map = new HashMap<>();
-		for (ReplyVO reply : oneDimList) {
-			map.put(reply.getId(), reply);
-			
-			ReplyVO parent = map.get(reply.getParentId());
-			//원글이면 null이 됨
-			if (parent != null) {
-				parent.appendReply(reply);
+		if (id.length() == 8) {
+			Map<String, ReplyVO> map = new HashMap<>();
+			for (ReplyVO reply : oneDimList) {
+				map.put(reply.getId(), reply);
+				
+				ReplyVO parent = map.get(reply.getParentId());
+				//원글이면 null이 됨
+				if (parent != null) {
+					parent.appendReply(reply);
+				}
 			}
 		}
+		
 		return ret;
 	}
 	
