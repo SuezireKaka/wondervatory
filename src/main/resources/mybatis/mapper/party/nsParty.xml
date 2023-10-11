@@ -107,53 +107,6 @@
 		 where p.nick = binary(#{nick})
 	</select>
 
-	<!-- 	public int createOrganization(OrganizationVO organization); -->
-	<insert id="createOrganization">
-		<selectKey keyProperty="id" resultType="String"
-			order="BEFORE">
-			select NEXT_PK('s_party')
-		</selectKey>
-		INSERT INTO T_party(id, descrim, name, nick, pwd)
-		VALUES (#{id}, 'Organization', #{name}, #{nick}, #{pwd});
-
-		INSERT INTO T_contact_Point(owner_id, cp_type, cp_val)
-		VALUES
-		<foreach item="cp" collection="listContactPoint" separator=","
-			close=";">
-			(#{id}, #{cp.cpType}, #{cp.cpVal})
-		</foreach>
-	</insert>
-
-	<!-- 	public int createPerson(PersonVO person); OGNL 사용함 -->
-	<insert id="createPerson">
-		<selectKey keyProperty="id" resultType="String"
-			order="BEFORE">
-			select NEXT_PK('s_party')
-		</selectKey>
-
-		INSERT INTO T_party(id, descrim, name, nick, pwd, sex)
-		VALUES (#{id}, 'Person', #{name}, #{nick}, #{pwd}, #{sex});
-
-	  <if test="!(listContactPoint.isEmpty())">
-			INSERT INTO T_contact_Point(owner_id, cp_type, cp_val)
-			VALUES
-			<foreach item="cp" collection="listContactPoint" separator=","
-				close=";">
-				(#{id}, #{cp.cpType}, #{cp.cpVal})
-			</foreach>
-	  </if>
-	</insert>
-	
-	<!-- 	public int createAccountability(AccountabilityVO accountability); -->
-	<insert id="createAccountability">
-		<selectKey keyProperty="id" resultType="String"
-			order="BEFORE">
-			select NEXT_PK('s_accountability')
-		</selectKey>
-		INSERT INTO T_Accountability(id, account_type, owner_id, respons_id)
-		VALUES (#{id}, #{accountType}, #{ownerId}, #{responsId});
-	</insert>
-	
 	<!-- 	public int createPerson(PersonVO person); OGNL 사용함 -->
 	<insert id="createPerson">
 		<selectKey keyProperty="id" resultType="String"
