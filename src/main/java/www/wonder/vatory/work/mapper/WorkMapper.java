@@ -20,7 +20,8 @@ public interface WorkMapper {
 	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);
 	
-	public List<ReplyVO> findById(String id);
+	public List<ReplyVO> findSeriesById(String id);
+	public List<ReplyVO> findPostById(String id);
 	public void incReadCount(String id);
 	
 	
