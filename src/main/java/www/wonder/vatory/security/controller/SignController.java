@@ -29,11 +29,11 @@ public class SignController {
 
 	@PostMapping(value = "/anonymous/sign-in")
 	public SignInResultDto signIn(@RequestBody SignInDTO signInDTO) throws BusinessException {
-		LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", signInDTO.getId());
+		LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", signInDTO.getLoginId());
 		SignInResultDto signInResultDto = signService.signIn(signInDTO);
 
 		if (signInResultDto.getCode() == 0) {
-			LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", signInDTO.getId(), signInResultDto.getToken());
+			LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", signInDTO.getLoginId(), signInResultDto.getToken());
 		}
 		return signInResultDto;
 	}

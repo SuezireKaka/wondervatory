@@ -15,6 +15,7 @@ public interface PartyMapper {
 	public List<AccountVO> listAllAccount(@Param("ownerId") String ownerId, @Param("paging") PagingDTO paging);
 	
 	public AccountVO findByNick(String nick);
+	public AccountVO findByLoginId(String loginId);
 	public boolean isValidNick(String nick);
 	
 	public int createPerson(PersonVO person);

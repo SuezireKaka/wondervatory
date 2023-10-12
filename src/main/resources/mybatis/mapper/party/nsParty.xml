@@ -51,7 +51,7 @@
 	
 	<resultMap id="rmRoleVO"
 		type="www.wonder.vatory.party.model.RoleVO">
-		<id property="role" column="role" />
+		<result property="role" column="role" />
 		<result property="manual" column="manual" />
 		<collection property="allowedActsList" columnPrefix="allow_"
 			resultMap="rmActVO">
@@ -86,18 +86,24 @@
 		 order by acc.id DESC
 		 limit #{paging.limit} offset #{paging.offset};
 	</select>
-	<!-- public AccountVO findByNick(String nick); -->
-	<select id="findByNick" resultMap="rmPartyVO">
-		SELECT p.*, 
-			role.id role_id, role.account_type role_account_type, role.owner_id role_owner_id, 
-				role.alive role_alive, role.reg_dt role_reg_dt, role.upt_dt role_upt_dt, 
-			cp.cp_type cp_cp_type, cp.cp_val cp_cp_val
-		  FROM T_party p 
-		    join T_Accountability role on p.id = role.respons_id
-		    LEFT OUTER JOIN T_contact_Point cp
-		    on p.id = cp.owner_id
-		 where p.nick = #{nick}
-		   and role.alive = true
+	<!-- public AccountVO findByLoginId(String loginId); -->
+	<select id="findByLoginId" resultMap="rmAccountVO">
+		SELECT acc.*, 
+			own.name own_name,
+			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
+			cp.cp_type cp_type, cp.cp_val cp_val,
+			role.role role_role
+		  FROM T_Account acc
+		  LEFT OUTER JOIN T_role role
+		    on role.account_id = acc.id
+		  LEFT OUTER JOIN T_party own
+		    on own.id = acc.owner_id
+		  LEFT OUTER JOIN T_party rsp
+		    on rsp.id = acc.response_id
+		  LEFT OUTER JOIN T_contact_Point cp
+		    on rsp.id = cp.owner_id
+		 where acc.login_id = #{loginId}
+		   and acc.alive = true
 	</select>
 
 	<!-- public boolean isValidNick(String nick); -->

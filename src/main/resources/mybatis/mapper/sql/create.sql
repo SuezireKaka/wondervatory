@@ -412,4 +412,10 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
 	values("00010011", "0001", "0001", "Post", 0, "하위글11" ,"내용", 10, 5, 100, 1, "유료화", 1);
 
+create table t_role(
+	role		varchar(16) comment 'reader or writer or manager or ceo',
+	account_id	char(4)
+);
 
+insert into t_role(role, account_id)
+	values('reader', '0001');
