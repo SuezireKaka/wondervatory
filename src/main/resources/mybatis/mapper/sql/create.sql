@@ -359,7 +359,57 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 insert into t_tool(id, x_tool_size, y_tool_size, name, parent_id, parent_type)
 	values("0002", 1024, 768, "트레이스 관계도", "0000", "Series");
 	
+--231012  02 -----------
 	
-	
-	
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000005", "0001", "0001", "Post", 0, "하위글5" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000006", "0001", "0001", "Post", 0, "하위글6" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000007", "0001", "0001", "Post", 0, "하위글7" ,"내용", 10, 5, 100, 1, "유료화", 1);	
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000008", "0001", "0001", "Post", 0, "하위글8" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000009", "0001", "0001", "Post", 0, "하위글9" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000010", "0001", "0001", "Post", 0, "하위글10" ,"내용", 10, 5, 100, 1, "유료화", 1);	
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000011", "0001", "0001", "Post", 0, "하위글11" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000012", "0001", "0001", "Post", 0, "하위글12" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000013", "0001", "0001", "Post", 0, "하위글13" ,"내용", 10, 5, 100, 1, "유료화", 1);		
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000014", "0001", "0001", "Post", 0, "하위글14" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000015", "0001", "0001", "Post", 0, "하위글15" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00000016", "0001", "0001", "Post", 0, "하위글16" ,"내용", 10, 5, 100, 1, "유료화", 1);
+
+
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010000", "0001", "0001", "Post", 0, "하위글0" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010001", "0001", "0001", "Post", 0, "하위글1" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010002", "0001", "0001", "Post", 0, "하위글2" ,"내용", 10, 5, 100, 1, "유료화", 1);	
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010003", "0001", "0001", "Post", 0, "하위글3" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010004", "0001", "0001", "Post", 0, "하위글4" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010005", "0001", "0001", "Post", 0, "하위글5" ,"내용", 10, 5, 100, 1, "유료화", 1);	
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010006", "0001", "0001", "Post", 0, "하위글6" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010007", "0001", "0001", "Post", 0, "하위글7" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010008", "0001", "0001", "Post", 0, "하위글8" ,"내용", 10, 5, 100, 1, "유료화", 1);		
+	insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010009", "0001", "0001", "Post", 0, "하위글9" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010010", "0001", "0001", "Post", 0, "하위글10" ,"내용", 10, 5, 100, 1, "유료화", 1);
+insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("00010011", "0001", "0001", "Post", 0, "하위글11" ,"내용", 10, 5, 100, 1, "유료화", 1);
+
 

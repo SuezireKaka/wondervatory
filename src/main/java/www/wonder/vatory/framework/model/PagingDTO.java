@@ -1,7 +1,7 @@
 package www.wonder.vatory.framework.model;
 
 public class PagingDTO {
-	private static final int LIMIT = 10;
+	private static final int LIMIT = 5;
 	private static final int BTN_CNT = 10;
 	private int page;
 	private long offset;
