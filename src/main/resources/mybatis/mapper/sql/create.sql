@@ -419,3 +419,13 @@ create table t_role(
 
 insert into t_role(role, account_id)
 	values('reader', '0001');
+insert into T_CODE(Code_type, code_val) values('역할', 'admin');
+insert into T_CODE(Code_type, code_val) values('역할', 'reader');
+insert into T_CODE(Code_type, code_val) values('역할', 'writer');
+
+insert into T_CODE(Code_type, code_val) values('contect point type', 'phone number');
+insert into T_CODE(Code_type, code_val) values('contect point type', 'home address');
+insert into T_CODE(Code_type, code_val, validation_re) values('contect point type', 'email', '[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
+insert into T_CODE(Code_type, code_val) values('rel target tag', 'post');
+insert into T_CODE(Code_type, code_val) values('rel target tag', 'party');
