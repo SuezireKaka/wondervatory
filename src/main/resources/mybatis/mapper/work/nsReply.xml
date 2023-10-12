@@ -110,7 +110,7 @@
 	 a.alive a_alive, a.reg_dt a_reg_dt, a.upt_dt a_upt_dt
 	  from T_work w LEFT OUTER JOIN T_account a
 	       ON w.writer_id = a.id
-	 where w.id like CONCAT(#{id}, '%')
+	 where w.id =#{id}
 	</select>
 	
 	<!-- public List<ReplyVO> findPostById(String id); -->

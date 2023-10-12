@@ -69,7 +69,7 @@ public class WorkService {
 	
 	public ReplyVO findById(String id) {
 		//postMapper.findById(id)는 id의 primary key 특성으로 사전순서가 보장되어 있음
-		List<ReplyVO> oneDimList = id.length() < 12 ? workMapper.findSeriesById(id) : workMapper.findPostById(id) ;
+		List<ReplyVO> oneDimList = id.length() == 4 ? workMapper.findSeriesById(id) : workMapper.findPostById(id) ;
 		if (oneDimList.isEmpty()) {
 			return null;
 		}
@@ -82,7 +82,7 @@ public class WorkService {
 		//List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		//ret.setListAttachFile(attachFileList);
 		
-		if (id.length() >= 12) {
+		if (id.length() == 8) {
 			Map<String, ReplyVO> map = new HashMap<>();
 			for (ReplyVO reply : oneDimList) {
 				map.put(reply.getId(), reply);
