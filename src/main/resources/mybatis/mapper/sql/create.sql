@@ -351,3 +351,15 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 	values("00000003", "0001", "0001", "Post", 0, "하위글3" ,"내용", 10, 5, 100, 1, "유료화", 1);
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
 	values("00000004", "0001", "0001", "Post", 0, "하위글4" ,"내용", 10, 5, 100, 1, "유료화", 1);
+	
+	
+	
+	
+--231012  01 -----------
+insert into t_tool(id, x_tool_size, y_tool_size, name, parent_id, parent_type)
+	values("0002", 1024, 768, "트레이스 관계도", "0000", "Series");
+	
+	
+	
+	
+

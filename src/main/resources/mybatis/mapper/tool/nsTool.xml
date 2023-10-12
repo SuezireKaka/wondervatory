@@ -47,7 +47,7 @@
 	<select id="listAllFromSeries" resultMap="rmToolVO">
 		SELECT SQL_CALC_FOUND_ROWS *
 		  FROM t_tool
-		 where parent_id = '0000'
+		 where parent_id = #{seriesId}
 		   and parent_type = 'Series'
 	</select>
 	
