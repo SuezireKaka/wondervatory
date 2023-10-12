@@ -61,10 +61,15 @@
 	
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
-		SELECT *
-		  from t_custom_obj
-		 where parent_id = #{toolId}
-		   and descrim = 'Relation'
+		SELECT rel.*,
+			one.x_pos one_x_pos, one.y_pos one_y_pos,
+			one.x_size one_x_size, one.y_size one_y_size,
+			other.x_pos other_x_pos, other.y_pos other_y_pos,
+			other.x_size other_x_size, other.y_size other_y_size
+		  from t_custom_obj rel, t_custom_obj one, t_custom_obj other
+		 where rel.parent_id = #{toolId}
+		   and one.id = rel.one_id
+		   and other.id = rel.other_id
 	</select>
 	
 	<!-- public ToolVO getToolById(@Param("toolId") String toolId); -->
