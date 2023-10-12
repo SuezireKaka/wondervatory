@@ -413,3 +413,13 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_c
 	values("00010011", "0001", "0001", "Post", 0, "하위글11" ,"내용", 10, 5, 100, 1, "유료화", 1);
 
 
+insert into T_CODE(Code_type, code_val) values('역할', 'admin');
+insert into T_CODE(Code_type, code_val) values('역할', 'reader');
+insert into T_CODE(Code_type, code_val) values('역할', 'writer');
+
+insert into T_CODE(Code_type, code_val) values('contect point type', 'phone number');
+insert into T_CODE(Code_type, code_val) values('contect point type', 'home address');
+insert into T_CODE(Code_type, code_val, validation_re) values('contect point type', 'email', '[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
+insert into T_CODE(Code_type, code_val) values('rel target tag', 'post');
+insert into T_CODE(Code_type, code_val) values('rel target tag', 'party');
