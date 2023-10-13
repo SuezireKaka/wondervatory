@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,6 +30,10 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	private String introduction;
 	private boolean isAlive;
 	private Collection<RoleVO> roleList;
+	
+	public void encodePswd(PasswordEncoder pswdEnc) {
+		passWord = pswdEnc.encode(passWord);
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

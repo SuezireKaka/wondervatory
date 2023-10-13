@@ -8,12 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.party.model.OrganizationVO;
+import www.wonder.vatory.party.model.PersonVO;
 import www.wonder.vatory.party.service.PartyService;
 
 
@@ -30,5 +34,32 @@ public class PartyController {
 	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(@PathVariable String ownerId, @PathVariable int page) {
 		DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/createOrganization")
+	public ResponseEntity<Integer> createOrganization(OrganizationVO organization) {
+		return ResponseEntity.ok(partyService.createOrganization(organization));
+	}
+
+	@PostMapping("/createManager")
+	public ResponseEntity<Integer> createManager(@RequestBody List<AccountVO> accountList) {
+		return ResponseEntity.ok(partyService.createManager(accountList));
+	}
+	
+	// /party/anonymous/checkLoginId?loginId=hgghg
+	@GetMapping("/anonymous/checkLoginId")
+	public ResponseEntity<Boolean> checkLoginId(String loginId) {
+		return ResponseEntity.ok(partyService.checkLoginId(loginId));
+	}
+	// /party/anonymous/checkNick?nick=hgghg
+	@GetMapping("/anonymous/checkNick")
+	public ResponseEntity<Boolean> checkNick(String nick) {
+		return ResponseEntity.ok(partyService.checkNick(nick));
+	}
+
+	// /party/anonymous/createMember
+	@PostMapping("/anonymous/createMember")
+	public ResponseEntity<Integer> createMember(PersonVO person, AccountVO account) {
+		return ResponseEntity.ok(partyService.createMember(person, account));
 	}
 }

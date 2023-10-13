@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
 
 @Mapper
@@ -14,10 +15,15 @@ public interface PartyMapper {
 	public long getFoundRows();
 	public List<AccountVO> listAllAccount(@Param("ownerId") String ownerId, @Param("paging") PagingDTO paging);
 	
-	public AccountVO findByNick(String nick);
 	public AccountVO findByLoginId(String loginId);
+	public AccountVO findByNick(String nick);
+	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
 	
+	public int createOrganization(OrganizationVO organization);
+	public int createManager(AccountVO account);
 	public int createPerson(PersonVO person);
 	public int createAccount(AccountVO account);
+	
+	
 }
