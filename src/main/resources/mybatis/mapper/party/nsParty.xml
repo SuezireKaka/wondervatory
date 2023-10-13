@@ -74,7 +74,7 @@
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type cp_type, cp.cp_val cp_val,
+			cp.cp_type cp_type, cp.cp_val cp_val
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id
