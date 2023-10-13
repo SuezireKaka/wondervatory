@@ -36,6 +36,13 @@ public class PartyController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	// /party/anonymous/findByNick/홍
+	@GetMapping("/anonymous/findByNick/{nick}")
+	public ResponseEntity<AccountVO> findByNick(@PathVariable String nick) {
+		AccountVO result = partyService.findByNick(nick);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	@PostMapping("/createOrganization")
 	public ResponseEntity<Integer> createOrganization(OrganizationVO organization) {
 		return ResponseEntity.ok(partyService.createOrganization(organization));

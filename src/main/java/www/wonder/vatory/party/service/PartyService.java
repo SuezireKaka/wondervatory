@@ -35,6 +35,14 @@ public class PartyService implements UserDetailsService {
 
 		return new DreamPair<List<AccountVO>, PagingDTO>(listResult, paging);
 	}
+	
+	public AccountVO findByNick(String username) {
+		return partyMapper.findByNick(username);
+	}
+	public AccountVO findByLoginId(String loginId) {
+		return partyMapper.findByLoginId(loginId);
+	}
+	
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

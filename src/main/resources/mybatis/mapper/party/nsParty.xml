@@ -74,7 +74,7 @@
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type rsp_cp_type, cp.cp_val rsp_cp_val
+			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id
@@ -92,7 +92,7 @@
 		SELECT acc.*, 
 			own.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type cp_type, cp.cp_val cp_val,
+			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
 			role.role role_role
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_role role
@@ -105,6 +105,25 @@
 		    on rsp.id = cp.owner_id
 		 where acc.login_id = #{loginId}
 		   and acc.alive = true
+	</select>
+	<!-- public AccountVO findByNick(String nick); -->
+	<select id="findByNick" resultMap="rmAccountVO">
+		SELECT acc.*, 
+			own.name own_name,
+			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
+			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
+			role.role role_role
+		  FROM T_Account acc
+		  LEFT OUTER JOIN T_role role
+		    on role.account_id = acc.id
+		  LEFT OUTER JOIN T_party own
+		    on own.id = acc.owner_id
+		  LEFT OUTER JOIN T_party rsp
+		    on rsp.id = acc.response_id
+		  LEFT OUTER JOIN T_contact_Point cp
+		    on cp.owner_id = rsp.id
+		 where acc.nick = '홍'
+		   and acc.alive = TRUE
 	</select>
 	
 	<!-- public boolean isValidLoginId(String loginId); -->

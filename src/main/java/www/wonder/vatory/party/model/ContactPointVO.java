@@ -1,6 +1,15 @@
 package www.wonder.vatory.party.model;
 
-public class ContactPointVO {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY) class ContactPointVO {
 	private String cpType;
 	private String cpVal;
 
