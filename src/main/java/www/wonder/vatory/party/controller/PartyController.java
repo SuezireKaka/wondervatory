@@ -66,7 +66,7 @@ public class PartyController {
 
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
-	public ResponseEntity<Integer> createMember(SignUpDto signUpRequest) {
+	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.createMember(signUpRequest));
 	}
 }

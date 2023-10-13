@@ -1,5 +1,6 @@
 package www.wonder.vatory.party.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.party.model.ContactPointVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
 import www.wonder.vatory.party.model.SignUpDto;
@@ -79,15 +81,19 @@ public class PartyService implements UserDetailsService {
 				.name(signUpRequest.getName())
 				.sex(signUpRequest.getSex())
 				.birthDate(signUpRequest.getBirthDate())
+				.contactPointList(new ArrayList<ContactPointVO>())
 				.build();
 		AccountVO account = AccountVO.builder()
-				.loginId(signUpRequest.getName())
+				.loginId(signUpRequest.getLoginId())
 				.passWord(signUpRequest.getPassWord())
 				.nick(signUpRequest.getNick())
-				.introduction(signUpRequest.getNick())
+				.introduction("")
 				.owner(new OrganizationVO("0000"))
 				.response(person)
 				.build();
+		for (ContactPointVO cp : signUpRequest.getListContactPoint()) {
+			person.addCP(cp);
+		}
 		int cnt = partyMapper.createPerson(person);
 		account.encodePswd(pswdEnc);
 

@@ -16,9 +16,9 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import www.wonder.vatory.framework.model.TimeEntity;
 
+@SuperBuilder
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountVO extends TimeEntity implements UserDetails {

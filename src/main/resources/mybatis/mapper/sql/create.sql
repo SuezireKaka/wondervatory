@@ -173,7 +173,7 @@ create table t_account(
 	response_id	char(4),
 	nick		varchar(255),
 	intro		varchar(255),
-	alive		tinyint,
+	alive		TINYINT(4) NULL DEFAULT '1',
 	reg_dt		timestamp default current_timestamp(),
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
 );
@@ -419,6 +419,8 @@ create table t_role(
 
 insert into t_role(role, account_id)
 	values('reader', '0001');
+	
+
 insert into T_CODE(Code_type, code_val) values('역할', 'admin');
 insert into T_CODE(Code_type, code_val) values('역할', 'reader');
 insert into T_CODE(Code_type, code_val) values('역할', 'writer');
