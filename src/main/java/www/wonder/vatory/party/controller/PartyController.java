@@ -17,7 +17,7 @@ import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.OrganizationVO;
-import www.wonder.vatory.party.model.PersonVO;
+import www.wonder.vatory.party.model.SignUpDto;
 import www.wonder.vatory.party.service.PartyService;
 
 
@@ -59,7 +59,7 @@ public class PartyController {
 
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
-	public ResponseEntity<Integer> createMember(PersonVO person, AccountVO account) {
-		return ResponseEntity.ok(partyService.createMember(person, account));
+	public ResponseEntity<Integer> createMember(SignUpDto signUpRequest) {
+		return ResponseEntity.ok(partyService.createMember(signUpRequest));
 	}
 }

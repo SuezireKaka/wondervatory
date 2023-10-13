@@ -1,7 +1,6 @@
 package www.wonder.vatory.party.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +15,7 @@ import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
+import www.wonder.vatory.party.model.SignUpDto;
 
 
 @Service
@@ -64,12 +64,26 @@ public class PartyService implements UserDetailsService {
 	}
 
 	/** 회원 가입 */
-	public int createMember(PersonVO person, AccountVO account) {
+	public int createMember(SignUpDto signUpRequest) {
 		// 동일인 검증 어케 하나요 ㅠㅠ
+		// 모르겠고 빌더패턴이나 쓰자
+		PersonVO person = PersonVO.builder()
+				.name(signUpRequest.getName())
+				.sex(signUpRequest.getSex())
+				.birthDate(signUpRequest.getBirthDate())
+				.build();
+		AccountVO account = AccountVO.builder()
+				.loginId(signUpRequest.getName())
+				.passWord(signUpRequest.getPassWord())
+				.nick(signUpRequest.getNick())
+				.introduction(signUpRequest.getNick())
+				.owner(new OrganizationVO("0000"))
+				.response(person)
+				.build();
 		int cnt = partyMapper.createPerson(person);
 		account.encodePswd(pswdEnc);
 
-		partyMapper.createAccount(account);
+		cnt *= partyMapper.createAccount(account);
 		return cnt;
 	}
 }
