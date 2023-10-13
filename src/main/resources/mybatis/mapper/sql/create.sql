@@ -429,3 +429,11 @@ insert into T_CODE(Code_type, code_val, validation_re) values('contect point typ
 
 insert into T_CODE(Code_type, code_val) values('rel target tag', 'post');
 insert into T_CODE(Code_type, code_val) values('rel target tag', 'party');
+
+----10 13 01-----------
+insert into t_contact_point(owner_id, cp_type, cp_val) values('0001','phone number','010-1234-5678');
+insert into t_contact_point(owner_id, cp_type, cp_val) values('0001','home address','서울시 동작구 구로동');
+insert into t_contact_point(owner_id, cp_type, cp_val) values('0001','email','aaaa@naver.com');
+
+
+
