@@ -436,4 +436,15 @@ insert into t_contact_point(owner_id, cp_type, cp_val) values('0001','home addre
 insert into t_contact_point(owner_id, cp_type, cp_val) values('0001','email','aaaa@naver.com');
 
 
+----10 13 02-----------
+insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
+	values("000000160000", "0001", "0002", "Reply", 3,"댓글0", 0, 0);
+insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
+	values("000000160001", "0001", "0002", "Reply", 3,"댓글1", 0, 0);
+insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
+	values("000000160002", "0001", "0002", "Reply", 3,"댓글2", 0, 0);
 
+insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
+	values("0000001600000000", "0001", "0002", "Reply", 4,"대댓글0", 0, 0);
+insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
+	values("0000001600000001", "0001", "0002", "Reply", 4,"대댓글1", 0, 0);

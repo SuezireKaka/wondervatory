@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY) class ContactPointVO {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY) 
+public class ContactPointVO {
 	private String cpType;
 	private String cpVal;
 
