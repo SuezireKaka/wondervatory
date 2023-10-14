@@ -168,5 +168,7 @@
 		</selectKey>
 		INSERT INTO T_Account(id, login_id, pass_word, owner_id, response_id, nick, intro)
 		VALUES (#{id}, #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introduction});
+		INSERT INTO t_role(role, account_id)
+		VALUES ('reader',#{response.id});
 	</insert>
 </mapper>
