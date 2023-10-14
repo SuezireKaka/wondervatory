@@ -74,7 +74,7 @@
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val
+			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val, role.role role_role
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id
@@ -82,6 +82,8 @@
 		    on rsp.id = acc.response_id
 		  LEFT OUTER JOIN T_contact_Point cp
 		    on rsp.id = cp.owner_id
+		  LEFT OUTER JOIN T_role role
+		    on role.account_id = acc.id
 		 where acc.owner_id = #{ownerId}
 		   AND acc.alive = 1
 		 order by acc.id DESC
