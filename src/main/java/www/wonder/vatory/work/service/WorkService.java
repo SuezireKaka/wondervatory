@@ -22,6 +22,7 @@ import www.wonder.vatory.iis.model.TagRelId;
 import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
@@ -100,7 +101,7 @@ public class WorkService {
 		return ret;
 	}
 	
-	public int manageWork(DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
+	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
 		SemiPostVO parent = semiPostPair.getFirstVal();
 		SemiPostVO child = semiPostPair.getSecondVal();
 		String parentId = parent.getId();
@@ -111,6 +112,7 @@ public class WorkService {
 				: "reply";
 		//child.id가 없으면 제작
 		if (child.getId() == "") {
+			child.setWriter(user);
 			int cnt = workMapper.createSemiPost(parent, child, type);
 			return cnt;
 		}

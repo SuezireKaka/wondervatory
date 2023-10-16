@@ -72,7 +72,7 @@ public class WorkController {
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
 	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
 		if (user.getId().equals(semiPostPair.getSecondVal().getWriter().getId())) {
-			return ResponseEntity.ok(workService.manageWork(semiPostPair));
+			return ResponseEntity.ok(workService.manageWork(user, semiPostPair));
 		}
 		return null;
 	}
