@@ -106,10 +106,10 @@ public class WorkService {
 		SemiPostVO child = semiPostPair.getSecondVal();
 		String parentId = parent.getId();
 		//parent.id가 없으면 Series
-		String type = ObjectUtils.isEmpty(child.getId()) ? "Series"
+		String type = parent.getId().equals("") ? "Series"
 				//parent.id가 4자리면 Post
 				: parentId.length() == 4 ? "Post"
-				: "reply";
+				: "Reply";
 		//child.id가 없으면 제작
 		if (child.getId() == "") {
 			child.setWriter(user);
