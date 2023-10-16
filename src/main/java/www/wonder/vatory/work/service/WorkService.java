@@ -109,12 +109,8 @@ public class WorkService {
 				//parent.id가 4자리면 Post
 				: parentId.length() == 4 ? "Post"
 				: "reply";
-		// 타입이 Series면 parent.hTier를 -1로
-		if (type == "Series") {
-			parent.setHTier(-1);
-		}
 		//child.id가 없으면 제작
-		if (ObjectUtils.isEmpty(child.getId())) {
+		if (child.getId() == "") {
 			int cnt = workMapper.createSemiPost(parent, child, type);
 			return cnt;
 		}

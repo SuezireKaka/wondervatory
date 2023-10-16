@@ -67,7 +67,7 @@ public class JwtTokenProvider {
 	// 예제 13.13
 	// JWT 토큰으로 인증 정보 조회
 	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = partyMapper.findByNick(this.getUsername(token));
+		UserDetails userDetails = partyMapper.findByLoginId(this.getUsername(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 

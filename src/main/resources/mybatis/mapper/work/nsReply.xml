@@ -136,7 +136,7 @@
 		<selectKey keyProperty="child.id" resultType="String" order="BEFORE">
     		select CONCAT(#{child.id}, NEXT_PK('s_#{type}'))  
   		</selectKey>
-	INSERT INTO T_work(id, h_tier, descrim, bb_id, writer_id, TITLE, content, complete)
+	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
 		VALUES (#{child.id}, #{parent.hTier} + 1, #{type}, '0000', #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});
 	</insert>
 	
@@ -145,9 +145,9 @@
 	<insert id="updateSemiPost">
 	update T_work
 	   set TITLE = #{child.title},
-	       content = #{content},
+	       content = #{child.content},
 	       complete = #{child.isComplete}
-	 where id = #{semiPost.id}
+	 where id = #{child.id}
 	</insert>
 	
 	<!-- public int updatePost(PostVO post);-->

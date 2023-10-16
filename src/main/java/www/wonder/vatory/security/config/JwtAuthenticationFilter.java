@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // 예제 13.17
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 

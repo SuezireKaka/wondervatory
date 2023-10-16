@@ -12,23 +12,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class DreamSecurityConfiguration {
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
 	private CustomAuthenticationEntryPoint point;
-
+	
 	@Autowired
-	private JwtAuthenticationFilter filter;
+	private CustomAccessDeniedHandler denyHandler;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -36,19 +35,18 @@ public class DreamSecurityConfiguration {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-		// 인증 문제
-		http.httpBasic().disable().csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.authorizeHttpRequests(authCustomizer -> authCustomizer
-						.requestMatchers(new MvcRequestMatcher(introspector, "/*/anonymous/**")).permitAll())
-				// .authorizeHttpRequests(auth
-				// ->auth.requestMatchers("/anonymous/**").permitAll())
-				// .authorizeHttpRequests(authCustomizer ->
-				// authCustomizer.anyRequest().authenticated())
-				.addFilterBefore(filter, RequestCacheAwareFilter.class)
-				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+		// configuration
+		http.httpBasic().disable()
+				.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth ->auth.requestMatchers("/*/anonymous/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+                .exceptionHandling(ex -> ex.accessDeniedHandler(denyHandler))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), RequestCacheAwareFilter.class)
+				;
+		//.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 		return http.build();
 	}
 
