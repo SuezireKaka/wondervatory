@@ -9,6 +9,7 @@ import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
+import www.wonder.vatory.party.model.RoleVO;
 
 @Mapper
 public interface PartyMapper {
@@ -24,6 +25,6 @@ public interface PartyMapper {
 	public int createManager(AccountVO account);
 	public int createPerson(PersonVO person);
 	public int createAccount(AccountVO account);
-	
+	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role);
 	
 }

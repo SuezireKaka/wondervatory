@@ -170,7 +170,11 @@
 		</selectKey>
 		INSERT INTO T_Account(id, login_id, pass_word, owner_id, response_id, nick, intro)
 		VALUES (#{id}, #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introduction});
+	</insert>
+	
+	<!-- 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role); -->
+	<insert id="createRole">
 		INSERT INTO t_role(role, account_id)
-		VALUES ('reader',#{response.id});
+		VALUES (#{role.role}, #{account.id});
 	</insert>
 </mapper>

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
@@ -24,6 +25,7 @@ import www.wonder.vatory.iis.service.TagService;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
+import www.wonder.vatory.work.model.SemiPostVO;
 import www.wonder.vatory.work.model.SeriesVO;
 
 @Service
@@ -98,7 +100,40 @@ public class WorkService {
 		return ret;
 	}
 	
-
+	public int manageWork(DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
+		SemiPostVO parent = semiPostPair.getFirstVal();
+		SemiPostVO child = semiPostPair.getSecondVal();
+		String parentId = parent.getId();
+		//parent.id가 없으면 Series
+		String type = ObjectUtils.isEmpty(child.getId()) ? "Series"
+				//parent.id가 4자리면 Post
+				: parentId.length() == 4 ? "Post"
+				: "reply";
+		// 타입이 Series면 parent.hTier를 -1로
+		if (type == "Series") {
+			parent.setHTier(-1);
+		}
+		//child.id가 없으면 제작
+		if (ObjectUtils.isEmpty(child.getId())) {
+			int cnt = workMapper.createSemiPost(parent, child, type);
+			return cnt;
+		}
+		//child.id가 있으면 수정
+		else {
+			int cnt = workMapper.updateSemiPost(parent, child, type);
+			return cnt;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private Map<String, Integer> buildTF(PostVO post) {
 		//대상이되는 문자열 추출
@@ -159,12 +194,7 @@ public class WorkService {
 	
 	
 	
-	
 
-	/** */
-	public int updateReply(ReplyVO reply) {
-		return workMapper.updateReply(reply);
-	}
 	
 	/** hid like로 지우기
 	 * tf, df 정보 수정도 고려하여야 함.

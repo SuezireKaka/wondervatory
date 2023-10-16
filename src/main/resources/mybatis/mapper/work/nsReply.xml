@@ -122,8 +122,6 @@
 	       ON w.writer_id = a.id
 	 where w.id like CONCAT(#{id}, '%')
 	</select>
-	
-		
 	<!-- public void incReadCount(String id); -->
 	<update id="incReadCount">
 	update T_work
@@ -132,23 +130,31 @@
 	 where id = #{id}
 	</update>
 	
+	<!-- public int createSemiPost(@Param("parent") SemiPostVO parent,
+			@Param("child") SemiPostVO child, @Param("type") String type); -->
+	<insert id="createSemiPost">
+		<selectKey keyProperty="child.id" resultType="String" order="BEFORE">
+    		select CONCAT(#{child.id}, NEXT_PK('s_#{type}'))  
+  		</selectKey>
+	INSERT INTO T_work(id, h_tier, descrim, bb_id, writer_id, TITLE, content, complete)
+		VALUES (#{child.id}, #{parent.hTier} + 1, #{type}, '0000', #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});
+	</insert>
 	
-	
-	
-	
-	
+	<!-- public int updateSemiPost(@Param("parent") SemiPostVO parent,
+			@Param("child") SemiPostVO child, @Param("type") String type); -->
+	<insert id="updateSemiPost">
+	update T_work
+	   set TITLE = #{child.title},
+	       content = #{content},
+	       complete = #{child.isComplete}
+	 where id = #{semiPost.id}
+	</insert>
 	
 	<!-- public int updatePost(PostVO post);-->
 	<update id="updatePost">
 	update T_work
 	   set TITLE = #{title},
 	       content = #{content}
-	 where id = #{id} 
-	</update>
-	<!-- public int updateReply(ReplyVO reply);-->
-	<update id="updateReply">
-	update T_work
-	   set content = #{content}
 	 where id = #{id} 
 	</update>
 	

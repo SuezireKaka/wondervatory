@@ -19,6 +19,10 @@ public class RoleVO {
 	String manual;
 	List<ActVO> allowedActsList;
 	
+	public RoleVO(String role) {
+		this.role = role;
+	};
+	
 	public SimpleGrantedAuthority getAuthority() {
 		return new SimpleGrantedAuthority(role);
 	}

@@ -17,6 +17,7 @@ import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.ContactPointVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
+import www.wonder.vatory.party.model.RoleVO;
 import www.wonder.vatory.party.model.SignUpDto;
 
 
@@ -97,7 +98,8 @@ public class PartyService implements UserDetailsService {
 		int cnt = partyMapper.createPerson(person);
 		account.encodePswd(pswdEnc);
 
-		cnt *= partyMapper.createAccount(account);
+		cnt &= partyMapper.createAccount(account)
+				& partyMapper.createRole(account, new RoleVO("reader"));
 		return cnt;
 	}
 }

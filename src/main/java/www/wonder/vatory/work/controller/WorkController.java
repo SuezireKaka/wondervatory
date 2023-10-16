@@ -5,19 +5,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.party.model.PartyVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
+import www.wonder.vatory.work.model.SemiPostVO;
 import www.wonder.vatory.work.model.SeriesVO;
 import www.wonder.vatory.work.service.WorkService;
 
@@ -62,11 +66,14 @@ public class WorkController {
 		return new ResponseEntity<>(post, HttpStatus.OK);
 	}
 	
-
-	/** */
-	@PutMapping("/updateReply")
-	public ResponseEntity<Integer> updateReply(ReplyVO reply) {
-		return new ResponseEntity<>(workService.updateReply(reply), HttpStatus.OK);
+	// 하나로 전부 통합할 것
+	// /work/manageWork
+	@PostMapping("/manageWork")
+	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal PartyVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
+		if (user.getId() == semiPostPair.getSecondVal().getWriter().getId()) {
+			return ResponseEntity.ok(workService.manageWork(semiPostPair));
+		}
+		return (ResponseEntity<Integer>) ResponseEntity.badRequest();
 	}
 
 	/** hid like로 지우기 */
