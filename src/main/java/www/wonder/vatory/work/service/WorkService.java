@@ -106,12 +106,12 @@ public class WorkService {
 		SemiPostVO child = semiPostPair.getSecondVal();
 		String parentId = parent.getId();
 		//parent.id가 없으면 Series
-		String type = parent.getId().equals("") ? "Series"
+		String type = parentId.equals("") ? "Series"
 				//parent.id가 4자리면 Post
 				: parentId.length() == 4 ? "Post"
 				: "Reply";
 		//child.id가 없으면 제작
-		if (child.getId() == "") {
+		if (ObjectUtils.isEmpty(child.getId())) {
 			child.setWriter(user);
 			int cnt = workMapper.createSemiPost(parent, child, type);
 			return cnt;
