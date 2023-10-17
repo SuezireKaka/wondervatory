@@ -137,7 +137,7 @@
     		select CONCAT(#{parent.id}, NEXT_PK('s_${type}'))  
   		</selectKey>
 	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
-		VALUES (#{id}, #{parent.hTier} + 1, #{type}, '0000', #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});
+		VALUES (#{id}, #{child.hTier}, #{type}, #{child.boardVO.id}, #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});
 	</insert>
 	
 	<!-- public int updateSemiPost(@Param("parent") SemiPostVO parent,

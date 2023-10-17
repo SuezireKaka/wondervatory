@@ -113,6 +113,7 @@ public class WorkService {
 		//child.id가 없으면 제작
 		if (ObjectUtils.isEmpty(child.getId())) {
 			child.setWriter(user);
+			child.setHTier(parent.getId().length() / 4);
 			int cnt = workMapper.createSemiPost(parent, child, type);
 			return cnt;
 		}
