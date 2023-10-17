@@ -134,7 +134,7 @@
 			@Param("child") SemiPostVO child, @Param("type") String type); -->
 	<insert id="createSemiPost">
 		<selectKey keyProperty="id" resultType="String" order="BEFORE">
-    		select CONCAT(#{parent.id}, NEXT_PK('s_#{type}'))  
+    		select CONCAT(#{parent.id}, NEXT_PK('s_${type}'))  
   		</selectKey>
 	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
 		VALUES (#{id}, #{parent.hTier} + 1, #{type}, '0000', #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});

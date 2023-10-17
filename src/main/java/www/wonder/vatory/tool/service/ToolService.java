@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
+import www.wonder.vatory.tool.model.CustomObjectVO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Service
@@ -38,6 +39,10 @@ public class ToolService {
 		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
 		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
 		return result;
+	}
+
+	public CustomObjectVO getObjectById(String objectId) {
+		return toolMapper.getObjectById(objectId);
 	}
 
 }

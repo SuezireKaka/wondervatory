@@ -18,6 +18,9 @@
 	<resultMap id="rmCustomObjectVO" extends="nsEntity.rmSpaceEntity"
 		type="www.wonder.vatory.tool.model.CustomObjectVO">
 		<result property="name" column="name" />
+		<collection property="customPropertiesList" columnPrefix="prop_"
+			resultMap="rmCustomPropertyVO">
+		</collection>
 		<discriminator javaType="String" column="descrim">
          	<case value="Entity" resultMap="rmCustomEntityVO" />
          	<case value="Relation" resultMap="rmCustomRelationVO" />
@@ -36,6 +39,12 @@
 				resultMap="rmCustomEntityVO" />
 		<association property="other" columnPrefix="other_" notNullColumn="id"
 				resultMap="rmCustomEntityVO" />
+	</resultMap>
+	
+	<resultMap id="rmCustomPropertyVO"
+		type="www.wonder.vatory.tool.model.CustomPropertyVO">
+		<result property="propType" column="prop_type" />
+		<result property="propVal" column="prop_val" />
 	</resultMap>
 	
 	<!-- public long getFoundRows(); -->
@@ -85,6 +94,15 @@
 		  from t_tool
 		 where parent_id = #{entityId}
 		   and parent_type = 'Entity'
+	</select>
+	<!-- public CustomObjectVO getObjectById(@Param("objectId") String objectId); -->
+	<select id="getObjectById" resultMap="rmCustomObjectVO">
+		SELECT co.*,
+			prop.prop_type prop_prop_type, prop.prop_type prop_prop_type 
+		  from t_custom_obj co
+		  LEFT OUTER JOIN t_custom_property prop
+		    on co.id = prop.owner_id
+		 where co.id = #{objectId}
 	</select>
 
 </mapper>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.tool.model.CustomObjectVO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
 
@@ -41,6 +42,13 @@ public class ToolController {
 	@GetMapping("/anonymous/getToolByEntity/{entityId}")
 	public ResponseEntity<ToolVO> getToolByEntity(@PathVariable String entityId) {
 		ToolVO result = toolService.getToolByEntity(entityId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /tool/anonymous/getObjectById/0000
+	@GetMapping("/anonymous/getObjectById/{objectId}")
+	public ResponseEntity<CustomObjectVO> getObjectById(@PathVariable String objectId) {
+		CustomObjectVO result = toolService.getObjectById(objectId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
