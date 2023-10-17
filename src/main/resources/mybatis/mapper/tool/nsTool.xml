@@ -68,6 +68,13 @@
 		   and descrim = 'Entity'
 	</select>
 	
+	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
+	<select id="listPropertiesOf" resultMap="rmCustomPropertyVO">
+		SELECT prop.*
+		  from t_custom_property prop
+		 where prop.owner_id = #{objectId}
+	</select>
+	
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
 		SELECT rel.*,
@@ -94,15 +101,6 @@
 		  from t_tool
 		 where parent_id = #{entityId}
 		   and parent_type = 'Entity'
-	</select>
-	<!-- public CustomObjectVO getObjectById(@Param("objectId") String objectId); -->
-	<select id="getObjectById" resultMap="rmCustomObjectVO">
-		SELECT co.*,
-			prop.prop_type prop_prop_type, prop.prop_type prop_prop_type 
-		  from t_custom_obj co
-		  LEFT OUTER JOIN t_custom_property prop
-		    on co.id = prop.owner_id
-		 where co.id = #{objectId}
 	</select>
 
 </mapper>

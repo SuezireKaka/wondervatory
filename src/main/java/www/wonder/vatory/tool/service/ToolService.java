@@ -25,6 +25,10 @@ public class ToolService {
 
 		return new DreamPair<List<ToolVO>, PagingDTO>(listResult, paging);
 	}
+	
+	public List<CustomObjectVO> listPropertiesOf(String objectId) {
+		return toolMapper.listPropertiesOf(objectId);
+	}
 
 	public ToolVO getToolById(String toolId) {
 		ToolVO result = toolMapper.getToolById(toolId);
@@ -39,10 +43,6 @@ public class ToolService {
 		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
 		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
 		return result;
-	}
-
-	public CustomObjectVO getObjectById(String objectId) {
-		return toolMapper.getObjectById(objectId);
 	}
 
 }

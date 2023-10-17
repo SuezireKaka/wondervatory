@@ -31,6 +31,13 @@ public class ToolController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	// /tool/anonymous/listPropertiesOf/0000
+	@GetMapping("/anonymous/listPropertiesOf/{objectId}")
+	public ResponseEntity<List<CustomObjectVO>> listPropertiesOf(@PathVariable String objectId) {
+		List<CustomObjectVO> result = toolService.listPropertiesOf(objectId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	// /tool/anonymous/getToolById/0000
 	@GetMapping("/anonymous/getToolById/{toolId}")
 	public ResponseEntity<ToolVO> getToolById(@PathVariable String toolId) {
@@ -42,13 +49,6 @@ public class ToolController {
 	@GetMapping("/anonymous/getToolByEntity/{entityId}")
 	public ResponseEntity<ToolVO> getToolByEntity(@PathVariable String entityId) {
 		ToolVO result = toolService.getToolByEntity(entityId);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-	
-	// /tool/anonymous/getObjectById/0000
-	@GetMapping("/anonymous/getObjectById/{objectId}")
-	public ResponseEntity<CustomObjectVO> getObjectById(@PathVariable String objectId) {
-		CustomObjectVO result = toolService.getObjectById(objectId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

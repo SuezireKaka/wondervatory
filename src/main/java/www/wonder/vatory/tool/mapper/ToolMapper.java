@@ -17,9 +17,9 @@ public interface ToolMapper {
 	public List<ToolVO> listAllFromSeries(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging);
 	public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);
 	public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);
+	public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId);
 	
 	public ToolVO getToolById(@Param("toolId") String toolId);
 	public ToolVO getToolByEntity(@Param("entityId") String entityId);
-	public CustomObjectVO getObjectById(@Param("objectId") String objectId);
 	
 }
