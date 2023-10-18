@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import www.wonder.vatory.fileattachment.service.AttachFileService;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.framework.nlpposservice.NounExtractor;
@@ -35,6 +36,9 @@ public class WorkService {
 	private WorkMapper workMapper;
 	@Autowired
 	private TagService tagService;
+	@Autowired
+	private AttachFileService attachFileService;
+	
 	
 	/** 게시판의 모든 원글 목록 조회 */ 
 	public DreamPair<List<SeriesVO>, PagingDTO> listAllSeries(String boardId, int page) {
@@ -115,11 +119,14 @@ public class WorkService {
 			child.setWriter(user);
 			child.setHTier(parent.getId().length() / 4);
 			int cnt = workMapper.createSemiPost(parent, child, type);
+			attachFileService.createAttachFiles(child);
 			return cnt;
 		}
 		//child.id가 있으면 수정
 		else {
+			attachFileService.deleteAttachFiles(child);
 			int cnt = workMapper.updateSemiPost(parent, child, type);
+			attachFileService.createAttachFiles(child);
 			return cnt;
 		}
 	}
