@@ -47,7 +47,7 @@ public class AttachFileCleaner {
 	// 매일이 시작 할 때 실행
 	@Scheduled(cron = "0 0 0 * * *")
 	public void crearAttachFile() throws InterruptedException {
-		System.out.println("crearAttachFile 실행 시작");
+		System.out.println("clearAttachFile() 실행 시작");
 		// 어제 등록된 첨부 정보를 DB에서 확보
 		List<String> dur = getDuration();
 
