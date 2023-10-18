@@ -45,7 +45,7 @@
 		type="www.wonder.vatory.tool.model.CustomPropertyVO">
 		<result property="propType" column="prop_type" />
 		<result property="propVal" column="prop_val" />
-		<result property="order" column="order" />
+		<result property="level" column="level" />
 	</resultMap>
 	
 	<!-- public long getFoundRows(); -->
@@ -103,5 +103,24 @@
 		 where parent_id = #{entityId}
 		   and parent_type = 'Entity'
 	</select>
+	
+	<!-- public int insertAllPropsFrom(@Param("objectId") String objectId,
+			@Param("insertList") List<PropertyRequestDTO> insertList);-->
+	<insert id="insertAllPropsFrom">
+		<if test="!(insertList.isEmpty())">
+			INSERT INTO T_contact_Point(owner_id, level, prop_type, prop_val)
+			VALUES
+			<foreach item="prop" collection="insertList" separator=","
+					close=";">
+				(#{objectId}, #{prop.order} #{prop.propType}, #{prop.propVal})
+			</foreach>
+		</if>
+	</insert>
+	
+	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,
+			@Param("updateList") List<PropertyRequestDTO> updateList);-->
+	
+	<!-- public int deleteAllPropsFrom(@Param("objectId") String objectId,
+			@Param("deleteList") List<PropertyRequestDTO> deleteList);-->
 
 </mapper>

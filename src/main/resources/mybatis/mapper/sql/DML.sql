@@ -225,17 +225,19 @@ create table T_custom_property(
 >>>>>>> 92986dc927e811166caaf82b5eea699b4e5034c0:src/main/resources/mybatis/mapper/sql/DML.sql
 
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0000", "위치", "API");
+	values("0000", 0, "위치", "API");
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0000", "제조일자", "2023-05-06");
+	values("0000", 1, "제조일자", "2023-05-06");
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0000", "능력", "신체 압축");
+	values("0000", 2, "능력", "신체 압축");
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0001", "위치", "오라클");
+	values("0001", 0, "위치", "오라클");
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0001", "제습기", "???");
+	values("0001", 1, "제습기", "???");
 insert into T_custom_property(owner_id, prop_type, prop_val)
-	values("0002", "시작년도", "BC 127");
+	values("0002", 0, "시작년도", "BC 127");
+
+ 
 	
 			 
 			 

@@ -247,9 +247,10 @@ create table t_role(
 
 create table T_custom_property(
 	owner_id	char(4),
+	order		MEDIUMINT,
 	prop_type	varchar(255),
 	prop_val	varchar(255),
-	primary key(owner_id, prop_type)
+	primary key(owner_id, order)
 );
 
 	
@@ -260,3 +261,5 @@ create table T_favorites(
 	response_id	varchar(255) comment '시리즈id',
 	favorites	tinyint
 );
+
+create index idx_prop_type on T_custom_property(prop_type);

@@ -59,11 +59,11 @@ public class ToolController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /tool/anonymous/getToolByEntity/0000
-	@PostMapping("/manageWork")
+	// /tool/anonymous/syncPropertiesOf/0000
+	@PostMapping("/syncPropertiesOf")
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
-	public ResponseEntity<Integer> updateAllProperties(
+	public ResponseEntity<Integer> syncPropertiesOf(
 			@AuthenticationPrincipal AccountVO user, @RequestBody CustomPropertyIncomeDTO income) {
-		return ResponseEntity.ok(toolService.updateAllProperties(income));
+		return ResponseEntity.ok(toolService.syncPropertiesOf(income));
 	}
 }

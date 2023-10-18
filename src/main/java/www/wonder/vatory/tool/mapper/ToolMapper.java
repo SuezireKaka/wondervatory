@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomObjectVO;
-import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
+import www.wonder.vatory.tool.model.PropertyRequestDTO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Mapper
@@ -23,8 +23,13 @@ public interface ToolMapper {
 	public ToolVO getToolById(@Param("toolId") String toolId);
 	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
-	public int saveAllPropsInto(String objectId, List<CustomPropertyVO> customPropertyList);
+	public int insertAllPropsFrom(@Param("objectId") String objectId,
+			@Param("insertList") List<PropertyRequestDTO> insertList);
 	
-	public int deleteAllPropsFrom(String objectId, List<CustomPropertyVO> customPropertyList);
+	public int updateAllPropsFrom(@Param("objectId") String objectId,
+			@Param("updateList") List<PropertyRequestDTO> updateList);
+	
+	public int deleteAllPropsFrom(@Param("objectId") String objectId,
+			@Param("deleteList") List<PropertyRequestDTO> deleteList);
 	
 }

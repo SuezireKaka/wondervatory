@@ -1,7 +1,5 @@
 package www.wonder.vatory.tool.model;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +7,9 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class CustomPropertyIncomeDTO {
-	String objectId;
-	List<PropertyRequestDTO> requestList;
+public class PropertyRequestDTO {
+	String propType;
+	String propVal;
+	String editType;
+	int level;
 }
