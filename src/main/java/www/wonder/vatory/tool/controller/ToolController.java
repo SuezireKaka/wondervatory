@@ -5,17 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.model.CustomObjectVO;
+import www.wonder.vatory.tool.model.CustomPropertyIncomeDTO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
+import www.wonder.vatory.work.model.SemiPostVO;
 
 @RestController	
 @CrossOrigin
@@ -50,5 +57,13 @@ public class ToolController {
 	public ResponseEntity<ToolVO> getToolByEntity(@PathVariable String entityId) {
 		ToolVO result = toolService.getToolByEntity(entityId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /tool/anonymous/getToolByEntity/0000
+	@PostMapping("/manageWork")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	public ResponseEntity<Integer> updateAllProperties(
+			@AuthenticationPrincipal AccountVO user, @RequestBody CustomPropertyIncomeDTO income) {
+		return ResponseEntity.ok(toolService.updateAllProperties(income));
 	}
 }

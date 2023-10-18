@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class CustomPropertyVO {
+public class CustomPropertyVO {	
 	private String propType;
 	private String propVal;
+	private int order;
 
 	@Override
 	public String toString() {
-		return "[propType=" + propType + ", propVal=" + propVal + "]";
+		return "[propType=" + propType + ", propVal=" + propVal + ", order=" + order + "]";
 	}
 }

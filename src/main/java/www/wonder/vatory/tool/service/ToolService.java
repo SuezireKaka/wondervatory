@@ -9,6 +9,8 @@ import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomObjectVO;
+import www.wonder.vatory.tool.model.CustomPropertyIncomeDTO;
+import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Service
@@ -42,6 +44,14 @@ public class ToolService {
 		String toolId = result.getId();
 		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
 		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
+		return result;
+	}
+
+	public int updateAllProperties(CustomPropertyIncomeDTO income) {
+		String objectId = income.getObjectId();
+		List<CustomPropertyVO> customPropertyList = income.getCustomPropertyList();
+		int result = toolMapper.deleteAllPropsFrom(objectId, customPropertyList)
+				& toolMapper.saveAllPropsInto(objectId, customPropertyList);
 		return result;
 	}
 

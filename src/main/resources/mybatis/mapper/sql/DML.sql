@@ -211,8 +211,18 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, di
 insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
 	values("0000001600000001", "0001", "0002", "Reply", 4,"대댓글1", 0, 0);
 
+<<<<<<< HEAD:src/main/resources/mybatis/mapper/sql/create.sql
+create table T_custom_property(
+	owner_id	char(4),
+	prop_type	varchar(255),
+	prop_val	varchar(255),
+	height		int default 1001,
+	primary key(owner_id, prop_type)
+);
+=======
 
 ----10 17 02------------
+>>>>>>> 92986dc927e811166caaf82b5eea699b4e5034c0:src/main/resources/mybatis/mapper/sql/DML.sql
 
 insert into T_custom_property(owner_id, prop_type, prop_val)
 	values("0000", "위치", "API");
