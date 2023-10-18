@@ -80,8 +80,8 @@ public class FileAttachController {
 	}
 
 	/** 썸네일 파일을 화면에 조그맣게 표현해 줄때 작동합니다 */
-	@PostMapping("/anonymous/displayThumbnail")
 	@ResponseBody
+	@PostMapping("/anonymous/displayThumbnail")
 	public ResponseEntity<byte[]> getFile(@RequestBody AttachFileDTO afdto) {
 		ResponseEntity<byte[]> result = null;
 		try {
@@ -95,8 +95,8 @@ public class FileAttachController {
 		return result;
 	}
 
-	@PostMapping("/anonymous/getOriginalFile")
 	@ResponseBody
+	@PostMapping("/anonymous/getOriginalFile")
 	public ResponseEntity<byte[]> getOriginalFile(@RequestBody AttachFileDTO afdto) {
 		ResponseEntity<byte[]> result = null;
 		try {
