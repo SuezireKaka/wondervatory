@@ -457,6 +457,7 @@ create table T_custom_property(
 	owner_id	char(4),
 	prop_type	varchar(255),
 	prop_val	varchar(255),
+	height		int default 1001,
 	primary key(owner_id, prop_type)
 );
 
