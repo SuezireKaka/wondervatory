@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import www.wonder.vatory.fileattachment.model.MappedTableDef;
+import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
 import www.wonder.vatory.framework.property.ano.TargetProperty;
 import www.wonder.vatory.party.model.AccountVO;
@@ -16,8 +18,11 @@ import www.wonder.vatory.party.model.AccountVO;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ReplyVO extends TimeEntity {
-
+public class ReplyVO extends TimeEntity  implements MappedTableDef {
+	public String getMappedTableName() {
+		return "T_work";
+	}
+	
 	private BoardVO boardVO;
 	@TargetProperty
 	private AccountVO writer;	//게시물 작성자
@@ -29,6 +34,8 @@ public class ReplyVO extends TimeEntity {
 	// compose pattern
 	private List<ReplyVO> repliesList = new ArrayList<>();
 	
+	private List<String> listTag;
+	private List<AttachFileDTO> listAttachFile;
 	public ReplyVO(String id) {
 		super.setId(id);
 	}

@@ -29,6 +29,7 @@ import www.wonder.vatory.fileattachment.model.PlaybleContentTypes;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileCleaner;
 import www.wonder.vatory.framework.exception.BusinessException;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.PartyVO;
 
 @RestController		//Container에 담기도록 지정
@@ -42,7 +43,7 @@ public class FileAttachController {
 	 * 무거운 것 미리 올려두자
 	 */
 	@PostMapping("/upload_multi")
-	public ResponseEntity<List<AttachFileDTO>> uploadAttachedMultiFiles(@AuthenticationPrincipal PartyVO user,
+	public ResponseEntity<List<AttachFileDTO>> uploadAttachedMultiFiles(@AuthenticationPrincipal AccountVO user,
 			@RequestParam MultipartFile[] attachFiles) throws BusinessException {
 		List<AttachFileDTO> listRet = new ArrayList<>();
 
