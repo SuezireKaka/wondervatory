@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileService;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
@@ -85,9 +86,9 @@ public class WorkService {
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
 
-		//attachFileService 아직 추가안해서 주석처리
-		//List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
-		//ret.setListAttachFile(attachFileList);
+	
+		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
+		ret.setListAttachFile(attachFileList);
 		
 		if (id.length() == 8) {
 			Map<String, ReplyVO> map = new HashMap<>();
@@ -119,6 +120,7 @@ public class WorkService {
 			child.setWriter(user);
 			child.setHTier(parent.getId().length() / 4);
 			int cnt = workMapper.createSemiPost(parent, child, type);
+			//createTagRelation(child);
 			attachFileService.createAttachFiles(child);
 			return cnt;
 		}
@@ -126,22 +128,16 @@ public class WorkService {
 		else {
 			attachFileService.deleteAttachFiles(child);
 			int cnt = workMapper.updateSemiPost(parent, child, type);
+			//createTagRelation(child);
 			attachFileService.createAttachFiles(child);
 			return cnt;
 		}
 	}
 	
+
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	private Map<String, Integer> buildTF(PostVO post) {
+	private Map<String, Integer> buildTF(SemiPostVO post) {
 		//대상이되는 문자열 추출
 		List<String> docs = PropertyExtractor.extractProperty(post);
 
@@ -169,7 +165,7 @@ public class WorkService {
 	}
 
 	@Transactional
-	private void createTagRelation(PostVO post) {
+	private void createTagRelation(SemiPostVO post) {
 		Map<String, Integer> mapTF = buildTF(post);
 
 		//기존 단어 찾음. 기존 단어의 DF는 이 문서에서 나온 단어 출현 횟수를 올려주어야 함. 
@@ -184,10 +180,10 @@ public class WorkService {
 		
 		//게시물과 단어 사이의 관계 만들기
 		List<TagRelVO> list = listExistingTags.stream().map(tagVo->
-			new TagRelVO(new TagRelId("T_reply", post.getId(), tagVo.getId()), 
+			new TagRelVO(new TagRelId("T_work", post.getId(), tagVo.getId()), 
 					mapTF.get(tagVo.getWord()))).collect(Collectors.toList());
 		for (TagVO tagVo : listNewTags) {
-			TagRelId id = new TagRelId("T_reply", post.getId(), tagVo.getId());
+			TagRelId id = new TagRelId("T_work", post.getId(), tagVo.getId());
 			list.add(new TagRelVO(id, mapTF.get(tagVo.getWord())));
 		}
 		
