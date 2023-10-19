@@ -1,7 +1,13 @@
 package www.wonder.vatory.framework.model;
 
+import lombok.Data;
+import lombok.Getter;
+
+@Data
+@Getter
 public class PagingDTO {
-	private static final int LIMIT = 10;
+	private static final int POST_LIMIT = 10;
+	private static final int SERIES_LIMIT = 20;
 	private static final int BTN_CNT = 10;
 	private int page;
 	private long offset;
@@ -13,15 +19,19 @@ public class PagingDTO {
 	
 	public PagingDTO(int page) {
 		this.page = page;
-		offset = (this.page - 1) *  LIMIT;
+		offset = (this.page - 1) *  POST_LIMIT;
 	}
 
 	public long getOffset() {
 		return offset;
 	}
 
-	public static int getLimit() {
-		return LIMIT;
+	public static int getSeriesLimit() {
+		return SERIES_LIMIT;
+	}
+	
+	public static int getPostLimit() {
+		return POST_LIMIT;
 	}
 	
 	public int getLastPage() {
@@ -54,7 +64,7 @@ public class PagingDTO {
 	 */
 	public void buildPagination(long dataCount) {
 		//전체 쪽 수 
-		int totPageCount = (int) Math.ceil((float) dataCount / LIMIT);
+		int totPageCount = (int) Math.ceil((float) dataCount / POST_LIMIT);
 		//전체 쪽 수의 최소값 
 		totPageCount = totPageCount < 1 ? 1 : totPageCount;
 		//마지막 쪽 번호의 기본값 산출
