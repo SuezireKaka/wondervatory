@@ -45,7 +45,6 @@
 		type="www.wonder.vatory.tool.model.CustomPropertyVO">
 		<result property="propType" column="prop_type" />
 		<result property="propVal" column="prop_val" />
-		<result property="level" column="level" />
 	</resultMap>
 	
 	<!-- public long getFoundRows(); -->

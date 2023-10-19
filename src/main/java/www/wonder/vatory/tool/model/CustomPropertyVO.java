@@ -13,10 +13,9 @@ import lombok.NoArgsConstructor;
 public class CustomPropertyVO {	
 	private String propType;
 	private String propVal;
-	private int level;
 
 	@Override
 	public String toString() {
-		return "[propType=" + propType + ", propVal=" + propVal + ", level=" + level + "]";
+		return "[propType=" + propType + ", propVal=" + propVal + "]";
 	}
 }

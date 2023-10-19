@@ -11,18 +11,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.model.CustomObjectVO;
-import www.wonder.vatory.tool.model.CustomPropertyIncomeDTO;
+import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
-import www.wonder.vatory.work.model.SemiPostVO;
 
 @RestController	
 @CrossOrigin
@@ -59,11 +58,11 @@ public class ToolController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /tool/anonymous/syncPropertiesOf/0000
-	@PostMapping("/syncPropertiesOf")
+	// /tool/syncPropertiesOf/0000
+	@PostMapping("/syncPropertiesOf/{objectId}")
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
-	public ResponseEntity<Integer> syncPropertiesOf(
-			@AuthenticationPrincipal AccountVO user, @RequestBody CustomPropertyIncomeDTO income) {
-		return ResponseEntity.ok(toolService.syncPropertiesOf(income));
+	public ResponseEntity<Integer> syncPropertiesOf(@AuthenticationPrincipal AccountVO user,
+			@PathVariable String objectId, @RequestParam CustomPropertyDTO[] request) {
+		return ResponseEntity.ok(toolService.syncPropertiesOf(objectId, request));
 	}
 }

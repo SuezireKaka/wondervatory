@@ -1,7 +1,6 @@
 package www.wonder.vatory.tool.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,7 @@ import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomObjectVO;
-import www.wonder.vatory.tool.model.CustomPropertyIncomeDTO;
-import www.wonder.vatory.tool.model.PropertyRequestDTO;
+import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Service
@@ -48,25 +46,10 @@ public class ToolService {
 		return result;
 	}
 
-	public int syncPropertiesOf(CustomPropertyIncomeDTO income) {
-		String objectId = income.getObjectId();
-		List<PropertyRequestDTO> requestList = income.getRequestList();
-		// 먼저 delete로 DB에서 검색할 양을 최소로 만들고
-		// 그 상태에서 update를 빠르게 끝내서
-		// 더 할 게 없을 때 create 한다
-		List<PropertyRequestDTO> deleteList = editTypeToRequest(requestList, "D");
-		List<PropertyRequestDTO> updateList = editTypeToRequest(requestList, "U");
-		List<PropertyRequestDTO> createList = editTypeToRequest(requestList, "C");
-		
-		int result = toolMapper.deleteAllPropsFrom(objectId, deleteList);
-		
+	public int syncPropertiesOf(String objectId, CustomPropertyDTO[] request) {
+		int a = 100;
 		return 0;
 	}
 
-	private List<PropertyRequestDTO> editTypeToRequest(List<PropertyRequestDTO> requestList, String editType) {
-		return requestList.stream()
-				.filter(req -> {return req.getEditType() == editType;})
-				.collect(Collectors.toList());
-	}
 
 }
