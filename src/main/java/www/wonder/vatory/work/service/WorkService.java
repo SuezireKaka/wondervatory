@@ -47,6 +47,12 @@ public class WorkService {
 		List<SeriesVO> listResult = workMapper.listAllSeries(boardId, paging);
 		long dataCount = workMapper.getFoundRows();
 		paging.buildPagination(dataCount);
+		
+		// listResult의 각각에 썸네일 뿌리기
+		for (SeriesVO series : listResult) {
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(series);
+			series.setListAttachFile(attachFileList);
+		}
 
 		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
 	}
