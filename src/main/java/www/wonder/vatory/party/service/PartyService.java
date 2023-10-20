@@ -16,6 +16,7 @@ import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.ContactPointVO;
 import www.wonder.vatory.party.model.OrganizationVO;
+import www.wonder.vatory.party.model.PartyVO;
 import www.wonder.vatory.party.model.PersonVO;
 import www.wonder.vatory.party.model.RoleVO;
 import www.wonder.vatory.party.model.SignUpDto;
@@ -33,6 +34,12 @@ public class PartyService implements UserDetailsService {
 	public DreamPair<List<AccountVO>, PagingDTO> listAllAccount(String ownerId, int page) {
 		PagingDTO paging = new PagingDTO(page);
 		List<AccountVO> listResult = partyMapper.listAllAccount(ownerId, paging);
+		
+		for (AccountVO account : listResult) {
+			PartyVO response = account.getResponse();
+			List<ContactPointVO> contacts = partyMapper.listAllCpOf(response.getId());
+			response.setContactPointList(contacts);
+		}
 
 		long dataCount = partyMapper.getFoundRows();
 		paging.buildPagination(dataCount);

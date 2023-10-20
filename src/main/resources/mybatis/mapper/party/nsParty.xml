@@ -73,15 +73,12 @@
 	<select id="listAllAccount" resultMap="rmAccountVO">
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
-			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val, role.role role_role
+			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id
 		  LEFT OUTER JOIN T_party rsp
 		    on rsp.id = acc.response_id
-		  LEFT OUTER JOIN T_contact_Point cp
-		    on rsp.id = cp.owner_id
 		  LEFT OUTER JOIN T_role role
 		    on role.account_id = acc.id
 		 where acc.owner_id = #{ownerId}
@@ -91,7 +88,11 @@
 	</select>
 	
 	<!-- public List<ContactPointVO> listAllCpOf(@Param("ownerId") String ownerId); -->
-	
+	<select id="listAllCpOf" resultMap="rmContactPointVO">
+		SELECT *
+		  from t_contact_point
+		 WHERE owner_id = #{ownerId}
+	</select>
 	
 	<!-- public AccountVO findByLoginId(String loginId); -->
 	<select id="findByLoginId" resultMap="rmAccountVO">
