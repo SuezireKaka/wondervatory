@@ -78,8 +78,8 @@
 	<!-- public int countPropertiesOf(@Param("objectId") String objectId); -->
 	<select id="countPropertiesOf">
 		SELECT count(*)
-		  from t_custom_property prop
-		 where prop.owner_id = #{objectId}
+		  from t_custom_property
+		 where owner_id = #{objectId}
 	</select>
 	
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
