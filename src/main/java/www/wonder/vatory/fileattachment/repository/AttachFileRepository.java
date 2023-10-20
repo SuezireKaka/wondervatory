@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import jakarta.transaction.Transactional;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 
 public interface AttachFileRepository extends JpaRepository<AttachFileDTO, String>{
@@ -26,5 +27,6 @@ public interface AttachFileRepository extends JpaRepository<AttachFileDTO, Strin
 	
 	/** delete */
 	/** delete all */
+	@Transactional
 	int deleteAllByOwnerTypeAndOwnerId(String ownerType, String ownerId);
 }
