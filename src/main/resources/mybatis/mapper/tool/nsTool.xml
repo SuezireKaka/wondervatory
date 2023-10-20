@@ -75,6 +75,13 @@
 		 where prop.owner_id = #{objectId}
 	</select>
 	
+	<!-- public int countPropertiesOf(@Param("objectId") String objectId); -->
+	<select id="countPropertiesOf">
+		SELECT count(*)
+		  from t_custom_property prop
+		 where prop.owner_id = #{objectId}
+	</select>
+	
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
 		SELECT rel.*,
@@ -103,23 +110,48 @@
 		   and parent_type = 'Entity'
 	</select>
 	
-	<!-- public int insertAllPropsFrom(@Param("objectId") String objectId,
-			@Param("insertList") List<PropertyRequestDTO> insertList);-->
-	<insert id="insertAllPropsFrom">
+	<!-- public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
+			@Param("insertList") List<CustomPropertyDTO> insertList);-->
+	<insert id="insertToSync">
 		<if test="!(insertList.isEmpty())">
-			INSERT INTO T_contact_Point(owner_id, level, prop_type, prop_val)
+			INSERT INTO t_custom_property(owner_id, level, prop_type, prop_val)
 			VALUES
-			<foreach item="prop" collection="insertList" separator=","
-					close=";">
-				(#{objectId}, #{prop.order} #{prop.propType}, #{prop.propVal})
+			<foreach item="prop" collection="insertList" separator="," index="index" close=";">
+				(#{objectId}, (#{index} + #{offset}), #{prop.propType}, #{prop.propVal})
 			</foreach>
 		</if>
 	</insert>
 	
 	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,
-			@Param("updateList") List<PropertyRequestDTO> updateList);-->
+			@Param("updateList") List<CustomPropertyDTO> updateList);-->
+	<update id="updateAllPropsFrom">
+		<if test="!(updateList.isEmpty())">
+			UPDATE t_custom_property prop
+			  JOIN (
+			<foreach item="prop" collection="updateList" separator=" UNION ALL " index="index" close=")">
+			<if test="prop.isEdited">
+			  <choose>
+			    <when test = "index == 0">
+				  SELECT #{index} as LEVEL, #{prop.propType} as prop_type, #{prop.propVal} as prop_val
+			    </when>
+			    <otherwise>
+				  SELECT #{index}, #{prop.propType}, #{prop.propVal}
+			    </otherwise>
+			  </choose>
+			</if>
+			</foreach> vals ON prop.level = vals.level
+			   SET prop.prop_type = vals.prop_type, prop.prop_val = vals.prop_val
+			 WHERE prop.owner_id = '0000'
+		</if>
+	</update>
 	
-	<!-- public int deleteAllPropsFrom(@Param("objectId") String objectId,
-			@Param("deleteList") List<PropertyRequestDTO> deleteList);-->
+	<!-- public int deleteToSync(@Param("objectId") String objectId,
+			@Param("border") long border);-->
+	<delete id="deleteToSync">
+		DELETE prop.*
+		  from t_custom_property prop
+		 where prop.owner_id = #{objectId}
+		   and prop.level >= ${border}
+	</delete>
 
 </mapper>

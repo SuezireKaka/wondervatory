@@ -21,16 +21,18 @@ public interface ToolMapper {
 	public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);
 	public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId);
 	
+	public int countPropertiesOf(@Param("objectId") String objectId);
+	
 	public ToolVO getToolById(@Param("toolId") String toolId);
 	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
-	public int insertToSync(@Param("objectId") String objectId,
+	public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
 			@Param("insertList") List<CustomPropertyDTO> insertList);
 	
 	public int updateAllPropsFrom(@Param("objectId") String objectId,
 			@Param("updateList") List<CustomPropertyDTO> updateList);
 	
 	public int deleteToSync(@Param("objectId") String objectId,
-			@Param("deleteList") List<CustomPropertyDTO> deleteList);
+			@Param("border") int border);
 	
 }
