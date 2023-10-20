@@ -1,6 +1,8 @@
 package www.wonder.vatory.tool.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,9 +48,34 @@ public class ToolService {
 		return result;
 	}
 
-	public int syncPropertiesOf(String objectId, CustomPropertyDTO[] request) {
-		int a = 100;
-		return 0;
+	public int syncPropertiesOf(String objectId, List<CustomPropertyDTO> requestList) {
+		int result = 0;
+		int requestCount = requestList.size();
+		// 현재 들어있는 개수랑 비교해서 판단
+		int prevCount = toolMapper.countPropertiesOf(objectId);
+		
+		if (requestCount > prevCount) {
+			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
+			int border = prevCount;
+			
+		    List<List<CustomPropertyDTO>> listOfLists = new ArrayList<>(
+		    	requestList.stream()
+		    	.collect(Collectors.groupingBy(s -> requestList.indexOf(s) >= border))
+		    	.values()
+		    );
+		    
+		    List<CustomPropertyDTO> updateList = listOfLists.get(0);
+		    List<CustomPropertyDTO> insertList = listOfLists.get(1);
+		    
+		    result = toolMapper.updateAllPropsFrom(objectId, updateList)
+		    	& toolMapper.insertToSync(objectId, updateList.size(), insertList);
+		}
+		else {
+			result = toolMapper.deleteToSync(objectId, requestCount)
+				& toolMapper.updateAllPropsFrom(objectId, requestList);
+		}
+		
+		return result;
 	}
 
 
