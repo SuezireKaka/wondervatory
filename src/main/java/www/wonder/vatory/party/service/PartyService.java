@@ -33,6 +33,7 @@ public class PartyService implements UserDetailsService {
 	public DreamPair<List<AccountVO>, PagingDTO> listAllAccount(String ownerId, int page) {
 		PagingDTO paging = new PagingDTO(page);
 		List<AccountVO> listResult = partyMapper.listAllAccount(ownerId, paging);
+
 		long dataCount = partyMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 

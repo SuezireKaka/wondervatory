@@ -87,14 +87,17 @@
 		 where acc.owner_id = #{ownerId}
 		   AND acc.alive = 1
 		 order by acc.id DESC
-		 limit #{paging.limit} offset #{paging.offset};
+		 limit #{paging.partyLimit} offset #{paging.offset};
 	</select>
+	
+	<!-- public List<ContactPointVO> listAllCpOf(@Param("ownerId") String ownerId); -->
+	
+	
 	<!-- public AccountVO findByLoginId(String loginId); -->
 	<select id="findByLoginId" resultMap="rmAccountVO">
 		SELECT acc.*, 
 			own.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
 			role.role role_role
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_role role
@@ -103,8 +106,6 @@
 		    on own.id = acc.owner_id
 		  LEFT OUTER JOIN T_party rsp
 		    on rsp.id = acc.response_id
-		  LEFT OUTER JOIN T_contact_Point cp
-		    on rsp.id = cp.owner_id
 		 where acc.login_id = #{loginId}
 		   and acc.alive = true
 	</select>

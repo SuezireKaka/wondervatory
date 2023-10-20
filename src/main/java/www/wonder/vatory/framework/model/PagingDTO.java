@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class PagingDTO {
 	private static final int POST_LIMIT = 10;
+	private static final int PARTY_LIMIT = 10;
 	private static final int SERIES_LIMIT = 20;
 	private static final int BTN_CNT = 10;
 	private int page;
@@ -32,6 +33,10 @@ public class PagingDTO {
 	
 	public static int getPostLimit() {
 		return POST_LIMIT;
+	}
+	
+	public static int getPartyLimit() {
+		return PARTY_LIMIT;
 	}
 	
 	public int getLastPage() {
