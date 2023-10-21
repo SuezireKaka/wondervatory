@@ -73,7 +73,8 @@
 	<select id="listAllAccount" resultMap="rmAccountVO">
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
-			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex
+			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
+			role.role role_role, role.account_id role_account_id
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id

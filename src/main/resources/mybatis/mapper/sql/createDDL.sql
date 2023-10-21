@@ -259,7 +259,7 @@ create table T_custom_property(
 create table T_favorites(
 	owner_id	char(4) comment '어카운트id',
 	response_id	varchar(255) comment '시리즈id',
-	favorites	tinyint
+	favorites	tinyint default 0
 );
 
 create index idx_prop_type on T_custom_property(prop_type);
