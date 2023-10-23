@@ -57,12 +57,7 @@
 			resultMap="rmActVO">
 		</collection>
 	</resultMap>
-	
-	<resultMap id="rmFavoritesVO"
-		type="www.wonder.vatory.party.model.FavoritesVO">
-		<result property="favorites" column="favorites" />
-	</resultMap>
-	
+
 	
 	
 	<resultMap id="rmActVO"

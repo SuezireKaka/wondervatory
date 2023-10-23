@@ -12,6 +12,7 @@
 		<result property="readCount" column="read_cnt" />
 		<result property="likeCount" column="like_cnt" />
 		<result property="dislikeCount" column="dis_cnt" />
+		<result property="favorites" column="favorites" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
 		<association property="writer" columnPrefix="acc_"
@@ -39,6 +40,7 @@
 
 	</resultMap>
 
+	
 	<!-- public long getFoundRows(); -->
 	<select id="getFoundRows" resultType="long">
 		SELECT FOUND_ROWS()
@@ -46,14 +48,17 @@
 	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page); -->
 	<select id="listAllSeries" resultMap="rmSeriesVO">
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
-	 		a.id acc_id, a.login_id acc_login_id, a.nick acc_nick
+	 		a.id acc_id, a.login_id acc_login_id, a.nick acc_nick, f.favorites
 	  from T_work w LEFT OUTER JOIN t_bb b
 	       ON w.bb_id = b.id
 	       LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
+	       LEFT OUTER JOIN t_favorites f
+	       ON w.writer_id = f.owner_id
 	where w.bb_id = #{boardId}
 	  and LENGTH(w.id) = 4
 	  and w.descrim = 'Series'
+	  and f.favorites = 1
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	 <!--  limit #{paging.limit} offset #{paging.offset} -->
@@ -134,7 +139,8 @@
 	<select id="isFirstFavorites" resultType="boolean">
 		SELECT count(*) = 0 
 		  FROM t_favorites 
-		 WHERE owner_id=${ownerId} AND response_id=#{responseId}
+		 WHERE owner_id=${ownerId} 
+		   AND response_id=#{responseId}
 	</select>
 	
 	<!-- 	public boolean isFavorites(String ownerId, String responseId); -->

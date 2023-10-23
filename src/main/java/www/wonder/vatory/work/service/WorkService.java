@@ -111,7 +111,7 @@ public class WorkService {
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
 
-	
+		
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);
 		
@@ -127,7 +127,7 @@ public class WorkService {
 				}
 			}
 		}
-		
+		//ret.setFavorites(workMapper.isFavorites(user.getId(), id));
 		return ret;
 	}
 	

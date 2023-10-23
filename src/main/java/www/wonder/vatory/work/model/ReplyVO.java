@@ -32,8 +32,8 @@ public class ReplyVO extends TimeEntity  implements MappedTableDef {
 	private int likeCount; //series는 post 총합
 	private int dislikeCount; //series는 post 총합
 	// compose pattern
+	private boolean favorites;
 	private List<ReplyVO> repliesList = new ArrayList<>();
-	
 	private List<String> listTag;
 	private List<AttachFileDTO> listAttachFile;
 	
