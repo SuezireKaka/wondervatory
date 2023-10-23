@@ -23,7 +23,8 @@ public class AttachFileService {
 		List<AttachFileDTO> list = owner.getListAttachFile();
 		if (list == null)
 			return;
-		list.forEach(e->{e.setOwnerType(owner.getMappedTableName());
+		list.forEach(e->{
+			e.setOwnerType(owner.getMappedTableName());
 			e.setOwnerId(owner.getId());
 		});
 		

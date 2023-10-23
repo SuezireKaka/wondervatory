@@ -211,18 +211,8 @@ insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, di
 insert into t_work(id, writer_id, bb_id, descrim, h_level, content, like_cnt, dis_cnt)
 	values("0000001600000001", "0001", "0002", "Reply", 4,"대댓글1", 0, 0);
 
-<<<<<<< HEAD:src/main/resources/mybatis/mapper/sql/create.sql
-create table T_custom_property(
-	owner_id	char(4),
-	prop_type	varchar(255),
-	prop_val	varchar(255),
-	height		int default 1001,
-	primary key(owner_id, prop_type)
-);
-=======
 
 ----10 17 02------------
->>>>>>> 92986dc927e811166caaf82b5eea699b4e5034c0:src/main/resources/mybatis/mapper/sql/DML.sql
 
 insert into T_custom_property(owner_id, prop_type, prop_val)
 	values("0000", 0, "위치", "API");
@@ -238,7 +228,12 @@ insert into T_custom_property(owner_id, prop_type, prop_val)
 	values("0002", 0, "시작년도", "BC 127");
 
  
-	
-			 
-			 
+ -----10 23 ------------------------------------
+ 
+insert into t_sys_role(role, level, descrip)
+	values("Reader", 0, "계정의 가장 기본적인 역할이며, 모든 계정들은 기본적으로 해당 역할을 가지고 있습니다.");
+insert into t_sys_role(role, level, descrip)
+	values("Writer", 1, "일정 퀄리티 이상의 소설을 만들었을 때 관리자에 의해 활성화됩니다.");
+insert into t_sys_role(role, level, descrip)
+	values("Manager", 2, "게시글과 유저 계정을 관리할 수 있는 강력한 권한입니다. 이미 매니저인 계정에 의해 등록이 되며 메니저의 총의로 퇴출됩니다.");
 			 
