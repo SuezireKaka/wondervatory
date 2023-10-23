@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.party.model.AccountVO;
 
 @Entity

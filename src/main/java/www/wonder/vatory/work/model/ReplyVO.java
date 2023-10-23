@@ -36,6 +36,7 @@ public class ReplyVO extends TimeEntity  implements MappedTableDef {
 	
 	private List<String> listTag;
 	private List<AttachFileDTO> listAttachFile;
+	
 	public ReplyVO(String id) {
 		super.setId(id);
 	}

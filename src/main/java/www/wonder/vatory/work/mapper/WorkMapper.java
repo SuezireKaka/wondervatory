@@ -27,10 +27,16 @@ public interface WorkMapper {
 	public List<ReplyVO> findPostById(String id);
 	public void incReadCount(String id);
 	
+	public boolean isFirstFavorites(String ownerId, String responseId);
+	public boolean isFavorites(String ownerId, String responseId);
+	
 	public int createSemiPost(@Param("parent") SemiPostVO parent,
 			@Param("child") SemiPostVO child, @Param("type") String type);
 	public int updateSemiPost(@Param("parent") SemiPostVO parent,
 			@Param("child") SemiPostVO child, @Param("type") String type);
+	public int firstFavorites(String ownerId, String responseId);
+	
+	public int toggleFavorites(String ownerId, String responseId);
 	
 	public int deleteReply(String id);
 

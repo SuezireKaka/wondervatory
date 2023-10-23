@@ -297,15 +297,6 @@ create table t_report(
 );
 
 create table t_sys_rptype(
-	ordinal			bigint(20) UNSIGNED default 0 primary key,
-	reporter_id		char(4), /* 비로그인 유저의 신고 처리는? */
-	suspect_id		varchar(16),
-	suspect_type	varchar(6) comment '계정 -> account, 작품 또는 댓글 -> work',
-	cause			text(5000) comment '유저가 대상을 신고한 이유',
-	reported_when	timestamp default current_timestamp(),
-	complete		tinyint default 0 comment '처리시 1로 변경',
-	processer_id	char(4),
-	process_when	timestamp on update current_timestamp(),
-	process_msg		varchar(255) comment '매니저가 처리한 내용을 요약해서 정리'
+	
 );
 

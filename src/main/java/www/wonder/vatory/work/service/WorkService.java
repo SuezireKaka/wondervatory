@@ -24,6 +24,7 @@ import www.wonder.vatory.iis.model.TagRelId;
 import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
+import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.PostVO;
@@ -81,7 +82,25 @@ public class WorkService {
 		return new DreamPair(listResult, paging);
 	}
 	
-	public ReplyVO findById(String id) {
+	public boolean isFavorites(String ownerId, String responseId) {
+		return workMapper.isFavorites(ownerId, responseId);
+	}
+	
+	public int toggleFavorites(String ownerId, String responseId) {
+		//좋아하는게 있는지 검사 = responseId
+		boolean isFirstFavorites = workMapper.isFirstFavorites(ownerId, responseId);
+		int ret = 0;
+		
+		//없으면 create 있으면 업데이트
+		if(isFirstFavorites) {
+			ret = workMapper.firstFavorites(ownerId, responseId);
+		} else {
+			ret = workMapper.toggleFavorites(ownerId, responseId);
+		}
+		return ret;
+	}
+	
+	public ReplyVO findById(AccountVO user, String id) {
 		//postMapper.findById(id)는 id의 primary key 특성으로 사전순서가 보장되어 있음
 		List<ReplyVO> oneDimList = id.length() == 4 ? workMapper.findSeriesById(id) : workMapper.findPostById(id) ;
 		if (oneDimList.isEmpty()) {

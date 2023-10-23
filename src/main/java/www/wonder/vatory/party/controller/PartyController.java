@@ -54,13 +54,6 @@ public class PartyController {
 	public ResponseEntity<Integer> createManager(@RequestBody List<AccountVO> accountList) {
 		return ResponseEntity.ok(partyService.createManager(accountList));
 	}
-	//0000000   /party/favorites/0000
-	@GetMapping("/favorites/{responseId}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
-	public ResponseEntity<Integer> toggleFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
-		int result = partyService.toggleFavorites(owner.getId(), responseId);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
 	
 	// /party/anonymous/checkLoginId?loginId=hgghg
 	@GetMapping("/anonymous/checkLoginId")

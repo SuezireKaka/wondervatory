@@ -58,12 +58,26 @@ public class WorkController {
 	/** 원글 상세. 첨부파일 목록, 댓글, 대댓 목록이 내부 변수에 채워짐 */
 	// /work/anonymous/findById/0000           //4글자나 8글자 전부 찾기 가능 댓글과 대댓글만나오게 조건을 8글자이상으로함
 	@GetMapping("/anonymous/findById/{id}")
-	public ResponseEntity<ReplyVO> findById(@PathVariable String id) {
-		ReplyVO post = workService.findById(id);
-		if (post == null)
+	public ResponseEntity<ReplyVO> findById(@AuthenticationPrincipal AccountVO user, @PathVariable String id) {
+		ReplyVO result = workService.findById(user, id);
+		if (result == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			
-		return new ResponseEntity<>(post, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /work/anonymous/isFavorites/0000
+	@GetMapping("/anonymous/isFavorites/{responseId}")
+	public ResponseEntity<Boolean> isFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
+		boolean result = workService.isFavorites(owner.getId(), responseId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	//0000000   /work/toggleFavorites/0000
+	@GetMapping("/toggleFavorites/{responseId}")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	public ResponseEntity<Integer> toggleFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
+		int result = workService.toggleFavorites(owner.getId(), responseId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	// 하나로 전부 통합할 것
