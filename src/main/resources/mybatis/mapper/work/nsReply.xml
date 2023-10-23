@@ -58,7 +58,6 @@
 	where w.bb_id = #{boardId}
 	  and LENGTH(w.id) = 4
 	  and w.descrim = 'Series'
-	  and f.favorites = 1
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	 <!--  limit #{paging.limit} offset #{paging.offset} -->
