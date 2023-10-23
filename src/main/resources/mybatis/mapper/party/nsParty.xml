@@ -58,6 +58,13 @@
 		</collection>
 	</resultMap>
 	
+	<resultMap id="rmFavoritesVO"
+		type="www.wonder.vatory.party.model.FavoritesVO">
+		<result property="favorites" column="favorites" />
+	</resultMap>
+	
+	
+	
 	<resultMap id="rmActVO"
 		type="www.wonder.vatory.party.model.ActVO">
 		<id property="action" column="action" />
@@ -144,6 +151,20 @@
 		  FROM t_account
 		 where nick = binary(#{nick})
 	</select>
+	
+	<!-- 	public boolean isFirstFavorites(String ownerId, String responseId); -->
+	<select id="isFirstFavorites" resultType="boolean">
+		SELECT count(*) = 0 
+		  FROM t_favorites 
+		 WHERE owner_id=${ownerId} AND response_id=#{responseId}
+	</select>
+	
+<!-- 	public int firstFavorites(String ownerId, String responseId); -->
+	<insert id="firstFavorites">
+		INSERT INTO t_favorites(owner_id, response_id)
+		VALUES (#{ownerId}, #{responseId});
+	</insert>
+
 
 	<!-- 	public int createPerson(PersonVO person); OGNL 사용함 -->
 	<insert id="createPerson">
@@ -180,4 +201,14 @@
 		INSERT INTO t_role(role, account_id)
 		VALUES (#{role.role}, #{account.id});
 	</insert>
+	
+	<!-- 	public AccountVO toggleFavorites(String ownerId); -->
+	<update id="toggleFavorites">
+	update t_favorites
+	set favorites=!favorites
+		WHERE owner_id=#{ownerId}
+		and  response_id=#{responseId};
+	</update>
+	
+	
 </mapper>
