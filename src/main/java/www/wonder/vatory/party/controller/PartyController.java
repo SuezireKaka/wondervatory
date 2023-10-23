@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +53,13 @@ public class PartyController {
 	@PostMapping("/createManager")
 	public ResponseEntity<Integer> createManager(@RequestBody List<AccountVO> accountList) {
 		return ResponseEntity.ok(partyService.createManager(accountList));
+	}
+	//0000000   /party/favorites/0000
+	@GetMapping("/favorites/{responseId}")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	public ResponseEntity<Integer> toggleFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
+		int result = partyService.toggleFavorites(owner.getId(), responseId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	// /party/anonymous/checkLoginId?loginId=hgghg

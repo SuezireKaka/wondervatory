@@ -50,11 +50,27 @@ public class PartyService implements UserDetailsService {
 	public AccountVO findByNick(String username) {
 		return partyMapper.findByNick(username);
 	}
+	
 	public AccountVO findByLoginId(String loginId) {
 		return partyMapper.findByLoginId(loginId);
 	}
-	
+	//00000000
+	public int toggleFavorites(String ownerId, String responseId) {
+		//좋아하는게 있는지 검사 = responseId
+		boolean isFirstFavorites = partyMapper.isFirstFavorites(ownerId, responseId);
+		int ret = 0;
+		
+		//없으면 create 있으면 업데이트
+		if(isFirstFavorites) {
+			ret=partyMapper.firstFavorites(ownerId, responseId);
+		} else {
+			ret=partyMapper.toggleFavorites(ownerId, responseId);
+		}
+		return ret;
+	}
 
+
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return partyMapper.findByNick(username);
@@ -110,4 +126,6 @@ public class PartyService implements UserDetailsService {
 				& partyMapper.createRole(account, new RoleVO("reader"));
 		return cnt;
 	}
+
+
 }

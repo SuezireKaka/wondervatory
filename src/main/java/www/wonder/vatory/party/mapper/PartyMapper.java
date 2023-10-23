@@ -20,6 +20,10 @@ public interface PartyMapper {
 	
 	public AccountVO findByLoginId(String loginId);
 	public AccountVO findByNick(String nick);
+	//000
+	public int toggleFavorites(String ownerId, String responseId);
+	public boolean isFirstFavorites(String ownerId, String responseId);
+	
 	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
 	
@@ -28,5 +32,8 @@ public interface PartyMapper {
 	public int createPerson(PersonVO person);
 	public int createAccount(AccountVO account);
 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role);
+	
+	
+	public int firstFavorites(String ownerId, String responseId);
 	
 }

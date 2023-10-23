@@ -14,4 +14,8 @@ public class SemiPostVO extends ReplyVO {
 	private String title;
 	private int readCount;
 	private boolean isComplete;
+	
+	public void incReadCount() {
+		readCount++;
+	}
 }
