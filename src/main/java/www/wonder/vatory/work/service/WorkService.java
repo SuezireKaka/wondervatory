@@ -85,11 +85,10 @@ public class WorkService {
 	public boolean isFavorites(String ownerId, String responseId) {
 		return workMapper.isFavorites(ownerId, responseId);
 	}
-	/*
-	public boolean favoritesAll(String ownerId) {
+
+	public int favoritesAll(String ownerId) {
 		return workMapper.favoritesAll(ownerId);
-		
-	}*/
+	}
 	
 	public int toggleFavorites(String ownerId, String responseId) {
 		//좋아하는게 있는지 검사 = responseId
