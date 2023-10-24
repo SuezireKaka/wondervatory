@@ -267,9 +267,11 @@ create index idx_prop_type on T_custom_property(prop_type);
 
 -----10 23 ------------------------------------
 
+/* 업데이트 - 서버에 업데이트하고 주석 지워서 push해주세요 */
+
 create table t_sys_role(
-	role	varchar(16) primary key,
-	level	tinyint,
+	level	tinyint primary key,
+	role	varchar(16),
 	descrip varchar(255)
 );
 
@@ -284,19 +286,28 @@ create table t_sys_allow(
 );
 
 create table t_report(
-	ordinal			bigint(20) UNSIGNED default 0 primary key,
+	id				char(4) primary key,
 	reporter_id		char(4), /* 비로그인 유저의 신고 처리는? */
 	suspect_id		varchar(16),
-	suspect_type	varchar(6) comment '계정 -> account, 작품 또는 댓글 -> work',
-	cause			text(5000) comment '유저가 대상을 신고한 이유',
-	reported_when	timestamp default current_timestamp(),
+	suspect_table	varchar(10) comment '계정 -> t_account, 작품 또는 댓글 -> t_work',
+	cause			text(5000) comment '유저가 대상을 신고한 이유 자세히 듣기',
+	reported_reg	timestamp default current_timestamp(),
+	reported_upt	timestamp default current_timestamp(),
 	complete		tinyint default 0 comment '처리시 1로 변경',
 	processer_id	char(4),
-	process_when	timestamp on update current_timestamp(),
+	process_when	timestamp,
 	process_msg		varchar(255) comment '매니저가 처리한 내용을 요약해서 정리'
+);
+create index idx_time on t_report(reported_upt);
+
+create table t_report_cls(
+	rpt_id		char(4),
+	rpt_type	varchar(16)
 );
 
 create table t_sys_rptype(
-	
+	level		tinyint primary key,
+	rpt_type	varchar(16),
+	rpt_info	varchar(255)
 );
 

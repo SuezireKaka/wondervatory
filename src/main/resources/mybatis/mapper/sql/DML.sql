@@ -235,5 +235,23 @@ insert into t_sys_role(role, level, descrip)
 insert into t_sys_role(role, level, descrip)
 	values("Writer", 1, "일정 퀄리티 이상의 소설을 만들었을 때 관리자에 의해 활성화됩니다.");
 insert into t_sys_role(role, level, descrip)
-	values("Manager", 2, "게시글과 유저 계정을 관리할 수 있는 강력한 권한입니다. 이미 매니저인 계정에 의해 등록이 되며 메니저의 총의로 퇴출됩니다.");
-			 
+	values("Admin", 2, "게시글과 유저 계정을 관리할 수 있는 강력한 권한입니다. 이미 어드민인 계정에 의해 등록이 됩니다.");
+
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (0, "지나친 선정성", "대충 설명 1");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (1, "지나친 폭력성", "대충 설명 2");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (2, "명예훼손", "대충 설명 3");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (3, "아동학대", "대충 설명 4");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (4, "테러조장", "대충 설명 5");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (5, "허위광고", "대충 설명 6");
+insert into t_sys_rptype(level, rpt_type, rpt_info)
+values (6, "저작권 침해", "대충 설명 7");
+
+
+
+

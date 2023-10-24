@@ -136,7 +136,7 @@
 	<select id="isFirstFavorites" resultType="boolean">
 		SELECT count(*) = 0 
 		  FROM t_favorites 
-		 WHERE owner_id=${ownerId} 
+		 WHERE owner_id=#{ownerId} 
 		   AND response_id=#{responseId}
 	</select>
 	
@@ -144,7 +144,7 @@
 	<select id="isFavorites" resultType="boolean">
 		SELECT count(*)
 		  FROM t_favorites 
-		 WHERE owner_id=${ownerId}
+		 WHERE owner_id=#{ownerId}
 		   AND response_id=#{responseId}
 		   AND favorites = 1
 	</select>

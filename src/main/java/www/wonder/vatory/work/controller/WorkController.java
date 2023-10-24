@@ -65,7 +65,7 @@ public class WorkController {
 			
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	// /work/isFavorites/0000
 	// 완전 이상한 꼼수
 	@GetMapping("/isFavorites/{responseId}")

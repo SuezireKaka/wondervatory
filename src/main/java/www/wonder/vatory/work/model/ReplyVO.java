@@ -13,6 +13,7 @@ import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
 import www.wonder.vatory.framework.property.ano.TargetProperty;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.report.model.ReportVO;
 
 @Getter
 @Setter
@@ -36,6 +37,7 @@ public class ReplyVO extends TimeEntity  implements MappedTableDef {
 	private List<ReplyVO> repliesList = new ArrayList<>();
 	private List<String> listTag;
 	private List<AttachFileDTO> listAttachFile;
+	private List<ReportVO> reportsList;
 	
 	public ReplyVO(String id) {
 		super.setId(id);

@@ -1,19 +1,21 @@
 package www.wonder.vatory.party.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import www.wonder.vatory.fileattachment.model.MappedTableDef;
+import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
 
 @SuperBuilder
@@ -21,7 +23,11 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountVO extends TimeEntity implements UserDetails {
+public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef {
+	public String getMappedTableName() {
+		return "T_account";
+	}
+	
 	private String loginId;
 	private String passWord;
 	private OrganizationVO owner;	//주인으로서
@@ -30,6 +36,7 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	private String introduction;
 	private boolean isAlive;
 	private Collection<RoleVO> roleList;
+	private AttachFileDTO profileImage;
 	
 	public void encodePswd(PasswordEncoder pswdEnc) {
 		passWord = pswdEnc.encode(passWord);
@@ -71,6 +78,13 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public List<AttachFileDTO> getListAttachFile() {
+		List<AttachFileDTO> result = new ArrayList<>();
+		result.add(profileImage);
+		return result;
 	}
 
 }
