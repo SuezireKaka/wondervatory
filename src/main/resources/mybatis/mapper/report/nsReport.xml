@@ -4,16 +4,40 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="www.wonder.vatory.report.mapper.ReportMapper">
-	<resultMap id="rmReportVO"
+	<resultMap id="rmReportVO" extends="nsEntity.rmEntity"
 		type="www.wonder.vatory.report.model.ReportVO">
-		<result property="name" column="name" />
-		<result property="birthDate" column="birth" />
-		<!-- 1:N query. 성능 향상 -->
-		<collection property="contactPointList" columnPrefix="cp_"
-			resultMap="rmContactPointVO">
-		</collection>
-	</resultMap>
+		<result property="cause" column="cause" />
+		<result property="cause" column="cause" />
+		<association property="reporter" columnPrefix="repo_"
+			resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO"/>
 
+		<collection property="rptTypesList" columnPrefix="type_"
+			resultMap="rmReportCodeVO">
+		</collection>
+		
+		<discriminator javaType="String" column="suspect_table">
+			<case value="t_account">
+				<association property="suspect" columnPrefix="sus_"
+					resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
+			</case>
+			<case value="t_work">
+				<association property="suspect" columnPrefix="sus_"
+					resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmReplyVO" />
+			</case>
+		</discriminator>
+	</resultMap>
+	
+	<resultMap id="rmReportCodeVO"
+		type="www.wonder.vatory.report.model.ReportCodeVO">
+		<result property="rptType" column="rpt_type" />
+		<result property="rptInfo" column="rpt_info" />
+	</resultMap>
+	
+	<!-- public List<ReportCodeVO> listAllReportCodes(); -->
+	<select id="listAllReportCodes" resultMap="rmReportCodeVO">
+		SELECT *
+		  FROM t_sys_rptype
+	</select>
 
 	
 	

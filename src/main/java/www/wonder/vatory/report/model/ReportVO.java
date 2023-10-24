@@ -1,5 +1,7 @@
 package www.wonder.vatory.report.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import lombok.Getter;
@@ -17,4 +19,5 @@ public class ReportVO extends TimeEntity {
 	AccountVO reporter;
 	MappedTableDef suspect;
 	String cause;
+	List<ReportCodeVO> rptTypesList;
 }

@@ -37,7 +37,6 @@
 	<resultMap id="rmSeriesVO" extends="rmSemiPostVO"
 		type="www.wonder.vatory.work.model.SeriesVO">
 		<result property="seriesState" column="series_status" />
-
 	</resultMap>
 
 	
