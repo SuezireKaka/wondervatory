@@ -76,10 +76,10 @@ public class WorkController {
 	}
 	
 	// /work/favoritesAll/0001
-	@GetMapping("/favoritesAll")
+	@GetMapping("/favoritesAll/{page}")
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
-	public ResponseEntity<Integer> favoritesAll(@AuthenticationPrincipal AccountVO owner) {
-		int result = workService.favoritesAll(owner.getId());
+	public ResponseEntity<DreamPair<List<SeriesVO>, PagingDTO>> favoritesAll(@AuthenticationPrincipal AccountVO owner,  @PathVariable int page) {
+		DreamPair<List<SeriesVO>, PagingDTO> result = workService.favoritesAll(owner.getId(), page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

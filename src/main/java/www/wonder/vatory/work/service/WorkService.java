@@ -86,8 +86,19 @@ public class WorkService {
 		return workMapper.isFavorites(ownerId, responseId);
 	}
 
-	public int favoritesAll(String ownerId) {
-		return workMapper.favoritesAll(ownerId);
+	public DreamPair<List<SeriesVO>, PagingDTO> favoritesAll(String ownerId, int page) {
+		PagingDTO paging = new PagingDTO(page);
+		List<SeriesVO> listResult = workMapper.favoritesAll(ownerId, paging);
+		long dataCount = workMapper.getFoundRows();
+		paging.buildPagination(dataCount);
+		
+		// listResult의 각각에 썸네일 뿌리기
+		for (SeriesVO series : listResult) {
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(series);
+			series.setListAttachFile(attachFileList);
+		}
+
+		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
 	}
 	
 	public int toggleFavorites(String ownerId, String responseId) {

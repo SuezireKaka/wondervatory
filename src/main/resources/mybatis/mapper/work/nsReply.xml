@@ -125,12 +125,20 @@
 	 where w.id like CONCAT(#{id}, '%')
 	</select>
 	
-	<!-- 	public int favoritesAll(String ownerId); -->
+	<!-- 	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,
+			@Param("paging") PagingDTO paging); -->
 	<select id="favoritesAll" resultMap="rmReplyVO">
-	select *
-	from t_favorites
-	where owner_id = #{ownerId}
-	  and favorites = 1;
+	select SQL_CALC_FOUND_ROWS w.*
+	  from T_work w
+	  LEFT OUTER JOIN t_favorites f
+	       ON f.response_id = w.id
+	  LEFT OUTER JOIN t_account a
+	       ON f.owner_id = a.id
+	 WHERE w.descrim = 'Series'
+	   AND f.favorites = 1
+	   and a.id = #{ownerId}
+	 order by w.id DESC
+	 LIMIT #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 	
 	<!-- public void incReadCount(String id); -->

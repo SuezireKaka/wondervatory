@@ -39,7 +39,8 @@ public interface WorkMapper {
 			@Param("child") SemiPostVO child, @Param("type") String type);
 	public int firstFavorites(String ownerId, String responseId);
 	
-	public int favoritesAll(String ownerId);
+	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,
+			@Param("paging") PagingDTO paging);
 	public int toggleFavorites(String ownerId, String responseId);
 	
 	public int deleteReply(String id);
