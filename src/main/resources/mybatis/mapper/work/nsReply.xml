@@ -124,6 +124,15 @@
 	       ON w.writer_id = a.id
 	 where w.id like CONCAT(#{id}, '%')
 	</select>
+	
+	<!-- 	public int favoritesAll(String ownerId); -->
+	<select id="favoritesAll" resultMap="rmReplyVO">
+	select *
+	from t_favorites
+	where owner_id = #{ownerId}
+	  and favorites = 1;
+	</select>
+	
 	<!-- public void incReadCount(String id); -->
 	<update id="incReadCount">
 	update T_work

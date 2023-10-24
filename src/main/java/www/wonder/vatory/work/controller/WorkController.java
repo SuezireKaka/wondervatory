@@ -75,15 +75,13 @@ public class WorkController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /work/isFavorites/0000
-	// 완전 이상한 꼼수
-	/*
-	@GetMapping("/favoritesAll/{responseId}")
+	// /work/favoritesAll/0001
+	@GetMapping("/favoritesAll")
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
 	public ResponseEntity<Integer> favoritesAll(@AuthenticationPrincipal AccountVO owner) {
 		int result = workService.favoritesAll(owner.getId());
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}*/
+	}
 	
 	
 	//0000000   /work/toggleFavorites/0000
