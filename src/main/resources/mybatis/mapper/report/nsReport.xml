@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.report.mapper.ReportMapper">
+	<resultMap id="rmReportVO"
+		type="www.wonder.vatory.report.model.ReportVO">
+		<result property="name" column="name" />
+		<result property="birthDate" column="birth" />
+		<!-- 1:N query. 성능 향상 -->
+		<collection property="contactPointList" columnPrefix="cp_"
+			resultMap="rmContactPointVO">
+		</collection>
+	</resultMap>
+
+
+	
+	
+	
+</mapper>

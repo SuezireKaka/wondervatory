@@ -17,5 +17,4 @@ public class ReportVO extends TimeEntity {
 	AccountVO reporter;
 	MappedTableDef suspect;
 	String cause;
-	
 }
