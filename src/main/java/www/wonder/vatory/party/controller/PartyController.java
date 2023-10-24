@@ -60,6 +60,7 @@ public class PartyController {
 	public ResponseEntity<Boolean> checkLoginId(String loginId) {
 		return ResponseEntity.ok(partyService.checkLoginId(loginId));
 	}
+	
 	// /party/anonymous/checkNick?nick=hgghg
 	@GetMapping("/anonymous/checkNick")
 	public ResponseEntity<Boolean> checkNick(String nick) {

@@ -173,7 +173,7 @@ create table t_account(
 	response_id	char(4),
 	nick		varchar(255),
 	intro		varchar(255),
-	alive		TINYINT(4) NULL DEFAULT '1',
+	alive		TINYINT(4) DEFAULT '1',
 	reg_dt		timestamp default current_timestamp(),
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
 );

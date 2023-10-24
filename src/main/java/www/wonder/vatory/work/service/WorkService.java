@@ -85,6 +85,11 @@ public class WorkService {
 	public boolean isFavorites(String ownerId, String responseId) {
 		return workMapper.isFavorites(ownerId, responseId);
 	}
+	/*
+	public boolean favoritesAll(String ownerId) {
+		return workMapper.favoritesAll(ownerId);
+		
+	}*/
 	
 	public int toggleFavorites(String ownerId, String responseId) {
 		//좋아하는게 있는지 검사 = responseId
@@ -110,11 +115,9 @@ public class WorkService {
 		ReplyVO ret = (ReplyVO) oneDimList.get(0);
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
-
 		
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);
-		
 		if (id.length() == 8) {
 			Map<String, ReplyVO> map = new HashMap<>();
 			for (ReplyVO reply : oneDimList) {
@@ -157,9 +160,6 @@ public class WorkService {
 			return cnt;
 		}
 	}
-	
-
-	
 	
 	private Map<String, Integer> buildTF(SemiPostVO post) {
 		//대상이되는 문자열 추출

@@ -55,8 +55,6 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.findByLoginId(loginId);
 	}
 	//00000000
-
-
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

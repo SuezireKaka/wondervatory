@@ -129,7 +129,7 @@
 		    on rsp.id = acc.response_id
 		  LEFT OUTER JOIN T_contact_Point cp
 		    on cp.owner_id = rsp.id
-		 where acc.nick = '홍'
+		 where acc.nick = #(nick)
 		   and acc.alive = TRUE
 	</select>
 	
