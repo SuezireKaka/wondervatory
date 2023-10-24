@@ -39,7 +39,7 @@ public class DreamSecurityConfiguration {
 		// configuration
 		http.httpBasic().disable()
 				.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth ->auth.requestMatchers("/*/anonymous/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/*/anonymous/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .exceptionHandling(ex -> ex.accessDeniedHandler(denyHandler))

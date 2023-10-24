@@ -100,7 +100,7 @@ public class WorkService {
 		return ret;
 	}
 	
-	public ReplyVO findById(AccountVO user, String id) {
+	public ReplyVO findById(String id) {
 		//postMapper.findById(id)는 id의 primary key 특성으로 사전순서가 보장되어 있음
 		List<ReplyVO> oneDimList = id.length() == 4 ? workMapper.findSeriesById(id) : workMapper.findPostById(id) ;
 		if (oneDimList.isEmpty()) {
@@ -127,7 +127,6 @@ public class WorkService {
 				}
 			}
 		}
-		//ret.setFavorites(workMapper.isFavorites(user.getId(), id));
 		return ret;
 	}
 	
