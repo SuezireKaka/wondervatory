@@ -43,6 +43,8 @@ public interface WorkMapper {
 			@Param("paging") PagingDTO paging);
 	public int toggleFavorites(String ownerId, String responseId);
 	
+	public int onLike(String id);
+	
 	public int deleteReply(String id);
 
 	

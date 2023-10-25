@@ -57,5 +57,8 @@ public class ReplyVO extends TimeEntity  implements MappedTableDef {
 		readCount++;
 	}
 	
+	public void incLikeCount() {
+		likeCount++;
+	}
 
 }

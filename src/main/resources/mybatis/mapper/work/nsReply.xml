@@ -148,6 +148,15 @@
 	 where id = #{id}
 	</update>
 	
+	<!-- public int onLike(String id); -->
+	<update id="onLike">
+	update T_work
+	   set 	upt_dt = upt_dt,
+			like_cnt = like_cnt + 1
+	 where id = #{id}
+	</update>
+	
+	
 	<!-- 	public boolean isFirstFavorites(String ownerId, String responseId); -->
 	<select id="isFirstFavorites" resultType="boolean">
 		SELECT count(*) = 0 
