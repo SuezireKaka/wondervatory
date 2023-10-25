@@ -53,7 +53,6 @@
 	       LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
 	where w.bb_id = #{boardId}
-	  and LENGTH(w.id) = 4
 	  and w.descrim = 'Series'
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
@@ -68,7 +67,6 @@
 	       LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
 	where w.id like CONCAT(#{seriesId}, '%')
-	  and LENGTH(w.id) = 8
 	  and w.descrim = 'Post'
 	  and w.complete = 1
 	 order by w.id DESC
