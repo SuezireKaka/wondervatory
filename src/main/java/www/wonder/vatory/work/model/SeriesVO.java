@@ -12,5 +12,4 @@ import lombok.Setter;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class SeriesVO extends SemiPostVO  {
 	private String seriesState;
-
 }

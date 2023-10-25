@@ -271,15 +271,18 @@ insert into t_report_cls(rpt_id, rpt_level)
 
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0001", "000c", "0003", "t_account", "님이 더 이상해요 이 사람아");
+	
 insert into t_report_cls(rpt_id, rpt_level)
 	values("0001", 2);
 	
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0002", "0003", "000c", "t_account", "누구세요");
+	
 insert into t_report_cls(rpt_id, rpt_level)
 	values("0002", 2);
 	
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0003", "0003", "001d000m000g000h", "t_work", "이거 유사관리자 행위죠?");
+	
 insert into t_report_cls(rpt_id, rpt_level)
 	values("0003", 5);

@@ -50,19 +50,21 @@
 	<!-- public List<ReportVO> listAllReports(PagingDTO paging); -->
 	<select id="listAllReports" resultMap="rmReportVO">
 		select SQL_CALC_FOUND_ROWS r.*, repo.id repo_id, repo.nick repo_nick,
-			sus.id sus_id, sus.descrim sus_descrim,
-			sus.nick sus_nick, sus.title sus_title, sus.content sus_content
+			sus.id sus_id, sus.descrim sus_descrim, sus.nick sus_nick,
+			sus.title sus_title, sus.content sus_content, sus.bb_id sus_bb_id
 		  from T_report r
 		  LEFT OUTER JOIN t_account repo
 		    on r.reporter_id = repo.id
 		  LEFT OUTER JOIN
-			(SELECT w.id id, 't_work' type, w.descrim descrim, NULL nick,
-				if(LENGTH(w.id) > 7, NULL, title) title,
-				if(LENGTH(w.id) > 7, content, NULL) content
-			   FROM t_work w
-			  UNION All
-			 SELECT a.id, 't_account', NULL, a.nick, null, NULl
+			(SELECT a.id id, 't_account' type, a.nick nick,
+			 		NULL descrim, null title, null content, NULL bb_id
 			   FROM t_account a
+			  UNION All
+			 SELECT w.id id, 't_work' type, w.descrim descrim, NULL nick,
+				if(w.descrim = 'reply', NULL, title),
+				if(w.descrim = 'reply', content, NULL),
+				w.bb_id
+			   FROM t_work w
 			) sus
 		    ON r.suspect_id = sus.id
 		 WHERE r.suspect_table = sus.type

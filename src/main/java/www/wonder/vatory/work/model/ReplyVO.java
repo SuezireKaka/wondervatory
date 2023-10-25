@@ -61,5 +61,15 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 	public void incLikeCount() {
 		likeCount++;
 	}
+	
+	public String getKSuspectType() {
+		int idLength = this.getId().length();
+		switch (idLength) {
+			case 4 : return "시리즈";
+			case 8 : return "포스트";
+			default : return "댓글";
+		}
+		
+	}
 
 }

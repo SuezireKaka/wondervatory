@@ -8,5 +8,6 @@ import www.wonder.vatory.report.model.ReportVO;
 public interface MappedTableDef {
 	public String getMappedTableName();
 	public String getId();
+	public String getKSuspectType();
 	public List<AttachFileDTO> getListAttachFile();
 }

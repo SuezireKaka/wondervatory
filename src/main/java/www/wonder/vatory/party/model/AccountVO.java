@@ -87,4 +87,8 @@ public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef
 		return result;
 	}
 
+	public String getKSuspectType() {
+		return "사용자";
+	}
+
 }
