@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="www.wonder.vatory.report.mapper.ReportMapper">
-	<resultMap id="rmReportVO" extends="nsEntity.rmEntity"
+	<resultMap id="rmReportVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.report.model.ReportVO">
 		<result property="cause" column="cause" />
-		<result property="cause" column="cause" />
 		<association property="reporter" columnPrefix="repo_"
-			resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO"/>
+			resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
 
 		<collection property="rptTypesList" columnPrefix="type_"
 			resultMap="rmReportCodeVO">
 		</collection>
-		
+
 		<discriminator javaType="String" column="suspect_table">
 			<case value="t_account">
 				<association property="suspect" columnPrefix="sus_"
@@ -26,20 +23,57 @@
 			</case>
 		</discriminator>
 	</resultMap>
-	
+
 	<resultMap id="rmReportCodeVO"
 		type="www.wonder.vatory.report.model.ReportCodeVO">
 		<result property="rptType" column="rpt_type" />
 		<result property="rptInfo" column="rpt_info" />
 	</resultMap>
-	
+
 	<!-- public List<ReportCodeVO> listAllReportCodes(); -->
 	<select id="listAllReportCodes" resultMap="rmReportCodeVO">
 		SELECT *
-		  FROM t_sys_rptype
+		FROM t_sys_rptype
 	</select>
 
-	
-	
-	
+	<!-- public long getFoundRows(); -->
+	<select id="getFoundRows" resultType="long">
+		SELECT FOUND_ROWS()
+	</select>
+
+	<!-- public List<ReportVO> listAllReports(PagingDTO paging); -->
+	<select id="listAllReports" resultMap="rmReportVO">
+		select SQL_CALC_FOUND_ROWS r.*, repo.id repo_id, repo.nick repo_nick,
+			sus.id sus_id, sus.descrim sus_descrim,
+			sus.nick sus_nick, sus.title sus_title, sus.content sus_content
+		  from T_report r
+		  LEFT OUTER JOIN t_account repo
+		    on r.reporter_id = repo.id
+		  LEFT OUTER JOIN
+			(SELECT w.id id, 't_work' type, w.descrim descrim, NULL nick,
+				if(LENGTH(w.id) > 7, NULL, title) title,
+				if(LENGTH(w.id) > 7, content, NULL) content
+			   FROM t_work w
+			  UNION All
+			 SELECT a.id, 't_account', NULL, a.nick, null, NULl
+			   FROM t_account a
+			) sus
+		    ON r.suspect_id = sus.id
+		 WHERE r.suspect_table = sus.type
+		 order by upt_dt
+		 limit #{paging.seriesLimit} offset #{paging.offset}
+	</select>
+
+	<!-- public List<ReportCodeVO> listAllTypesOf(@Param("id") String id); -->
+	<select id="listAllTypesOf" resultMap="rmReportCodeVO">
+		SELECT rpt.*
+		  FROM t_sys_rptype rpt
+		  Left outer join t_report_cls c
+		    on rpt.level = c.rpt_level
+		  Left outer join t_report r
+		    on c.rpt_id = r.id
+		 where r.id = "0000"
+	</select>
+
+
 </mapper>

@@ -235,7 +235,9 @@ insert into t_sys_role(role, level, descrip)
 insert into t_sys_role(role, level, descrip)
 	values("Writer", 1, "일정 퀄리티 이상의 소설을 만들었을 때 관리자에 의해 활성화됩니다.");
 insert into t_sys_role(role, level, descrip)
-	values("Admin", 2, "게시글과 유저 계정을 관리할 수 있는 강력한 권한입니다. 이미 어드민인 계정에 의해 등록이 됩니다.");
+	values("Manager", 2, "게시글과 유저 계정을 관리할 수 있는 강력한 권한입니다.");
+insert into t_sys_role(role, level, descrip)
+	values("Ceo", 3, "매니저를 관리할 수 있다는 전설 속의 권한입니다.");
 
 insert into t_sys_rptype(level, rpt_type, rpt_info)
 values (0, "지나친 선정성", "대충 설명 1");
@@ -253,5 +255,31 @@ insert into t_sys_rptype(level, rpt_type, rpt_info)
 values (6, "저작권 침해", "대충 설명 7");
 
 
+------10 25 --------------------------------
 
 
+
+insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
+	values("0000", "0003", "0008", "t_work", "뭔가 이상해요 암튼 이상함");
+
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0000", 0);
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0000", 1);
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0000", 3);
+
+insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
+	values("0001", "000c", "0003", "t_account", "님이 더 이상해요 이 사람아");
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0001", 2);
+	
+insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
+	values("0002", "0003", "000c", "t_account", "누구세요");
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0002", 2);
+	
+insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
+	values("0003", "0003", "001d000m000g000h", "t_work", "이거 유사관리자 행위죠?");
+insert into t_report_cls(rpt_id, rpt_level)
+	values("0003", 5);

@@ -20,4 +20,8 @@ public class ReportVO extends TimeEntity {
 	MappedTableDef suspect;
 	String cause;
 	List<ReportCodeVO> rptTypesList;
+	
+	public void addRptType(ReportCodeVO rpt) {
+		rptTypesList.add(rpt);
+	}
 }
