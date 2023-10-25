@@ -16,10 +16,10 @@ import www.wonder.vatory.party.model.AccountVO;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ReportVO extends TimeEntity {
-	AccountVO reporter;
-	MappedTableDef suspect;
-	String cause;
-	List<ReportCodeVO> rptTypesList;
+	private AccountVO reporter;
+	private MappedTableDef suspect;
+	private String cause;
+	private List<ReportCodeVO> rptTypesList;
 	
 	public void addRptType(ReportCodeVO rpt) {
 		rptTypesList.add(rpt);

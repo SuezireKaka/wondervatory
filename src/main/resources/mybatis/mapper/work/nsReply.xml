@@ -57,7 +57,6 @@
 	  and w.descrim = 'Series'
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
-	 <!--  limit #{paging.limit} offset #{paging.offset} -->
 	</select>
 	
 	<!-- public List<PostVO> listAllPost(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging); -->

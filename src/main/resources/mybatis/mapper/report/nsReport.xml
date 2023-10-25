@@ -13,15 +13,21 @@
 		</collection>
 
 		<discriminator javaType="String" column="suspect_table">
-			<case value="t_account">
-				<association property="suspect" columnPrefix="sus_"
-					resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
-			</case>
-			<case value="t_work">
-				<association property="suspect" columnPrefix="sus_"
-					resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmReplyVO" />
-			</case>
+			<case value="t_account" resultMap="rmAccountReportVO" />
+			<case value="t_work" resultMap="rmReportWorkVO" />
 		</discriminator>
+	</resultMap>
+	
+	<!-- 인터페이스 프로퍼티 처리 꼼수 of 꼼수 - 결국 하나의 클래스로 합쳐질 거지만 일단 분리해놓기 -->
+	<resultMap id="rmAccountReportVO" extends="rmReportVO"
+		type="www.wonder.vatory.report.model.ReportVO">
+		<association property="suspect" columnPrefix="sus_"
+			resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
+	</resultMap>
+	<resultMap id="rmReportWorkVO" extends="rmReportVO"
+		type="www.wonder.vatory.report.model.ReportVO">
+		<association property="suspect" columnPrefix="sus_"
+			resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmReplyVO" />
 	</resultMap>
 
 	<resultMap id="rmReportCodeVO"
@@ -60,7 +66,7 @@
 			) sus
 		    ON r.suspect_id = sus.id
 		 WHERE r.suspect_table = sus.type
-		 order by upt_dt
+		 order by r.upt_dt
 		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 
@@ -72,7 +78,7 @@
 		    on rpt.level = c.rpt_level
 		  Left outer join t_report r
 		    on c.rpt_id = r.id
-		 where r.id = "0000"
+		 where r.id = #{id}
 	</select>
 
 
