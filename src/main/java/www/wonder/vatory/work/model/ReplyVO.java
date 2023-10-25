@@ -19,7 +19,7 @@ import www.wonder.vatory.report.model.ReportVO;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ReplyVO extends TimeEntity  implements MappedTableDef {
+public class ReplyVO extends TimeEntity implements MappedTableDef {
 	public String getMappedTableName() {
 		return "T_work";
 	}
@@ -32,8 +32,9 @@ public class ReplyVO extends TimeEntity  implements MappedTableDef {
 	private int readCount;
 	private int likeCount; //series는 post 총합
 	private int dislikeCount; //series는 post 총합
-	// compose pattern
+	
 	private boolean favorites;
+	// compose pattern
 	private List<ReplyVO> repliesList = new ArrayList<>();
 	private List<String> listTag;
 	private List<AttachFileDTO> listAttachFile;

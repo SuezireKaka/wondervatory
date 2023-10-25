@@ -291,8 +291,8 @@ create table t_report(
 	suspect_id		varchar(16),
 	suspect_table	varchar(10) comment '계정 -> t_account, 작품 또는 댓글 -> t_work',
 	cause			text(5000) comment '유저가 대상을 신고한 이유 자세히 듣기',
-	reported_reg	timestamp default current_timestamp(),
-	reported_upt	timestamp default current_timestamp(),
+	reg_dt			timestamp default current_timestamp(),
+	upt_dt			timestamp default current_timestamp(),
 	complete		tinyint default 0 comment '처리시 1로 변경',
 	processer_id	char(4),
 	process_when	timestamp,
@@ -302,7 +302,7 @@ create index idx_time on t_report(reported_upt);
 
 create table t_report_cls(
 	rpt_id		char(4),
-	rpt_type	varchar(16)
+	rpt_level	tinyint
 );
 
 create table t_sys_rptype(
@@ -310,4 +310,7 @@ create table t_sys_rptype(
 	rpt_type	varchar(16),
 	rpt_info	varchar(255)
 );
+create index idx_rpt on t_sys_rptype(rpt_type);
+
+
 
