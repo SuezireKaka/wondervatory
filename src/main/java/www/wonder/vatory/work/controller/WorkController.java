@@ -103,6 +103,14 @@ public class WorkController {
 		return null;
 	}
 
+	// /work/anonymous/onLike
+	@GetMapping("/anonymous/onLike")
+	public ResponseEntity<Integer> onLike(String id) {
+		return ResponseEntity.ok(workService.onLike(id));
+	}
+
+	
+	
 	/** hid like로 지우기 */
 	//@RequestMapping("/post/{id}")
 	@DeleteMapping("/{id}")

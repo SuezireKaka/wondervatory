@@ -86,6 +86,11 @@ public class WorkService {
 		return workMapper.isFavorites(ownerId, responseId);
 	}
 
+	public int onLike(String id) {
+		return workMapper.onLike(id);
+	}
+	
+	
 	public DreamPair<List<SeriesVO>, PagingDTO> favoritesAll(String ownerId, int page) {
 		PagingDTO paging = new PagingDTO(page);
 		List<SeriesVO> listResult = workMapper.favoritesAll(ownerId, paging);

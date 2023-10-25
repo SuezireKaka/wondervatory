@@ -243,16 +243,6 @@ create table t_role(
 	account_id	char(4)
 );
 
-----10 17 02------------
-
-create table T_custom_property(
-	owner_id	char(4),
-	order		MEDIUMINT,
-	prop_type	varchar(255),
-	prop_val	varchar(255),
-	primary key(owner_id, order)
-);
-
 	
 -----10 18 ----------------------------------
 	--다시--
@@ -311,6 +301,18 @@ create table t_sys_rptype(
 	rpt_info	varchar(255)
 );
 create index idx_rpt on t_sys_rptype(rpt_type);
+
+
+
+----10 17 예전에 바꿨던------------
+
+create table T_custom_property(
+	owner_id	char(4),
+	level		MEDIUMINT,
+	prop_type	varchar(255),
+	prop_val	varchar(255),
+	primary key(owner_id, order)
+);
 
 
 
