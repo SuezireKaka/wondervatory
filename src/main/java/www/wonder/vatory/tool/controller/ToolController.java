@@ -60,7 +60,7 @@ public class ToolController {
 	
 	// /tool/syncPropertiesOf/0000
 	@PostMapping("/syncPropertiesOf/{objectId}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> syncPropertiesOf(@AuthenticationPrincipal AccountVO user,
 			@PathVariable String objectId, @RequestBody List<CustomPropertyDTO> requestList) {
 		return ResponseEntity.ok(toolService.syncPropertiesOf(objectId, requestList));

@@ -69,7 +69,7 @@ public class WorkController {
 	// /work/isFavorites/0000
 	// 완전 이상한 꼼수
 	@GetMapping("/isFavorites/{responseId}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Boolean> isFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
 		boolean result = workService.isFavorites(owner.getId(), responseId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -77,7 +77,7 @@ public class WorkController {
 	
 	// /work/favoritesAll/0001
 	@GetMapping("/favoritesAll/{page}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<DreamPair<List<SeriesVO>, PagingDTO>> favoritesAll(@AuthenticationPrincipal AccountVO owner,  @PathVariable int page) {
 		DreamPair<List<SeriesVO>, PagingDTO> result = workService.favoritesAll(owner.getId(), page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -86,7 +86,7 @@ public class WorkController {
 	
 	//0000000   /work/toggleFavorites/0000
 	@GetMapping("/toggleFavorites/{responseId}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> toggleFavorites(@AuthenticationPrincipal AccountVO owner, @PathVariable String responseId) {
 		int result = workService.toggleFavorites(owner.getId(), responseId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -95,7 +95,7 @@ public class WorkController {
 	// 하나로 전부 통합할 것
 	// /work/manageWork
 	@PostMapping("/manageWork")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'ceo')")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
 		if (user.getId().equals(semiPostPair.getSecondVal().getWriter().getId())) {
 			return ResponseEntity.ok(workService.manageWork(user, semiPostPair));
