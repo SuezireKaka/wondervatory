@@ -18,4 +18,21 @@ public interface ReportMapper extends MetaMapper {
 
 	public List<ReportCodeVO> listAllTypesOf(@Param("id") String id);
 	
+	public int countRptTypesOf(String id);
+
+	public int createReport(ReportVO report);
+	public int insertToSync(@Param("reportId") String reportId, @Param("offset") int offset,
+			@Param("insertList") List<ReportCodeVO> insertList);
+
+	public int updateReport(@Param("report") ReportVO report);
+	public int updateAllRptFrom(@Param("reportId") String reportId,
+			@Param("updateList") List<ReportCodeVO> updateList);
+
+	public int deleteToSync(@Param("reportId") String reportId,
+			@Param("border") int border);
+
+	
+
+	
+	
 }

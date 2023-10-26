@@ -141,7 +141,7 @@
 			</if>
 			</foreach> vals ON prop.level = vals.level
 			   SET prop.prop_type = vals.prop_type, prop.prop_val = vals.prop_val
-			 WHERE prop.owner_id = '0000'
+			 WHERE prop.owner_id = #{objectId}
 		</if>
 	</update>
 	

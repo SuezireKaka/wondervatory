@@ -262,27 +262,30 @@ values (6, "저작권 침해", "대충 설명 7");
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0000", "0003", "0008", "t_work", "뭔가 이상해요 암튼 이상함");
 
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0000", 0);
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0000", 1);
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0000", 3);
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0000", 0, "지나친 선정성");
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0000", 1, "지나친 폭력성");
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0000", 2, "아동학대");
 
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0001", "000c", "0003", "t_account", "님이 더 이상해요 이 사람아");
 	
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0001", 2);
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0001", 0, "명예훼손");
 	
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0002", "0003", "000c", "t_account", "누구세요");
 	
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0002", 2);
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0002", 0, "명예훼손");
 	
 insert into t_report(id, reporter_id, suspect_id, suspect_table, cause)
 	values("0003", "0003", "001d000m000g000h", "t_work", "이거 유사관리자 행위죠?");
 	
-insert into t_report_cls(rpt_id, rpt_level)
-	values("0003", 5);
+insert into t_report_cls(rpt_id, rpt_type)
+	values("0003", 0, "허위광고");
+	
+insert into t_sequence(NAME, num)
+VALUES ('s_report', 4)

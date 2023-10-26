@@ -293,8 +293,10 @@ create index idx_time on t_report(reported_upt);
 
 create table t_report_cls(
 	rpt_id		char(4),
-	rpt_level	tinyint
+	rpt_level   tinyint,
+	rpt_type	varchar(16)
 );
+create index idx_rpt_id on t_report_cls(rpt_id);
 
 create table t_sys_rptype(
 	level		tinyint primary key,

@@ -68,6 +68,7 @@
 			) sus
 		    ON r.suspect_id = sus.id
 		 WHERE r.suspect_table = sus.type
+		   and r.complete = 0
 		 order by r.upt_dt
 		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
@@ -77,11 +78,87 @@
 		SELECT rpt.*
 		  FROM t_sys_rptype rpt
 		  Left outer join t_report_cls c
-		    on rpt.level = c.rpt_level
-		  Left outer join t_report r
-		    on c.rpt_id = r.id
-		 where r.id = #{id}
+		    on rpt.rpt_type = c.rpt_type
+		 where c.rpt_id = #{id}
 	</select>
+	
+	<!-- public int public int countRptTypesOf(String id); -->
+	<select id="countRptTypesOf">
+		SELECT count(*)
+		  from t_report_cls
+		 where rpt_id = #{id}
+	</select>
+	
+	<!-- public int insertToSync(@Param("reportId") String reportId, @Param("offset") int offset,
+			@Param("insertList") List<ReportCodeVO> insertList);-->
+	<insert id="insertToSync">
+		<if test="!(insertList.isEmpty())">
+			INSERT INTO t_report_cls(rptId, level, rptType)
+			VALUES
+			<foreach item="rpt" collection="insertList" separator="," index="index" close=";">
+				(#{reportId}, (#{index} + #{offset}), #{rpt.rptType})
+			</foreach>
+		</if>
+	</insert>
+	
+	<!-- public int updateAllRptFrom(@Param("reportId") String reportId,
+			@Param("updateList") List<ReportCodeVO> updateList);-->
+	<update id="updateAllPropsFrom">
+		<if test="!(updateList.isEmpty())">
+			UPDATE t_report_cls cls
+			  JOIN (
+			<foreach item="rpt" collection="updateList" separator=" UNION ALL " index="index" close=")">
+			<!-- 얼마 되지도 않는 거에 수정 여부 체크하기 시름 ㅡ.ㅡ -->
+			<choose>
+			    <when test = "index == 0">
+				  SELECT #{index} as LEVEL, #{rpt.rptType} as rpt_type
+			    </when>
+			    <otherwise>
+				  SELECT #{index}, #{prop.propType}, #{prop.propVal}
+			    </otherwise>
+			  </choose>
+			</foreach> vals ON rpt.rpt_level = vals.level
+			   SET cls.rpt_type = vals.rpt_type
+			 WHERE cls.rpt_id = #{reportId}
+		</if>
+	</update>
+	
+	<!-- public int deleteToSync(@Param("reportId") String reportId,
+			@Param("border") int border);-->
+	<delete id="deleteToSync">
+		DELETE cls.*
+		  from t_report_cls cls
+		 where cls.owner_id = #{reportId}
+		   and cls.level >= ${border}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- public int createReport(ReportVO report);
+	public int insertToSync(@Param("reportId") String reportId,
+			@Param("size") int size, @Param("insertList") List<ReportCodeVO> insertList);
+
+	public int updateReport(@Param("report") ReportVO report);
+	public int updateAllRptFrom(@Param("reportId") String reportId,
+			@Param("updateList") List<ReportCodeVO> updateList);
+
+	public int deleteToSync(@Param("reportId") String reportId,
+			@Param("requestCount") int requestCount);-->
+
 
 
 </mapper>
