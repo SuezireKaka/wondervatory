@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.framework.exception.BusinessException;
-import www.wonder.vatory.security.dto.SignInDTO;
-import www.wonder.vatory.security.dto.SignInResultDto;
+import www.wonder.vatory.security.config.JwtAuthenticationFilter;
+import www.wonder.vatory.security.model.SignInDTO;
+import www.wonder.vatory.security.model.SignInResultDto;
 import www.wonder.vatory.security.service.SignService;
 
 // 예제 13.28
@@ -22,7 +23,6 @@ public class SignController {
 	private final Logger LOGGER = LoggerFactory.getLogger(SignController.class);
 	private final SignService signService;
 
-	@Autowired
 	public SignController(SignService signService) {
 		this.signService = signService;
 	}

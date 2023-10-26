@@ -24,9 +24,7 @@ import www.wonder.vatory.framework.model.TimeEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef {
-	public String getMappedTableName() {
-		return "T_account";
-	}
+	public static final String ACCOUNT_TYPE = "원더";
 	
 	private String loginId;
 	private String passWord;
@@ -38,13 +36,17 @@ public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef
 	private Collection<RoleVO> roleList;
 	private AttachFileDTO profileImage;
 	
+	public String getMappedTableName() {
+		return "T_account";
+	}
+	
 	public void encodePswd(PasswordEncoder pswdEnc) {
 		passWord = pswdEnc.encode(passWord);
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roleList
+		return this.getRoleList()
 				.stream()
 				.map(RoleVO::getAuthority)
 				.collect(Collectors.toList());

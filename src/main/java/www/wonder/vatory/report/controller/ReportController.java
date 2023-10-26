@@ -38,7 +38,7 @@ public class ReportController {
 	@GetMapping("/listAllReports/{page}")
 	@PreAuthorize("hasAnyRole('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<ReportVO>, PagingDTO>> listAllReports(
-			@AuthenticationPrincipal AccountVO owner, @PathVariable int page) {
+			@AuthenticationPrincipal AccountVO manager, @PathVariable int page) {
 
 		DreamPair<List<ReportVO>, PagingDTO> list = reportService.listAllReports(page);
 		return new ResponseEntity<>(list, HttpStatus.OK);

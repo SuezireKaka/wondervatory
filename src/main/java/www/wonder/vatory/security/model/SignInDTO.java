@@ -1,4 +1,4 @@
-package www.wonder.vatory.security.dto;
+package www.wonder.vatory.security.model;
 
 import lombok.Data;
 

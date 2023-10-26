@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.framework.CommonResponse;
 import www.wonder.vatory.framework.exception.BusinessException;
 import www.wonder.vatory.framework.exception.ErrorCode;
+import www.wonder.vatory.oauth.model.OauthToken;
 import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.security.config.JwtTokenProvider;
-import www.wonder.vatory.security.dto.SignInDTO;
-import www.wonder.vatory.security.dto.SignInResultDto;
-import www.wonder.vatory.security.dto.SignUpResultDto;
+import www.wonder.vatory.security.model.SignInDTO;
+import www.wonder.vatory.security.model.SignInResultDto;
+import www.wonder.vatory.security.model.SignUpResultDto;
 
 @Service
 public class SignService {

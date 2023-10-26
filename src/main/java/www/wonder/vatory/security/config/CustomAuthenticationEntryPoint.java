@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import www.wonder.vatory.security.dto.EntryPointErrorResponse;
+import www.wonder.vatory.security.model.EntryPointErrorResponse;
 
 /**
  * 인증 실패시 결과를 처리해주는 로직을 가지고 있는 클래스 예제 13.21, 예제 13.32

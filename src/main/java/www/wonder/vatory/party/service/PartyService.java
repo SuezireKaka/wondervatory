@@ -111,6 +111,10 @@ public class PartyService implements UserDetailsService {
 				& partyMapper.createRole(account, new RoleVO("reader"));
 		return cnt;
 	}
+	
+	public int createPerson(PersonVO person) {
+		return partyMapper.createPerson(person);
+	}
 
 
 }

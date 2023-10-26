@@ -177,7 +177,8 @@ create table t_account(
 	reg_dt		timestamp default current_timestamp(),
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
 );
-create index idx_login_id on t_account(login_id);
+create unique index idx_login_id on t_account(login_id);
+create unique index idx_login_id on t_account(nick);
 
 -- work --
 create table t_work(
@@ -314,5 +315,14 @@ create table T_custom_property(
 	primary key(owner_id, order)
 );
 
+---- 10 26 ------------------
 
-
+create table T_kakao_account(
+	user_code		int UNSIGNED not null primary key,
+	kakao_id		int UNSIGNED not null,
+	kakao_nick		varchar(255) not null,
+	owner_id		char(4),
+	reg_dt			timestamp default current_timestamp()
+);
+create unique index idx_kko_id on T_kakao_account(kakao_id);
+create unique index idx_kko_nick on T_kakao_account(kakao_nick);

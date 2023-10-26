@@ -37,7 +37,7 @@ public class JwtTokenProvider {
 
 	@Value("${springboot.jwt.secret}") // 비밀키
 	private String secretKey = "secretKey00";
-	private final long tokenValidMillisecond = 1000L * 60 * 60; // 1시간 토큰 유효
+	private final long tokenValidMillisecond = 24000L * 60 * 60; // 24시간 토큰 유효
 
 	/**
 	 * SecretKey 에 대해 인코딩 수행 예제 13.11
