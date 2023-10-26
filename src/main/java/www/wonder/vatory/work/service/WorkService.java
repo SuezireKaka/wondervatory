@@ -162,7 +162,7 @@ public class WorkService {
 			child.setWriter(user);
 			child.setHTier(parent.getId().length() / 4);
 			int cnt = workMapper.createSemiPost(parent, child, type);
-			//createTagRelation(child);
+			createTagRelation(child);
 			attachFileService.createAttachFiles(child);
 			return cnt;
 		}
@@ -170,7 +170,7 @@ public class WorkService {
 		else {
 			attachFileService.deleteAttachFiles(child);
 			int cnt = workMapper.updateSemiPost(parent, child, type);
-			//createTagRelation(child);
+			createTagRelation(child);
 			attachFileService.createAttachFiles(child);
 			return cnt;
 		}

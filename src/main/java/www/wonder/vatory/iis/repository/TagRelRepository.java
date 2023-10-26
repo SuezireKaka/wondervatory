@@ -9,6 +9,6 @@ import www.wonder.vatory.iis.model.TagRelVO;
 
 public interface TagRelRepository extends JpaRepository<TagRelVO, TagRelId>{
 	
-	@Query(nativeQuery = true, value = "delete from t_tgt_tag where tgt_name = 'T_reply' and tgt_id = :postId")
+	@Query(nativeQuery = true, value = "delete from t_tgt_tag where tgt_name = 'T_work' and tgt_id = :postId")
 	void deleteAllByPostId(@Param("postId") String postId);
 }

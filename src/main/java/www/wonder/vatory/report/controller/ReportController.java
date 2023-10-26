@@ -34,7 +34,7 @@ public class ReportController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	// /anonymous/report/listAllReports/1
+	// /report/listAllReports/1
 	@GetMapping("/listAllReports/{page}")
 	@PreAuthorize("hasAnyRole('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<ReportVO>, PagingDTO>> listAllReports(
