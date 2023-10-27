@@ -28,6 +28,7 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 	@TargetProperty
 	private AccountVO writer;	//게시물 작성자
 	private int hTier;
+	@TargetProperty
 	private String content;	//내용, series에서는 줄거리
 	private int readCount;
 	private int likeCount; //series는 post 총합

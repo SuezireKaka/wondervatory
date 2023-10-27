@@ -48,7 +48,13 @@ public class PartyService implements UserDetailsService {
 	}
 	
 	public AccountVO findByNick(String username) {
-		return partyMapper.findByNick(username);
+		AccountVO res = partyMapper.findByNick(username);
+		PersonVO response = res.getResponse();
+		List<ContactPointVO> contacts = partyMapper.listAllCpOf(response.getId());
+		response.setContactPointList(contacts);
+		res.setResponse(response);
+	
+		return res;
 	}
 	
 	public AccountVO findByLoginId(String loginId) {

@@ -117,7 +117,7 @@
 	<select id="findByNick" resultMap="rmAccountVO">
 		SELECT acc.*, 
 			own.name own_name,
-			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
+			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
 			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
 			role.role role_role
 		  FROM T_Account acc
@@ -128,8 +128,8 @@
 		  LEFT OUTER JOIN T_party rsp
 		    on rsp.id = acc.response_id
 		  LEFT OUTER JOIN T_contact_Point cp
-		    on cp.owner_id = rsp.id
-		 where acc.nick = #(nick)
+		    on cp.owner_id = acc.id
+		 where acc.nick = #{nick}
 		   and acc.alive = TRUE
 	</select>
 	
