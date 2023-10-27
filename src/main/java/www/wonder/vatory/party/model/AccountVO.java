@@ -17,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
+import www.wonder.vatory.framework.property.ano.TargetProperty;
 
 @SuperBuilder
 @Getter
@@ -30,6 +31,7 @@ public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef
 	private String passWord;
 	private OrganizationVO owner;	//주인으로서
 	private PersonVO response;	//대상으로서
+
 	private String nick; // 화면에 표시되는 필명 - 중복검사할거임!
 	private String introduction;
 	private boolean isAlive;

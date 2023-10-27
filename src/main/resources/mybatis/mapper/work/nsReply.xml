@@ -90,7 +90,7 @@
 		   and t.id = r.tag_id
 		   and r.tgt_name = 'T_work'
 		   and r.tgt_id = w.id
-		   and w.descrim = 'Series'
+
 		   and w.bb_id = b.id
 		   and b.id = #{boardId}
 	  group by w.id) pst,
@@ -98,7 +98,7 @@
 	       ON w.writer_id = a.id
 	 where pst.wid = w.id
 	 order by pst.importance desc
-	 limit #{paging.series_limit} offset #{paging.offset}
+	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 	
 	<!-- public List<ReplyVO> findSeriesById(String id); -->
