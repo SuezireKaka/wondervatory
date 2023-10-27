@@ -5,20 +5,23 @@
 	<resultMap id="rmReportVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.report.model.ReportVO">
 		<result property="cause" column="cause" />
+		<result property="suspectId" column="suspect_id" />
+		<result property="suspectTable" column="suspect_table" />
 		<association property="reporter" columnPrefix="repo_"
 			resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
 
 		<collection property="rptTypesList" columnPrefix="type_"
 			resultMap="rmReportCodeVO">
 		</collection>
+	</resultMap>
 
-		<discriminator javaType="String" column="suspect_table">
+	<!-- 인터페이스 프로퍼티 처리 꼼수 of 꼼수 - 결국 하나의 클래스로 합쳐질 거지만 일단 분리해놓기
+		→ deprecated : 그냥 suspectId랑 suspectTable로 처리
+	<discriminator javaType="String" column="suspect_table">
 			<case value="t_account" resultMap="rmAccountReportVO" />
 			<case value="t_work" resultMap="rmReportWorkVO" />
 		</discriminator>
 	</resultMap>
-	
-	<!-- 인터페이스 프로퍼티 처리 꼼수 of 꼼수 - 결국 하나의 클래스로 합쳐질 거지만 일단 분리해놓기 -->
 	<resultMap id="rmAccountReportVO" extends="rmReportVO"
 		type="www.wonder.vatory.report.model.ReportVO">
 		<association property="suspect" columnPrefix="sus_"
@@ -28,7 +31,7 @@
 		type="www.wonder.vatory.report.model.ReportVO">
 		<association property="suspect" columnPrefix="sus_"
 			resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmReplyVO" />
-	</resultMap>
+	</resultMap>-->
 
 	<resultMap id="rmReportCodeVO"
 		type="www.wonder.vatory.report.model.ReportCodeVO">
@@ -49,26 +52,10 @@
 
 	<!-- public List<ReportVO> listAllReports(PagingDTO paging); -->
 	<select id="listAllReports" resultMap="rmReportVO">
-		select SQL_CALC_FOUND_ROWS r.*, repo.id repo_id, repo.nick repo_nick,
-			sus.id sus_id, sus.descrim sus_descrim, sus.nick sus_nick,
-			sus.title sus_title, sus.content sus_content, sus.bb_id sus_bb_id
+		select SQL_CALC_FOUND_ROWS r.*, repo.id repo_id, repo.nick repo_nick
 		  from T_report r
-		  LEFT OUTER JOIN t_account repo
+		  Left outer join t_account repo
 		    on r.reporter_id = repo.id
-		  LEFT OUTER JOIN
-			(SELECT a.id id, 't_account' type, a.nick nick,
-			 		NULL descrim, null title, null content, NULL bb_id
-			   FROM t_account a
-			  UNION All
-			 SELECT w.id id, 't_work' type, w.descrim descrim, NULL nick,
-				if(w.descrim = 'reply', NULL, title),
-				if(w.descrim = 'reply', content, NULL),
-				w.bb_id
-			   FROM t_work w
-			) sus
-		    ON r.suspect_id = sus.id
-		 WHERE r.suspect_table = sus.type
-		   and r.complete = 0
 		 order by r.upt_dt
 		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
@@ -93,12 +80,21 @@
 			@Param("insertList") List<ReportCodeVO> insertList);-->
 	<insert id="insertToSync">
 		<if test="!(insertList.isEmpty())">
-			INSERT INTO t_report_cls(rptId, level, rptType)
+			INSERT INTO t_report_cls(rpt_id, rpt_level, rpt_type)
 			VALUES
 			<foreach item="rpt" collection="insertList" separator="," index="index" close=";">
 				(#{reportId}, (#{index} + #{offset}), #{rpt.rptType})
 			</foreach>
 		</if>
+	</insert>
+	
+	<!--public int createReport(ReportVO report);-->
+	<insert id="createReport">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+    		select NEXT_PK('s_report') 
+  		</selectKey>
+		INSERT INTO t_report(id, reporter_id, suspect_id, suspect_table, cause)
+		VALUES (#{id}, #{reporter.id}, #{suspectId}, #{suspectTable}, #{cause})
 	</insert>
 	
 	<!-- public int updateAllRptFrom(@Param("reportId") String reportId,

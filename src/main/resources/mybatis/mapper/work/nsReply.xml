@@ -98,7 +98,7 @@
 	       ON w.writer_id = a.id
 	 where pst.wid = w.id
 	 order by pst.importance desc
-	 limit #{paging.series_limit} offset #{paging.offset}
+	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 	
 	<!-- public List<ReplyVO> findSeriesById(String id); -->

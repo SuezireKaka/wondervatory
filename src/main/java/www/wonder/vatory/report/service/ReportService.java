@@ -77,12 +77,21 @@ public class ReportService {
 			    	.collect(Collectors.groupingBy(s -> rptTypesList.indexOf(s) >= border))
 			    	.values()
 		    );
+		    // 둘로 쪼개는데 한 쪽이 없으면 알잘딱깔센 [[], [0, 1, 2]] 해야 할 거 아니야 ㅡ.ㅡ
+		    // 근데 못 해서 일단 마지막을 insertList로 두고
+		    int size = listOfLists.size();
+		    List<ReportCodeVO> insertList = listOfLists.get(size - size);
 		    
-		    List<ReportCodeVO> updateList = listOfLists.get(0);
-		    List<ReportCodeVO> insertList = listOfLists.get(1);
+		    //사이즈에 따라 updateList를 다르게
+		    if (listOfLists.size() == 1) {
+		    	result = reportMapper.insertToSync(reportId, 0, insertList);
+		    }
+		    else {
+		    	List<ReportCodeVO> updateList = listOfLists.get(0);
+		    	result = reportMapper.updateAllRptFrom(reportId, updateList)
+		    		& reportMapper.insertToSync(reportId, updateList.size(), insertList);
+		    }
 		    
-		    result = reportMapper.updateAllRptFrom(reportId, updateList)
-		    	& reportMapper.insertToSync(reportId, updateList.size(), insertList);
 		}
 		else {
 			result = reportMapper.deleteToSync(reportId, requestCount)

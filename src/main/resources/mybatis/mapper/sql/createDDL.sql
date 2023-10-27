@@ -283,11 +283,7 @@ create table t_report(
 	suspect_table	varchar(10) comment '계정 -> t_account, 작품 또는 댓글 -> t_work',
 	cause			text(5000) comment '유저가 대상을 신고한 이유 자세히 듣기',
 	reg_dt			timestamp default current_timestamp(),
-	upt_dt			timestamp default current_timestamp(),
-	complete		tinyint default 0 comment '처리시 1로 변경',
-	processer_id	char(4),
-	process_when	timestamp,
-	process_msg		varchar(255) comment '매니저가 처리한 내용을 요약해서 정리'
+	upt_dt			timestamp default current_timestamp()
 );
 create index idx_time on t_report(reported_upt);
 
@@ -328,3 +324,12 @@ create table T_kakao_account(
 );
 create unique index idx_kko_id on T_kakao_account(kakao_id);
 create unique index idx_kko_nick on T_kakao_account(kakao_nick);
+
+create table t_rpt_process(
+	id				char(4) primary key,
+	origin_id		char(4),
+	complete		tinyint default 0 comment '처리 완료시 1',
+	processer_id	char(4),
+	process_when	timestamp,
+	process_msg		varchar(255) comment '매니저가 처리한 내용을 요약해서 정리'
+);

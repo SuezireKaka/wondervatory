@@ -47,9 +47,9 @@ public class ReportController {
 	}
 
 	// 로그인 안 한 유저의 신고 처리는 몰?루
-	@PostMapping("/mngReport")
+	@PostMapping("/manageReport")
 	@PreAuthorize("hasAnyRole('reader', 'writer', 'manager', 'admin')")
-	public ResponseEntity<Integer> createReport(
+	public ResponseEntity<Integer> manageReport(
 			@AuthenticationPrincipal AccountVO reporter, @RequestBody ReportVO report) {
 		if (reporter.getId().equals(report.getReporter().getId())) {
 			return ResponseEntity.ok(reportService.manageReport(reporter, report));
