@@ -19,6 +19,9 @@ public interface WorkMapper extends MetaMapper {
 			@Param("paging") PagingDTO paging);
 	public List<PostVO> listAllPost(@Param("seriesId") String seriesId,
 			@Param("paging") PagingDTO paging);
+	public List<SeriesVO> listUserSeries(@Param("nick") String nick,
+			@Param("paging") PagingDTO paging);
+	
 	
 	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);

@@ -71,9 +71,19 @@
 	  and w.complete = 1
 	 order by w.id DESC
 	 limit #{paging.postLimit} offset #{paging.offset}
-	 <!--  limit #{paging.limit} offset #{paging.offset} -->
 	</select>
 	
+	<!-- 	public List<SeriesVO> listUserSeries(@Param("nick") String nick, @Param("paging") PagingDTO paging); -->
+	<select id="listUserSeries" resultMap="rmSeriesVO">
+	select SQL_CALC_FOUND_ROWS w.*, 
+	 		a.id acc_id, a.login_id acc_login_id, a.nick acc_nick
+	  from T_work w LEFT OUTER JOIN t_account a
+	       ON w.writer_id = a.id
+	where a.nick = #{nick}
+	  and w.descrim = 'Series'
+	 order by w.id DESC
+	 limit #{paging.seriesLimit} offset #{paging.offset}
+	</select>
 	
 	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
