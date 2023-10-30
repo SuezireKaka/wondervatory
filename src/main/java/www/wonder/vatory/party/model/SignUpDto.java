@@ -11,12 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SignUpDto {
+	private String accountId;
+	private String partyId;
 	private String name;
-	String nick;
-	String loginId;
-	String passWord;
-	String sex;
-	Date birthDate;
-	List<ContactPointVO> listContactPoint;
+	private String nick;
+	private String loginId;
+	private String passWord;
+	private String sex;
+	private Date birthDate;
+	private List<ContactPointVO> listContactPoint;
 	//String introduction;
 }

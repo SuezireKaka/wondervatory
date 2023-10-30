@@ -310,7 +310,7 @@ create table T_custom_property(
 	level		MEDIUMINT,
 	prop_type	varchar(255),
 	prop_val	varchar(255),
-	primary key(owner_id, order)
+	primary key(owner_id, level)
 );
 
 ---- 10 26 ------------------

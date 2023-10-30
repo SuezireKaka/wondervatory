@@ -30,6 +30,10 @@ public interface PartyMapper extends MetaMapper {
 	public int createAccount(AccountVO account);
 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role);
 	
+	public int updatePerson(@Param("person") PersonVO person);
+	public int updateAccount(@Param("account") AccountVO account);
 
 	public int deleteMember(String nick);
+	
+	
 }
