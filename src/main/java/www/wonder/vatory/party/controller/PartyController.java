@@ -36,7 +36,7 @@ public class PartyController {
 	@GetMapping("/listAllAccount/{ownerId}/{page}")
 	@PreAuthorize("hasAnyRole('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(
-			@AuthenticationPrincipal AccountVO manager ,@PathVariable String ownerId, @PathVariable int page) {
+			@AuthenticationPrincipal AccountVO manager, @PathVariable String ownerId, @PathVariable int page) {
 		DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -71,14 +71,22 @@ public class PartyController {
 	}
 
 	// /party/anonymous/createMember
-	@PostMapping("/anonymous/mngMember")
-	public ResponseEntity<Integer> mngMember(@RequestBody SignUpDto signUpRequest) {
+	@PostMapping("/anonymous/createMember")
+	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
 	}
 	
-	// /party/anonymous/deleteMember/닉
-	@GetMapping("/anonymous/deleteMember/{nick}")
-	public ResponseEntity<Integer> deleteMember(@PathVariable String nick) {
+	// /party/updateMember
+	@PostMapping("/updateMember")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<Integer> updateMember(@AuthenticationPrincipal AccountVO owner, @RequestBody SignUpDto signUpRequest) {
+		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
+	}
+	
+	// /party/deleteMember/닉
+	@GetMapping("/deleteMember/{nick}")
+	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String nick) {
 		return ResponseEntity.ok(partyService.deleteMember(nick));
 	}
 	
