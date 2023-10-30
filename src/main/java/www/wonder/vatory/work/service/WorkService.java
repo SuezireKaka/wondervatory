@@ -67,6 +67,22 @@ public class WorkService {
 		return new DreamPair<List<PostVO>, PagingDTO>(listResult, paging);
 	}
 
+	/** 한사람의 원글 목록 조회 */ 
+	public DreamPair<List<SeriesVO>, PagingDTO> listUserSeries(String nick, int page) {
+		PagingDTO paging = new PagingDTO(page);
+		List<SeriesVO> listResult = workMapper.listUserSeries(nick, paging);
+		long dataCount = workMapper.getFoundRows();
+		paging.buildPagination(dataCount);
+		
+		// listResult의 각각에 썸네일 뿌리기
+		for (SeriesVO series : listResult) {
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(series);
+			series.setListAttachFile(attachFileList);
+		}
+
+		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
+	}
+	
 	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page) {
 		String[] arrSearch = search.split(" ");
 		if (arrSearch.length == 0) {
