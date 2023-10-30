@@ -183,5 +183,10 @@
 		VALUES (#{role.role}, #{account.id});
 	</insert>
 	
-	
+	<!-- public int deleteMember(AccountVO account); -->
+	<update id="deleteMember">
+	update t_account
+	   set alive = 0
+	 where nick = #{nick} 
+	</update>
 </mapper>

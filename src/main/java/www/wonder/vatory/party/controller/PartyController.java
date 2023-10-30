@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,4 +75,11 @@ public class PartyController {
 	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.createMember(signUpRequest));
 	}
+	
+	// /party/anonymous/deleteMember/닉
+	@GetMapping("/anonymous/deleteMember/{nick}")
+	public ResponseEntity<Integer> deleteMember(@PathVariable String nick) {
+		return ResponseEntity.ok(partyService.deleteMember(nick));
+	}
+	
 }

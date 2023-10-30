@@ -121,6 +121,9 @@ public class PartyService implements UserDetailsService {
 	public int createPerson(PersonVO person) {
 		return partyMapper.createPerson(person);
 	}
-
+	
+	public int deleteMember(String nick) {
+		return partyMapper.deleteMember(nick);
+	}
 
 }
