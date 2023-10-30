@@ -90,7 +90,6 @@
 		   and t.id = r.tag_id
 		   and r.tgt_name = 'T_work'
 		   and r.tgt_id = w.id
-
 		   and w.bb_id = b.id
 		   and b.id = #{boardId}
 	  group by w.id) pst,

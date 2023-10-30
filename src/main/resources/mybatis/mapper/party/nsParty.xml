@@ -183,6 +183,41 @@
 		VALUES (#{role.role}, #{account.id});
 	</insert>
 	
+	<!-- 	public int updatePerson(@Param("person") PersonVO person); -->
+	<update id="updatePerson">
+		update T_party
+		   set name = #{person.name},
+			   birth = #{person.birthDate},
+			   sex = #{person.sex}
+		 where id = #{person.id};
+	  <if test="!(contactPointList.isEmpty())">
+			UPDATE t_contact_point cp
+			  JOIN (
+			<foreach item="ncp" collection="person.contactPointList" separator=" UNION ALL " index="index" close=")">
+			<!-- 얼마 되지도 않는 거에 수정 여부 체크하기 시름 ㅡ.ㅡ -->
+			<choose>
+			    <when test = "index == 0">
+				  SELECT #{ncp.cpType} as type, #{ncp.cpVal} as val, 
+			    </when>
+			    <otherwise>
+				  SELECT #{ncp.cpType}, #{ncp.cpVal}
+			    </otherwise>
+			  </choose>
+			</foreach> vals ON cp.cp_type = val.type
+			   SET cp.cp_val = vals.val
+			 WHERE cp.owner_id = #{person.id};
+		</if>
+	</update>
+	
+	<!-- public int updateAccount(@Param("account") AccountVO account); -->
+	<update id="updateAccount">
+		update T_account
+		   set nick = #{account.nick},
+			   pass_word = #{account.passWord},
+			   intro = #{person.introduction},
+		 where id = #{account.id};
+	</update>
+	
 	<!-- public int deleteMember(AccountVO account); -->
 	<update id="deleteMember">
 	update t_account

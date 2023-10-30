@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
@@ -90,7 +91,7 @@ public class PartyService implements UserDetailsService {
 	}
 
 	/** 회원 가입 */
-	public int createMember(SignUpDto signUpRequest) {
+	public int mngMember(SignUpDto signUpRequest) {
 		// 동일인 검증 어케 하나요 ㅠㅠ
 		// 모르겠고 빌더패턴이나 쓰자
 		PersonVO person = PersonVO.builder()
@@ -107,15 +108,30 @@ public class PartyService implements UserDetailsService {
 				.owner(new OrganizationVO("0000"))
 				.response(person)
 				.build();
+		int cnt = 1;
+		account.encodePswd(pswdEnc);
 		for (ContactPointVO cp : signUpRequest.getListContactPoint()) {
 			person.addCP(cp);
 		}
-		int cnt = partyMapper.createPerson(person);
-		account.encodePswd(pswdEnc);
+		// accountId가 비어있으면 생성 아니면 수정
+		if (ObjectUtils.isEmpty(signUpRequest.getAccountId())) {
+			cnt &= partyMapper.createPerson(person);
+			cnt &= partyMapper.createAccount(account)
+					& partyMapper.createRole(account, new RoleVO("reader"));
+			return cnt;
+		}
+		else {
+			person.setId(signUpRequest.getPartyId());
+			account.setId(signUpRequest.getAccountId());
+			cnt &= partyMapper.updatePerson(person)
+					& partyMapper.updateAccount(account);
+			return cnt;
+		}
+		
+		 
+		
 
-		cnt &= partyMapper.createAccount(account)
-				& partyMapper.createRole(account, new RoleVO("reader"));
-		return cnt;
+		
 	}
 	
 	public int createPerson(PersonVO person) {
