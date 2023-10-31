@@ -156,15 +156,6 @@
 
 		INSERT INTO T_party(id, descrim, name, sex, birth)
 		VALUES (#{id}, 'Person', #{name}, #{sex}, #{birthDate});
-
-	  <if test="!(contactPointList.isEmpty())">
-			INSERT INTO T_contact_Point(owner_id, cp_type, cp_val)
-			VALUES
-			<foreach item="cp" collection="contactPointList" separator=","
-				close=";">
-				(#{id}, #{cp.cpType}, #{cp.cpVal})
-			</foreach>
-	  </if>
 	</insert>
 	
 	<!-- 	public int createAccount(AccountVO account); -->
@@ -175,6 +166,19 @@
 		</selectKey>
 		INSERT INTO T_Account(id, login_id, pass_word, owner_id, response_id, nick, intro)
 		VALUES (#{id}, #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introduction});
+	</insert>
+	
+	<!-- public int createAllCpOf(@Param("id") String id,
+			@Param("listContactPoint") List<ContactPointVO> listContactPoint); -->
+	<insert id="createAllCpOf">
+		<if test="!(listContactPoint.isEmpty())">
+			INSERT INTO T_contact_Point(owner_id, cp_type, cp_val)
+			VALUES
+			<foreach item="cp" collection="listContactPoint" separator=","
+				close=";">
+				(#{id}, #{cp.cpType}, #{cp.cpVal})
+			</foreach>
+	  </if>
 	</insert>
 	
 	<!-- 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role); -->
@@ -190,22 +194,6 @@
 			   birth = #{person.birthDate},
 			   sex = #{person.sex}
 		 where id = #{person.id};
-	  <if test="!(person.contactPointList.isEmpty())">
-			UPDATE t_contact_point cp
-			  JOIN (
-			<foreach item="ncp" collection="person.contactPointList" separator=" UNION ALL " index="index" close=")">
-			<choose>
-			    <when test = "index == 0">
-				  SELECT #{ncp.cpType} as type, #{ncp.cpVal} as val
-			    </when>
-			    <otherwise>
-				  SELECT #{ncp.cpType}, #{ncp.cpVal}
-			    </otherwise>
-			  </choose>
-			</foreach> vals ON cp.cp_type = vals.type
-			   SET cp.cp_val = vals.val
-			 WHERE cp.owner_id = #{person.id};
-		</if>
 	</update>
 	
 	<!-- public int updateAccount(@Param("account") AccountVO account); -->
@@ -223,4 +211,10 @@
 	   set alive = 0
 	 where nick = #{nick} 
 	</update>
+	<!-- public int deleteAllCpOf(String id); -->
+	<delete id="deleteAllCpOf">
+	DELETE cp.*
+	  from t_contact_point cp
+	 where cp.owner_id = #{id}
+	</delete>
 </mapper>
