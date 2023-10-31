@@ -29,12 +29,15 @@ public interface PartyMapper extends MetaMapper {
 	public int createPerson(PersonVO person);
 	public int createAccount(AccountVO account);
 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role);
+	public int createAllCpOf(@Param("id") String id,
+			@Param("listContactPoint") List<ContactPointVO> listContactPoint);
 	
 	public int updatePerson(@Param("person") PersonVO person);
 	public int updateAccount(@Param("account") AccountVO account);
 
 	public int reRole(String memberId, String role);
 	public int deleteMember(String nick);
+	public int deleteAllCpOf(String id);
 	
 	
 }

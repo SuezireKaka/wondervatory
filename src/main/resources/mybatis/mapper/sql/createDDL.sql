@@ -333,3 +333,17 @@ create table t_rpt_process(
 	process_when	timestamp,
 	process_msg		varchar(255) comment '매니저가 처리한 내용을 요약해서 정리'
 );
+
+-----  10 31 --------------------
+
+create table t_sys_remocon(
+	remocon_name	varchar(32) not null,
+	key_level		tinyint not null,
+	key_name		varchar(16) not null,
+	key_use			varchar(8) not null,
+	key_click_cnt	tinyint default 1,
+	primary key(remocon_name, key_level)
+);
+
+
+

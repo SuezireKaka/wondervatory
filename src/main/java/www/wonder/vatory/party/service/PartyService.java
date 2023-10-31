@@ -98,7 +98,6 @@ public class PartyService implements UserDetailsService {
 				.name(signUpRequest.getName())
 				.sex(signUpRequest.getSex())
 				.birthDate(signUpRequest.getBirthDate())
-				.contactPointList(new ArrayList<ContactPointVO>())
 				.build();
 		AccountVO account = AccountVO.builder()
 				.loginId(signUpRequest.getLoginId())
@@ -110,21 +109,21 @@ public class PartyService implements UserDetailsService {
 				.build();
 		int cnt = 1;
 		account.encodePswd(pswdEnc);
-		for (ContactPointVO cp : signUpRequest.getListContactPoint()) {
-			person.addCP(cp);
-		}
 		// accountId가 비어있으면 생성 아니면 수정
 		if (ObjectUtils.isEmpty(signUpRequest.getAccountId())) {
 			cnt &= partyMapper.createPerson(person);
 			cnt &= partyMapper.createAccount(account)
-					& partyMapper.createRole(account, new RoleVO("reader"));
+					& partyMapper.createRole(account, new RoleVO("reader"))
+					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());;
 			return cnt;
 		}
 		else {
 			person.setId(signUpRequest.getPartyId());
 			account.setId(signUpRequest.getAccountId());
 			cnt &= partyMapper.updatePerson(person)
-					& partyMapper.updateAccount(account);
+					& partyMapper.updateAccount(account)
+					& partyMapper.deleteAllCpOf(person.getId())
+					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
 			return cnt;
 		}
 		

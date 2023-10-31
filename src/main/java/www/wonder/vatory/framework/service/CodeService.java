@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.framework.mapper.CodeMapper;
 import www.wonder.vatory.framework.model.CodeVO;
+import www.wonder.vatory.framework.model.RemoconVO;
 
 @Service
 public class CodeService {
@@ -16,5 +17,9 @@ public class CodeService {
 
 	public List<CodeVO> listAll() {
 		return codeMapper.listAll();
+	}
+
+	public RemoconVO getRemoconByName(String name) {
+		return codeMapper.getRemoconByName(name);
 	}
 }

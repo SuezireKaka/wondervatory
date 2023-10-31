@@ -289,3 +289,14 @@ insert into t_report_cls(rpt_id, rpt_type)
 	
 insert into t_sequence(NAME, num)
 VALUES ('s_report', 4)
+
+
+-----  10 31 --------------------
+
+insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_cnt)
+	values ("관계리모콘", 0, "선택", "button", 1)
+		, ("관계리모콘", 1, "객체 추가", "canvas", 1)
+		, ("관계리모콘", 2, "관계 추가", "button", 2)
+		, ("관계리모콘", 3, "제거", "button", 1)
+		, ("관계리모콘", 4, "복사", "button", 1)
+		, ("관계리모콘", 5, "붙여넣기", "canvas", 1)

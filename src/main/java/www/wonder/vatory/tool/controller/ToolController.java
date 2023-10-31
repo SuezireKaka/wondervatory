@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.report.model.ReportCodeVO;
 import www.wonder.vatory.tool.model.CustomObjectVO;
 import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.ToolVO;
