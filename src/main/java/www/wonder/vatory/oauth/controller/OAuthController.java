@@ -22,7 +22,7 @@ import www.wonder.vatory.party.service.PartyService;
 import www.wonder.vatory.security.config.JwtAuthenticationFilter;
 
 @RestController
-@RequestMapping("/party")
+@RequestMapping("/")
 public class OAuthController {
 
     @Autowired
@@ -30,17 +30,10 @@ public class OAuthController {
     @Autowired
     private PartyService partyService;
 
-    
-    // /party/anonymous/listAllAccount/0000/1
- 	@GetMapping("/anonymous/listAllAccount/{ownerId}/{page}")
- 	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(@PathVariable String ownerId, @PathVariable int page) {
- 		DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
- 		return new ResponseEntity<>(result, HttpStatus.OK);
- 	}
 
     // 프론트에서 인가코드 돌려 받는 주소
     // 인가 코드로 엑세스 토큰 발급 -> 사용자 정보 조회 -> DB 저장 -> jwt 토큰 발급 -> 프론트에 토큰 전달
-    @GetMapping("/anonymous/kakaoLogin/{code}")
+    @GetMapping("/login/oauth/callback/kakao")
     public ResponseEntity kakaoLogin(@PathVariable String code) {
 
         // 넘어온 인가 코드를 통해 access_token 발급
@@ -55,7 +48,7 @@ public class OAuthController {
     }
 
     // jwt 토큰으로 유저정보 요청하기
-    @GetMapping("kakao/me")
+    @GetMapping("/kakao/me")
     public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) {
 
         KakaoAccountVO user = oauthService.getKakaoAccount(request);

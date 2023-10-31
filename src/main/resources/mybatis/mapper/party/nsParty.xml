@@ -217,6 +217,15 @@
 		 where id = #{account.id};
 	</update>
 	
+	<!-- public int reRole(String memberId, String role); -->
+	<update id="reRole">
+		update t_role
+		   set role = #{role}
+		 where account_id = #{memberId};
+	</update>
+	
+	
+	
 	<!-- public int deleteMember(AccountVO account); -->
 	<update id="deleteMember">
 	update t_account

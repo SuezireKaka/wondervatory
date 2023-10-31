@@ -141,5 +141,11 @@ public class PartyService implements UserDetailsService {
 	public int deleteMember(String nick) {
 		return partyMapper.deleteMember(nick);
 	}
+	
+
+	public int reRole(String memberId, String role) {
+		return partyMapper.reRole(memberId, role);
+	}
+
 
 }
