@@ -33,7 +33,7 @@ public class PartyController {
 	private PartyService partyService;
 	
 	// /party/listAllAccount/0000/1
-	@GetMapping("/listAllAccount/{ownerId}/{page}")
+	@GetMapping("/listAllAccount/{ownerId}/{page}/{orderColumn}")
 	@PreAuthorize("hasAnyRole('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(
 			@AuthenticationPrincipal AccountVO manager, @PathVariable String ownerId, @PathVariable int page) {
