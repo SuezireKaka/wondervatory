@@ -30,6 +30,11 @@ public interface WorkMapper extends MetaMapper {
 	public List<ReplyVO> findPostById(String id);
 	public void incReadCount(String id);
 	
+	public PostVO getPrev(String parentId, String id);
+	public PostVO getNext(String parentId, String id);
+	
+	public int onLike(String id);
+	
 	public boolean isFirstFavorites(String ownerId, String responseId);
 	public boolean isFavorites(String ownerId, String responseId);
 	
@@ -42,8 +47,6 @@ public interface WorkMapper extends MetaMapper {
 	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,
 			@Param("paging") PagingDTO paging);
 	public int toggleFavorites(String ownerId, String responseId);
-	
-	public int onLike(String id);
 	
 	public int deleteReply(String id);
 

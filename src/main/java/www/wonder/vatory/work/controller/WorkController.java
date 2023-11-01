@@ -72,6 +72,16 @@ public class WorkController {
 			
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	// /work/anonymous/getPrevAndNext/0000           //4글자나 8글자 전부 찾기 가능 댓글과 대댓글만나오게 조건을 8글자이상으로함
+	@GetMapping("/anonymous/getPrevAndNext/{id}")
+	public ResponseEntity<DreamPair<PostVO, PostVO>> getPrevAndNext(@PathVariable String id) {
+		DreamPair<PostVO, PostVO> result = workService.getPrevAndNext(id);
+		if (result == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	// /work/isFavorites/0000
 	// 완전 이상한 꼼수

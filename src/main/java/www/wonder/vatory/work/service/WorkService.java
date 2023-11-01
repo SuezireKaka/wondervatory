@@ -164,6 +164,13 @@ public class WorkService {
 		return ret;
 	}
 	
+	public DreamPair<PostVO, PostVO> getPrevAndNext(String id) {
+		String parentId = id.substring(0, 4);
+		PostVO prev = workMapper.getPrev(parentId, id);
+		PostVO next = workMapper.getNext(parentId, id);
+		return new DreamPair<>(prev, next);
+	}
+	
 	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
 		SemiPostVO parent = semiPostPair.getFirstVal();
 		SemiPostVO child = semiPostPair.getSecondVal();

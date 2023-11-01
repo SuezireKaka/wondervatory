@@ -154,6 +154,30 @@
 	 where id = #{id}
 	</update>
 	
+	
+	<!-- public PostVO getPrev(String id); -->
+	<select id="getPrev" resultMap="rmReplyVO">
+	SELECT *
+	  FROM t_work
+	 WHERE id like CONCAT('0000', '%')
+	   AND descrim = 'Post'
+	   <![CDATA[AND id < '00000004']]>
+	   and complete = 1
+	 ORDER BY id DESC
+	 LIMIT 1
+	 </select>
+
+	<!-- public PostVO getNext(String id); -->
+	<select id="getNext" resultMap="rmReplyVO">
+	SELECT *
+	  FROM t_work
+	 WHERE id like CONCAT('0000', '%')
+	   AND descrim = 'Post'
+	   AND id > '00000004'
+	   and complete = 1
+	 LIMIT 1
+	</select>
+	
 	<!-- public int onLike(String id); -->
 	<update id="onLike">
 	update T_work
