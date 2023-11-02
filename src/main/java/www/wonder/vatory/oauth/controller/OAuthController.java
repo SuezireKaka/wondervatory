@@ -26,8 +26,8 @@ public class OAuthController {
 
     // 프론트에서 인가코드 돌려 받는 주소
     // 인가 코드로 엑세스 토큰 발급 -> 사용자 정보 조회 -> DB 저장 -> jwt 토큰 발급 -> 프론트에 토큰 전달
-    // /oauth/anonymous/kakao/login?code=ewioajieoawrejew
-    @GetMapping("/anonymous/kakao/login")
+    // /oauth/anonymous/kakao/login/ewioajieoawrejew
+    @GetMapping("/anonymous/kakao/login/{code}")
     public ResponseEntity kakaoLogin(@PathVariable String code) {
 
         // 넘어온 인가 코드를 통해 access_token 발급
@@ -43,7 +43,7 @@ public class OAuthController {
 
     // jwt 토큰으로 유저정보 요청하기
     @GetMapping("/kakao/me")
-    public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) {
+    public ResponseEntity<KakaoAccountVO> getCurrentUser(HttpServletRequest request) {
 
         KakaoAccountVO user = oauthService.getKakaoAccount(request);
 

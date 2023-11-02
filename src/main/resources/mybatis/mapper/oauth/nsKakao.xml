@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.oauth.mapper.KakaoMapper">
+	<resultMap id="rmKakaoAccountVO"
+			extends="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO"
+			type="www.wonder.vatory.oauth.model.KakaoAccountVO">
+		<result property="kakaoId" column="kakao_id" />
+		<result property="kakaoNick" column="kakao_nick" />
+	</resultMap>
+	
+	<!-- public KakaoAccountVO findByKakaoId(Long id); -->
+	<select id="findByKakaoId" resultMap="rmKakaoAccountVO">
+		SELECT acc.*, 
+			own.name own_name,
+			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
+			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
+			role.role role_role
+		  FROM T_Account acc
+		  LEFT OUTER JOIN T_role role
+		    on role.account_id = acc.id
+		  LEFT OUTER JOIN T_party own
+		    on own.id = acc.owner_id
+		  LEFT OUTER JOIN T_party rsp
+		    on rsp.id = acc.response_id
+		  LEFT OUTER JOIN T_contact_Point cp
+		    on cp.owner_id = acc.id
+		 where acc.kakao_id = #{id}
+	</select>
+	
+	<!-- public void createKakaoAccount(KakaoAccountVO kAccount); -->
+	<insert id="createKakaoAccount">
+		<selectKey keyProperty="id" resultType="String"
+			order="BEFORE">
+			select NEXT_PK('s_account')
+		</selectKey>
+		INSERT INTO T_Account(id, kakao_id, owner_id, response_id, kakao_nick)
+		VALUES (#{id}, #{kakao_id}, #{response.id}, #{kakaoNick});
+	</insert>
+	
+</mapper>

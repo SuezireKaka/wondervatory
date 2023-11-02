@@ -1,6 +1,5 @@
 package www.wonder.vatory.party.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import www.wonder.vatory.party.model.PartyVO;
 import www.wonder.vatory.party.model.PersonVO;
 import www.wonder.vatory.party.model.RoleVO;
 import www.wonder.vatory.party.model.SignUpDto;
+import www.wonder.vatory.party.model.WonderAccountVO;
 
 
 @Service
@@ -99,7 +99,7 @@ public class PartyService implements UserDetailsService {
 				.sex(signUpRequest.getSex())
 				.birthDate(signUpRequest.getBirthDate())
 				.build();
-		AccountVO account = AccountVO.builder()
+		WonderAccountVO account = WonderAccountVO.builder()
 				.loginId(signUpRequest.getLoginId())
 				.passWord(signUpRequest.getPassWord())
 				.nick(signUpRequest.getNick())
@@ -137,8 +137,8 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.createPerson(person);
 	}
 	
-	public int deleteMember(String nick) {
-		return partyMapper.deleteMember(nick);
+	public int deleteMember(String id) {
+		return partyMapper.deleteMember(id);
 	}
 	
 

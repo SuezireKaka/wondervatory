@@ -34,11 +34,7 @@
 	
 	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.party.model.AccountVO">
-		<result property="loginId" column="login_id" />
-		<result property="passWord" column="pass_word" />
-		<result property="nick" column="nick" />
-		<result property="introduction" column="intro" />
-		<result property="isAlive" column="alive" />
+		<result property="loginResultCode" column="loginResultCode" />
 		<association property="owner" columnPrefix="own_"
 			resultMap="rmOrganizationVO" />
 		<association property="response" columnPrefix="rsp_"
@@ -47,6 +43,18 @@
 		<collection property="roleList" columnPrefix="role_"
 			resultMap="rmRoleVO">
 		</collection>
+		<discriminator javaType="String" column="descrim">
+         	<case value="wonder" resultMap="rmWonderAccountVO" />
+         	<case value="kakao" resultMap="www.wonder.vatory.oauth.model.KakaoAccountVO" />
+		</discriminator>
+	</resultMap>
+	
+	<resultMap id="rmWonderAccountVO" extends="rmAccountVO"
+		type="www.wonder.vatory.party.model.WonderAccountVO">
+		<result property="loginId" column="login_id" />
+		<result property="passWord" column="pass_word" />
+		<result property="nick" column="nick" />
+		<result property="introduction" column="intro" />
 	</resultMap>
 	
 	<resultMap id="rmRoleVO"
@@ -57,8 +65,6 @@
 			resultMap="rmActVO">
 		</collection>
 	</resultMap>
-
-	
 	
 	<resultMap id="rmActVO"
 		type="www.wonder.vatory.party.model.ActVO">
@@ -76,7 +82,8 @@
 		SELECT SQL_CALC_FOUND_ROWS acc.*,
 			owner.id own_id, owner.name own_name,
 			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			role.role role_role, role.account_id role_account_id
+			role.role role_role, role.account_id role_account_id,
+			acc.descrim rsp_acc_descrim
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_party owner
 		    on owner.id = acc.owner_id
@@ -85,7 +92,6 @@
 		  LEFT OUTER JOIN T_role role
 		    on role.account_id = acc.id
 		 where acc.owner_id = #{ownerId}
-		   AND acc.alive = 1
 		 order by acc.id DESC
 		 limit #{paging.partyLimit} offset #{paging.offset};
 	</select>
@@ -98,11 +104,12 @@
 	</select>
 	
 	<!-- public AccountVO findByLoginId(String loginId); -->
-	<select id="findByLoginId" resultMap="rmAccountVO">
+	<select id="findByLoginId" resultMap="rmWonderAccountVO">
 		SELECT acc.*, 
 			own.name own_name,
 			rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
-			role.role role_role
+			role.role role_role,
+			acc.descrim rsp_acc_descrim
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_role role
 		    on role.account_id = acc.id
@@ -111,15 +118,15 @@
 		  LEFT OUTER JOIN T_party rsp
 		    on rsp.id = acc.response_id
 		 where acc.login_id = #{loginId}
-		   and acc.alive = true
 	</select>
 	<!-- public AccountVO findByNick(String nick); -->
-	<select id="findByNick" resultMap="rmAccountVO">
+	<select id="findByNick" resultMap="rmWonderAccountVO">
 		SELECT acc.*, 
 			own.name own_name,
 			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
 			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
-			role.role role_role
+			role.role role_role,
+			acc.descrim rsp_acc_descrim
 		  FROM T_Account acc
 		  LEFT OUTER JOIN T_role role
 		    on role.account_id = acc.id
@@ -130,7 +137,6 @@
 		  LEFT OUTER JOIN T_contact_Point cp
 		    on cp.owner_id = acc.id
 		 where acc.nick = #{nick}
-		   and acc.alive = TRUE
 	</select>
 	
 	<!-- public boolean isValidLoginId(String loginId); -->
@@ -212,13 +218,11 @@
 		 where account_id = #{memberId};
 	</update>
 	
-	
-	
-	<!-- public int deleteMember(AccountVO account); -->
+	<!-- public int deleteMember(String id); -->
 	<update id="deleteMember">
 	update t_account
 	   set alive = 0
-	 where nick = #{nick} 
+	 where id = #{id} 
 	</update>
 	<!-- public int deleteAllCpOf(String id); -->
 	<delete id="deleteAllCpOf">

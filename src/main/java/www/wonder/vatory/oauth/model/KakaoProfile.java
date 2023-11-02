@@ -21,6 +21,15 @@ public class KakaoProfile {
 
     @Data
     public class KakaoAccount {
+    	public Boolean has_age_range;
+    	public Boolean age_range_needs_agreement;
+    	public String age_range;
+    	public Boolean has_birthday;
+    	public Boolean birthday_needs_agreement;
+    	public String birthday;
+    	public Boolean has_gender;
+    	public Boolean gender_needs_agreement;
+    	public String gender; // female: 여성, male: 남성
         public Boolean profile_nickname_needs_agreement;
         public Boolean profile_image_needs_agreement;
         public Profile profile;

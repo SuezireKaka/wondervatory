@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class OauthToken {
+	private String id_token;
     private String access_token;
     private String token_type;
     private String refresh_token;

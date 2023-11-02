@@ -4,7 +4,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,8 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.framework.CommonResponse;
 import www.wonder.vatory.framework.exception.BusinessException;
 import www.wonder.vatory.framework.exception.ErrorCode;
-import www.wonder.vatory.oauth.model.OauthToken;
 import www.wonder.vatory.party.mapper.PartyMapper;
-import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.party.model.WonderAccountVO;
 import www.wonder.vatory.security.config.JwtTokenProvider;
 import www.wonder.vatory.security.model.SignInDTO;
 import www.wonder.vatory.security.model.SignInResultDto;
@@ -38,7 +36,7 @@ public class SignService {
 	/** 로그인 처리 */
 	public SignInResultDto signIn(SignInDTO signInDTO) {
 		LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
-		AccountVO user = partyMapper.findByLoginId(signInDTO.getLoginId());
+		WonderAccountVO user = partyMapper.findByLoginId(signInDTO.getLoginId());
 
 		LOGGER.info("[getSignInResult] 패스워드 비교 수행");
 		//User없는 상황 및 암호 오류 상황을 명확히 구분하여 알려주지 않음. 보안성 강화

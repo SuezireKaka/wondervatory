@@ -24,64 +24,17 @@ import www.wonder.vatory.framework.property.ano.TargetProperty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef {
-	public static final String ACCOUNT_TYPE = "원더";
-	
-	private String loginId;
-	private String passWord;
+public abstract class AccountVO extends TimeEntity implements MappedTableDef {
+
 	private OrganizationVO owner;	//주인으로서
 	private PersonVO response;	//대상으로서
-
-	private String nick; // 화면에 표시되는 필명 - 중복검사할거임!
-	private String introduction;
-	private boolean isAlive;
+	
+	private int loginResultCode; // 문제없음 : 1, 탈퇴계정 : 2, 만료계정 : 3, 처벌계정 : 4
 	private Collection<RoleVO> roleList;
 	private AttachFileDTO profileImage;
 	
 	public String getMappedTableName() {
 		return "T_account";
-	}
-	
-	public void encodePswd(PasswordEncoder pswdEnc) {
-		passWord = pswdEnc.encode(passWord);
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.getRoleList()
-				.stream()
-				.map(RoleVO::getAuthority)
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public String getPassword() {
-		return passWord;
-	}
-
-	@Override
-	public String getUsername() {
-		return nick;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return isAlive;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
 	}
 
 	@Override
@@ -93,6 +46,17 @@ public class AccountVO extends TimeEntity implements UserDetails, MappedTableDef
 
 	public String getKSuspectType() {
 		return "사용자";
+	}
+	
+	public String getAccountType() {
+		return "";
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.getRoleList()
+				.stream()
+				.map(RoleVO::getAuthority)
+				.collect(Collectors.toList());
 	}
 
 }

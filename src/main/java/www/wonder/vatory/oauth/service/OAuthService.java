@@ -65,7 +65,7 @@ public class OAuthService {
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add("grant_type", "authorization_code");
             params.add("client_id", client_id);
-            params.add("redirect_uri", redirect_url + "/party/callback");
+            params.add("redirect_uri", redirect_url);
             params.add("code", code);
             params.add("client_secret", client_secret);
             
@@ -127,9 +127,9 @@ public class OAuthService {
     }
 
     public KakaoAccountVO getKakaoAccount(HttpServletRequest request) {
-        Long userCode = (Long) request.getAttribute("userCode");
+        Long kakaoId = (Long) request.getAttribute("kakaoId");
 
-        KakaoAccountVO user = kakaoMapper.findByUserCode(userCode);
+        KakaoAccountVO user = kakaoMapper.findByKakaoId(kakaoId);
 
         return user;
     }
@@ -138,15 +138,15 @@ public class OAuthService {
         KakaoProfile profile = findProfile(token);
         
         KakaoAccountVO kAccount = kakaoMapper.findByKakaoId(profile.getId());
-        PersonVO kResponse = new PersonVO();
-        
         
         if(kAccount == null) {
+        	PersonVO kResponse = new PersonVO();
         	kAccount = KakaoAccountVO.builder()
                     .kakaoId(profile.getId())
-                    .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNick(profile.getKakao_account().getProfile().getNickname())
                     .build();
+        	
+        	// 여기서부터 만들면 됨
 
             kakaoMapper.createKakaoAccount(kAccount);
             partyService.createPerson(kResponse);

@@ -9,7 +9,6 @@ import www.wonder.vatory.oauth.model.KakaoAccountVO;
 public interface KakaoMapper extends MetaMapper {
 	
 	public KakaoAccountVO findByKakaoId(Long id);
-	public KakaoAccountVO findByUserCode(Long userCode);
 	
 	public void createKakaoAccount(KakaoAccountVO kAccount);
 }

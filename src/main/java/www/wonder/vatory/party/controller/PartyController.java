@@ -95,10 +95,10 @@ public class PartyController {
 	
 	
 	// /party/deleteMember/닉
-	@GetMapping("/deleteMember/{nick}")
+	@GetMapping("/deleteMember/{id}")
 	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String nick) {
-		return ResponseEntity.ok(partyService.deleteMember(nick));
+	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String id) {
+		return ResponseEntity.ok(partyService.deleteMember(id));
 	}
 	
 }

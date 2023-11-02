@@ -12,14 +12,15 @@ import www.wonder.vatory.party.model.ContactPointVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
 import www.wonder.vatory.party.model.RoleVO;
+import www.wonder.vatory.party.model.WonderAccountVO;
 
 @Mapper
 public interface PartyMapper extends MetaMapper {
 	public List<AccountVO> listAllAccount(@Param("ownerId") String ownerId, @Param("paging") PagingDTO paging);
 	public List<ContactPointVO> listAllCpOf(@Param("ownerId") String ownerId);
 	
-	public AccountVO findByLoginId(String loginId);
-	public AccountVO findByNick(String nick);
+	public WonderAccountVO findByLoginId(String loginId);
+	public WonderAccountVO findByNick(String nick);
 	
 	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
@@ -36,7 +37,7 @@ public interface PartyMapper extends MetaMapper {
 	public int updateAccount(@Param("account") AccountVO account);
 
 	public int reRole(String memberId, String role);
-	public int deleteMember(String nick);
+	public int deleteMember(String id);
 	public int deleteAllCpOf(String id);
 	
 	
