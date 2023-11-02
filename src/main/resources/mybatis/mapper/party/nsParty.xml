@@ -147,6 +147,13 @@
 		 where nick = binary(#{nick})
 	</select>
 
+	<!-- public boolean checkUiqueVal(String key, String val); -->
+	<select id="checkUiqueVal" resultType="boolean">
+		SELECT count(1) = 0
+		  FROM t_account
+		 where ${key} = binary(#{val})
+	</select>
+
 	<!-- 	public int createPerson(PersonVO person); OGNL 사용함 -->
 	<insert id="createPerson">
 		<selectKey keyProperty="id" resultType="String"

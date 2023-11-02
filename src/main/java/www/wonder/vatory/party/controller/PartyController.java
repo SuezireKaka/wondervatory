@@ -66,13 +66,20 @@ public class PartyController {
 	public ResponseEntity<Boolean> checkLoginId(String loginId) {
 		return ResponseEntity.ok(partyService.checkLoginId(loginId));
 	}
-	
+
 	// /party/anonymous/checkNick?nick=hgghg
 	@GetMapping("/anonymous/checkNick")
 	public ResponseEntity<Boolean> checkNick(String nick) {
 		return ResponseEntity.ok(partyService.checkNick(nick));
 	}
 
+	// /party/anonymous/checkUiqueVal/nick/홍
+	@GetMapping("/anonymous/checkUiqueVal/{key}/{val}")
+	public ResponseEntity<Boolean> checkUiqueVal(@PathVariable String key, @PathVariable String val) {
+		return ResponseEntity.ok(partyService.checkUiqueVal(key, val));
+	}
+	
+	
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
 	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
