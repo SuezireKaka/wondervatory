@@ -24,6 +24,7 @@ public interface PartyMapper extends MetaMapper {
 	
 	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
+	public boolean checkUiqueVal(String key, String val);
 	
 	public int createOrganization(OrganizationVO organization);
 	public int createManager(AccountVO account);

@@ -90,6 +90,10 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.isValidNick(nick);
 	}
 
+	public boolean checkUiqueVal(String key, String val) {
+		return partyMapper.checkUiqueVal(key, val);
+	}
+	
 	/** 회원 가입 */
 	public int mngMember(SignUpDto signUpRequest) {
 		// 동일인 검증 어케 하나요 ㅠㅠ
