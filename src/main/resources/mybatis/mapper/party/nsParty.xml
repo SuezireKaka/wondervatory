@@ -154,8 +154,8 @@
 		 where nick = binary(#{nick})
 	</select>
 
-	<!-- public boolean checkUiqueVal(String key, String val); -->
-	<select id="checkUiqueVal" resultType="boolean">
+	<!-- public boolean checkUniqueVal(String key, String val); -->
+	<select id="checkUniqueVal" resultType="boolean">
 		SELECT count(1) = 0
 		  FROM t_account
 		 where ${key} = binary(#{val})

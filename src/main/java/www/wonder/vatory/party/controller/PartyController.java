@@ -74,9 +74,9 @@ public class PartyController {
 	}
 
 	// /party/anonymous/checkUiqueVal/nick/홍
-	@GetMapping("/anonymous/checkUiqueVal/{key}/{val}")
-	public ResponseEntity<Boolean> checkUiqueVal(@PathVariable String key, @PathVariable String val) {
-		return ResponseEntity.ok(partyService.checkUiqueVal(key, val));
+	@GetMapping("/anonymous/checkUniqueVal/{key}/{val}")
+	public ResponseEntity<Boolean> checkUniqueVal(@PathVariable String key, @PathVariable String val) {
+		return ResponseEntity.ok(partyService.checkUniqueVal(key, val));
 	}
 	
 	
