@@ -45,7 +45,8 @@
 		</collection>
 		<discriminator javaType="String" column="descrim">
          	<case value="wonder" resultMap="rmWonderAccountVO" />
-         	<case value="kakao" resultMap="www.wonder.vatory.oauth.model.KakaoAccountVO" />
+         	<case value="kakao"
+         		resultMap="www.wonder.vatory.oauth.mapper.KakaoMapper.rmKakaoAccountVO" />
 		</discriminator>
 	</resultMap>
 	
