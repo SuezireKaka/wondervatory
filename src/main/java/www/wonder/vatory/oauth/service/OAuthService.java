@@ -1,5 +1,6 @@
 package www.wonder.vatory.oauth.service;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,35 +19,38 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
+import www.wonder.vatory.framework.exception.BusinessException;
+import www.wonder.vatory.framework.exception.ErrorCode;
 import www.wonder.vatory.oauth.mapper.KakaoMapper;
 import www.wonder.vatory.oauth.model.KakaoAccountVO;
 import www.wonder.vatory.oauth.model.KakaoProfile;
 import www.wonder.vatory.oauth.model.OauthToken;
+import www.wonder.vatory.party.model.ContactPointVO;
+import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.PersonVO;
+import www.wonder.vatory.party.model.RoleVO;
 import www.wonder.vatory.party.service.PartyService;
-import www.wonder.vatory.security.config.JwtTokenProvider;
 import www.wonder.vatory.security.model.SignInResultDto;
+import www.wonder.vatory.security.service.SignService;
 
 @Service
-public class OAuthService {
+public class OAuthService extends PartyService {
 
     //환경 변수 가져오기
 	@Value("#{'${kakao.client.id}'}")
-    String client_id;
+	private String client_id;
 
 	@Value("#{'${kakao.client.secret}'}")
-    String client_secret;
+	private String client_secret;
     
 	@Value("#{'${kakao.redirect.url}'}")
-    String redirect_url;
+	private String redirect_url;
 	
 	@Autowired
-	KakaoMapper kakaoMapper;
-	@Autowired
-	PartyService partyService;
+	private KakaoMapper kakaoMapper;
 	
 	@Autowired
-	JwtTokenProvider jwtTokenProvider;
+	private SignService signService;
 
     public OauthToken getAccessToken(String code, String loginType) {
     	OauthToken oauthToken = null;
@@ -134,30 +138,62 @@ public class OAuthService {
         return user;
     }
 
-    public String SaveUserAndGetToken(String token) {
+    public SignInResultDto SaveUserAndLogin(String token) {
         KakaoProfile profile = findProfile(token);
+        
+        if (profile == null) {
+			throw new BusinessException(ErrorCode.WRONG_PWD);
+		}
         
         KakaoAccountVO kAccount = kakaoMapper.findByKakaoId(profile.getId());
         
         if(kAccount == null) {
-        	PersonVO kResponse = new PersonVO();
-        	kAccount = KakaoAccountVO.builder()
-                    .kakaoId(profile.getId())
-                    .kakaoNick(profile.getKakao_account().getProfile().getNickname())
-                    .build();
-        	
-        	// 여기서부터 만들면 됨
-
-            kakaoMapper.createKakaoAccount(kAccount);
-            partyService.createPerson(kResponse);
+        	kAccount = kakaoSignUp(profile);
         }
+        
+        SignInResultDto signInResultDto = SignInResultDto.builder()
+        		.token(createKakaoToken(kAccount))
+        		.roles(kAccount.getAuthorities().stream()
+						.map(GrantedAuthority::getAuthority)
+						.collect(Collectors.toList()))
+        		.userId(String.valueOf(kAccount.getKakaoId()))
+				.userLoginId("")
+				.userNick(kAccount.getKakaoNick())
+				.type(KakaoAccountVO.ACCOUNT_TYPE)
+				.loginResultCode(kAccount.getLoginResultCode())
+				.build();
+        
+        signService.setSuccessResult(signInResultDto);
 
-        return createToken(kAccount);
+        return signInResultDto;
     }
 
-    public String createToken(KakaoAccountVO kAccount) {
+	private KakaoAccountVO kakaoSignUp(KakaoProfile profile) {
+		PersonVO kResponse = PersonVO.builder()
+				.sex(profile.getKakao_account().getGender())
+				.name(profile.getKakao_account().getProfile().getNickname())
+				.contactPointList(new ArrayList<>())
+				.build();
+		kResponse.addCP(new ContactPointVO("email", profile.getKakao_account().getEmail()));
+		KakaoAccountVO kAccount = KakaoAccountVO.builder()
+				.owner(new OrganizationVO("0000"))
+				.response(kResponse)
+				.roleList(new ArrayList<>())
+		        .kakaoId(profile.getId())
+		        .kakaoNick(profile.getProperties().getNickname())
+		        .build();
+		
+		int i = createPerson(kResponse)
+				& kakaoMapper.createKakaoAccount(kAccount)
+				& partyMapper.createRole(kAccount, new RoleVO("reader"))
+				& partyMapper.createAllCpOf(kResponse.getId(), kResponse.getContactPointList());
+		
+		return i == 0 ? null : kAccount;
+	}
+
+    public String createKakaoToken(KakaoAccountVO kAccount) {
         // Jwt 생성 후 헤더에 추가해서 보내줌
-        String jwtToken = jwtTokenProvider.createToken(
+        String jwtToken = signService.jwtTokenProvider.createToken(
 				String.valueOf(String.valueOf(kAccount.getKakaoId())),
 				kAccount.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)

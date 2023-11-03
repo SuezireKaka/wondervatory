@@ -34,7 +34,7 @@
 	
 	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.party.model.AccountVO">
-		<result property="loginResultCode" column="loginResultCode" />
+		<result property="loginResultCode" column="alive" />
 		<association property="owner" columnPrefix="own_"
 			resultMap="rmOrganizationVO" />
 		<association property="response" columnPrefix="rsp_"
@@ -177,8 +177,8 @@
 			order="BEFORE">
 			select NEXT_PK('s_account')
 		</selectKey>
-		INSERT INTO T_Account(id, login_id, pass_word, owner_id, response_id, nick, intro)
-		VALUES (#{id}, #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introduction});
+		INSERT INTO T_Account(id, descrim, login_id, pass_word, owner_id, response_id, nick, intro)
+		VALUES (#{id}, 'wonder', #{loginId}, #{passWord}, #{owner.id}, #{response.id}, #{nick}, #{introduction});
 	</insert>
 	
 	<!-- public int createAllCpOf(@Param("id") String id,

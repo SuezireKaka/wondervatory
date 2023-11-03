@@ -58,6 +58,8 @@ public class SignService {
 				.userId(user.getId())
 				.userLoginId(user.getLoginId())
 				.userNick(user.getNick())
+				.type(WonderAccountVO.ACCOUNT_TYPE)
+				.loginResultCode(user.getLoginResultCode())
 				.build();
 
 		LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");
@@ -67,14 +69,14 @@ public class SignService {
 	}
 
 	// 결과 모델에 api 요청 성공 데이터를 세팅해주는 메소드
-	private void setSuccessResult(SignUpResultDto result) {
+	public void setSuccessResult(SignUpResultDto result) {
 		result.setSuccess(true);
 		result.setCode(CommonResponse.SUCCESS.getCode());
 		result.setMsg(CommonResponse.SUCCESS.getMsg());
 	}
 
 	// 결과 모델에 api 요청 실패 데이터를 세팅해주는 메소드
-	private void setFailResult(SignUpResultDto result) {
+	public void setFailResult(SignUpResultDto result) {
 		result.setSuccess(false);
 		result.setCode(CommonResponse.FAIL.getCode());
 		result.setMsg(CommonResponse.FAIL.getMsg());

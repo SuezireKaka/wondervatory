@@ -47,10 +47,6 @@ public abstract class AccountVO extends TimeEntity implements MappedTableDef {
 	public String getKSuspectType() {
 		return "사용자";
 	}
-	
-	public String getAccountType() {
-		return "";
-	}
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.getRoleList()

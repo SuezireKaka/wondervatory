@@ -352,7 +352,7 @@ Top 전략으로 변경함에 따라 폐기*/
 create table t_account(
 	id			char(4) primary key,
 	login_id	varchar(255),
-	kakao_id	int,
+	kakao_id	long,
 	pass_word	varchar(255),
 	owner_id	char(4),
 	response_id	char(4),
@@ -367,4 +367,7 @@ create unique index idx_login_id on t_account(login_id);
 create unique index idx_kakao_id on t_account(kakao_id);
 create unique index idx_nick on t_account(nick);
 create index idx_login_id on t_account(nick);
+
+ALTER TABLE t_account MODIFY kakao_id bigint -- 인덱스 아웃오브 에러 ㅡ.ㅡ
+
 

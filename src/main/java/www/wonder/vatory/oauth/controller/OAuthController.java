@@ -13,6 +13,7 @@ import www.wonder.vatory.oauth.model.KakaoAccountVO;
 import www.wonder.vatory.oauth.model.OauthToken;
 import www.wonder.vatory.oauth.service.OAuthService;
 import www.wonder.vatory.party.service.PartyService;
+import www.wonder.vatory.security.model.SignInResultDto;
 
 @RestController
 @RequestMapping("/oauth")
@@ -28,17 +29,15 @@ public class OAuthController {
     // 인가 코드로 엑세스 토큰 발급 -> 사용자 정보 조회 -> DB 저장 -> jwt 토큰 발급 -> 프론트에 토큰 전달
     // /oauth/anonymous/kakao/login/ewioajieoawrejew
     @GetMapping("/anonymous/kakao/login/{code}")
-    public ResponseEntity kakaoLogin(@PathVariable String code) {
+    public ResponseEntity<SignInResultDto> kakaoLogin(@PathVariable String code) {
 
         // 넘어온 인가 코드를 통해 access_token 발급
         OauthToken oauthToken = oauthService.getAccessToken(code, "kakao");
 
         // 발급 받은 accessToken 으로 카카오 회원 정보 DB 저장
-        String jwtToken = oauthService.SaveUserAndGetToken(oauthToken.getAccess_token());
+        SignInResultDto result = oauthService.SaveUserAndLogin(oauthToken.getAccess_token());
 
-        HttpHeaders headers = new HttpHeaders();
-
-        return ResponseEntity.ok().headers(headers).body("success");
+        return ResponseEntity.ok(result);
     }
 
     // jwt 토큰으로 유저정보 요청하기

@@ -26,7 +26,7 @@ import www.wonder.vatory.party.model.WonderAccountVO;
 @Service
 public class PartyService implements UserDetailsService {
 	@Autowired(required = false)
-	private PartyMapper partyMapper;
+	protected PartyMapper partyMapper;
 
 	@Autowired(required = false)
 	private PasswordEncoder pswdEnc;
@@ -118,7 +118,7 @@ public class PartyService implements UserDetailsService {
 			cnt &= partyMapper.createPerson(person);
 			cnt &= partyMapper.createAccount(account)
 					& partyMapper.createRole(account, new RoleVO("reader"))
-					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());;
+					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
 			return cnt;
 		}
 		else {
