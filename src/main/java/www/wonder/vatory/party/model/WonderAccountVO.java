@@ -1,9 +1,5 @@
 package www.wonder.vatory.party.model;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -64,6 +60,10 @@ public class WonderAccountVO extends AccountVO implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public String getAccountType() {
+		return ACCOUNT_TYPE;
 	}
 
 }

@@ -27,6 +27,7 @@ public class KakaoProfile {
     	public Boolean has_birthday;
     	public Boolean birthday_needs_agreement;
     	public String birthday;
+    	public String birthday_type;
     	public Boolean has_gender;
     	public Boolean gender_needs_agreement;
     	public String gender; // female: 여성, male: 남성

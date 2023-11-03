@@ -156,10 +156,10 @@ public class OAuthService extends PartyService {
         		.roles(kAccount.getAuthorities().stream()
 						.map(GrantedAuthority::getAuthority)
 						.collect(Collectors.toList()))
-        		.userId(String.valueOf(kAccount.getKakaoId()))
-				.userLoginId("")
+        		.userId(kAccount.getId())
+				.userLoginId(String.valueOf(kAccount.getKakaoId()))
 				.userNick(kAccount.getKakaoNick())
-				.type(KakaoAccountVO.ACCOUNT_TYPE)
+				.accountType(KakaoAccountVO.ACCOUNT_TYPE)
 				.loginResultCode(kAccount.getLoginResultCode())
 				.build();
         

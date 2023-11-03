@@ -15,5 +15,9 @@ public class KakaoAccountVO extends AccountVO {
 	
 	private long kakaoId;
 	private String kakaoNick;
+	
+	public String getAccountType() {
+		return ACCOUNT_TYPE;
+	}
 
 }

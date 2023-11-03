@@ -58,7 +58,7 @@ public class SignService {
 				.userId(user.getId())
 				.userLoginId(user.getLoginId())
 				.userNick(user.getNick())
-				.type(WonderAccountVO.ACCOUNT_TYPE)
+				.accountType(WonderAccountVO.ACCOUNT_TYPE)
 				.loginResultCode(user.getLoginResultCode())
 				.build();
 

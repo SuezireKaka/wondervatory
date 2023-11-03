@@ -19,7 +19,7 @@ public class SignInResultDto extends SignUpResultDto {
 	private String userId;
 	private String userLoginId;
 	private String userNick;
-	private String type; // wonder? kakao?
+	private String accountType; // wonder? kakao?
 	private Integer loginResultCode;
 	private List<String> roles;
 	
