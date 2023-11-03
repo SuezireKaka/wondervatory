@@ -24,7 +24,7 @@ import www.wonder.vatory.framework.property.ano.TargetProperty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AccountVO extends TimeEntity implements MappedTableDef {
+public class AccountVO extends TimeEntity implements MappedTableDef {
 
 	private OrganizationVO owner;	//주인으로서
 	private PersonVO response;	//대상으로서
