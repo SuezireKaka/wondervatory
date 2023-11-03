@@ -90,8 +90,8 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.isValidNick(nick);
 	}
 
-	public boolean checkUiqueVal(String key, String val) {
-		return partyMapper.checkUiqueVal(key, val);
+	public boolean checkUniqueVal(String key, String val) {
+		return partyMapper.checkUniqueVal(key, val);
 	}
 	
 	/** 회원 가입 */
