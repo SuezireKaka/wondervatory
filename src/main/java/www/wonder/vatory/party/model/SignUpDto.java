@@ -18,6 +18,7 @@ public class SignUpDto {
 	private String loginId;
 	private String passWord;
 	private String sex;
+	private String introduction;
 	private Date birthDate;
 	private List<ContactPointVO> listContactPoint;
 	//String introduction;

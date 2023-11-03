@@ -102,7 +102,7 @@ public class PartyService {
 				.loginId(signUpRequest.getLoginId())
 				.passWord(signUpRequest.getPassWord())
 				.nick(signUpRequest.getNick())
-				.introduction("")
+				.introduction(signUpRequest.getIntroduction())
 				.owner(new OrganizationVO("0000"))
 				.response(person)
 				.build();
