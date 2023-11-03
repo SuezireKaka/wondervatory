@@ -65,10 +65,5 @@ public class WonderAccountVO extends AccountVO implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	@Override
-	public String getAccountType() {
-		return ACCOUNT_TYPE;
-	}
 
 }
