@@ -18,8 +18,7 @@
 	
 	<resultMap id="rmRemoteKeyVO" type="www.wonder.vatory.framework.model.RemoteKeyVO">
 		<result property="name" column="name" />
-		<result property="use" column="use" />
-		<result property="clickCnt" column="click_cnt" />
+		<result property="info" column="info" />
 	</resultMap>
 
 	<!-- public List<CodeVO> listAll(); -->

@@ -167,7 +167,7 @@
 	
 	<!-- public PostVO getPrev(String parentId, String id); -->
 	<select id="getPrev" resultMap="rmReplyVO">
-	SELECT w.*, a.descrim acc_descrim
+	SELECT w.*, a.descrim acc_descrim <!-- association에 discriminator가 있으면 무조건 acc_descrim -->
 	  FROM t_work w
 	  left outer join t_account a
 	    ON w.writer_id = a.id

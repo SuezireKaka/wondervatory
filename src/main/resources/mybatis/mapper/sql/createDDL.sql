@@ -370,4 +370,5 @@ create index idx_login_id on t_account(nick);
 
 ALTER TABLE t_account MODIFY kakao_id bigint -- 인덱스 아웃오브 에러 ㅡ.ㅡ
 
-
+ALTER TABLE t_sys_remocon
+ ADD COLUMN key_info VARCHAR(255);

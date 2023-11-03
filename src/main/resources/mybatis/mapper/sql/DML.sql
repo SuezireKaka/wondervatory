@@ -300,3 +300,21 @@ insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_
 		, ("관계리모콘", 3, "제거", "button", 1)
 		, ("관계리모콘", 4, "복사", "button", 1)
 		, ("관계리모콘", 5, "붙여넣기", "canvas", 1)
+		
+	
+ UPDATE t_sys_remocon sr
+ 	JOIN (
+	 	SELECT 0 AS LEVEL, '커스텀 오브젝트를 한 번 눌러서 선택합니다.' AS info
+	 	UNION All
+	 	SELECT 1 , '캔버스를 한 번 눌러서 새로운 커스텀 객체를 소환합니다.'
+	 	UNION All
+	 	SELECT 2, '두 커스텀 엔티티(같아도 허용)를 눌러서 새로운 커스텀 관계를 소환합니다.'
+	 	UNION All
+	 	SELECT 3, '커스텀 객체를 눌러서 삭제합니다.\n이때 해당 객체와 직간접적으로 연결된 모든 커스텀 관계도 삭제됩니다.'
+	 	UNION All
+	 	SELECT 4, '기본적으로 화면에 있는 툴 디테일 전체를 복사합니다.'
+	 	UNION All
+	 	SELECT 5, '복사된 툴 디테일을 현재 화면에 추가합니다.'
+	 ) sp ON sr.key_level = sp.LEVEL
+   SET sr.key_info = sp.info
+ WHERE sr.remocon_name = 'relation_remocon';

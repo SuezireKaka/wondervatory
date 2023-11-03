@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RemoteKeyVO {
 	private String name;
-	private String use;
-	private int clickCnt;
+	private String info;
 }
