@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -18,7 +17,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import www.wonder.vatory.oauth.mapper.KakaoMapper;
+import www.wonder.vatory.oauth.model.KakaoAccountVO;
 import www.wonder.vatory.party.mapper.PartyMapper;
+import www.wonder.vatory.party.model.WonderAccountVO;
 
 /**
  * JWT 토큰을 생성하고 유효성을 검증하는 컴포넌트 클래스 JWT 는 여러 암호화 알고리즘을 제공하고 알고리즘과 비밀키를 가지고 토큰을 생성
@@ -34,6 +36,7 @@ import www.wonder.vatory.party.mapper.PartyMapper;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 	private final PartyMapper partyMapper; // Spring Security 에서 제공하는 서비스 레이어. PartyService
+	private final KakaoMapper kakaoMapper; 
 
 	@Value("${springboot.jwt.secret}") // 비밀키
 	private String secretKey = "secretKey00";
@@ -67,8 +70,17 @@ public class JwtTokenProvider {
 	// 예제 13.13
 	// JWT 토큰으로 인증 정보 조회
 	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = partyMapper.findByLoginId(this.getUsername(token));
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+		KakaoAccountVO kakaoDetails = new KakaoAccountVO();
+		WonderAccountVO wonderDetails = partyMapper.findByLoginId(this.getUsername(token));
+		// 유저 인증시 원더가 없다면 카카오로 간주
+		if (wonderDetails == null) {
+			kakaoDetails = kakaoMapper.findByKakaoId(Long.parseLong(this.getUsername(token)));
+		}
+		return new UsernamePasswordAuthenticationToken(
+				wonderDetails != null ? wonderDetails : kakaoDetails, "",
+						wonderDetails != null
+						? wonderDetails.getAuthorities()
+						: kakaoDetails.getAuthorities());
 	}
 
 	// 예제 13.14
