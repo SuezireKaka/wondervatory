@@ -52,7 +52,9 @@
 
 	<!-- public List<ReportVO> listAllReports(PagingDTO paging); -->
 	<select id="listAllReports" resultMap="rmReportVO">
-		select SQL_CALC_FOUND_ROWS r.*, repo.id repo_id, repo.nick repo_nick
+		select SQL_CALC_FOUND_ROWS r.*,
+		repo.id repo_id, repo.descrim repo_descrim,
+		repo.nick repo_nick, repo.kakao_nick repo_kakao_nick
 		  from T_report r
 		  Left outer join t_account repo
 		    on r.reporter_id = repo.id

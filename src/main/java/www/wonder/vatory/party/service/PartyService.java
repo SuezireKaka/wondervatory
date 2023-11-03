@@ -24,7 +24,7 @@ import www.wonder.vatory.party.model.WonderAccountVO;
 
 
 @Service
-public class PartyService implements UserDetailsService {
+public class PartyService {
 	@Autowired(required = false)
 	protected PartyMapper partyMapper;
 
@@ -48,8 +48,8 @@ public class PartyService implements UserDetailsService {
 		return new DreamPair<List<AccountVO>, PagingDTO>(listResult, paging);
 	}
 	
-	public AccountVO findByNick(String username) {
-		AccountVO res = partyMapper.findByNick(username);
+	public AccountVO findById(String id) {
+		AccountVO res = partyMapper.findById(id);
 		PersonVO response = res.getResponse();
 		List<ContactPointVO> contacts = partyMapper.listAllCpOf(response.getId());
 		response.setContactPointList(contacts);
@@ -62,11 +62,6 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.findByLoginId(loginId);
 	}
 	//00000000
-	
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return partyMapper.findByNick(username);
-	}
 
 	public int createOrganization(OrganizationVO organization) {
 		return partyMapper.createOrganization(organization);

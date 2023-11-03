@@ -20,7 +20,7 @@ public interface PartyMapper extends MetaMapper {
 	public List<ContactPointVO> listAllCpOf(@Param("ownerId") String ownerId);
 	
 	public WonderAccountVO findByLoginId(String loginId);
-	public WonderAccountVO findByNick(String nick);
+	public AccountVO findById(String id);
 	
 	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
