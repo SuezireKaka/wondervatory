@@ -68,9 +68,9 @@ public class WorkService {
 	}
 
 	/** 한사람의 원글 목록 조회 */ 
-	public DreamPair<List<SeriesVO>, PagingDTO> listUserSeries(String nick, int page) {
+	public DreamPair<List<SeriesVO>, PagingDTO> listUserSeries(String id, int page) {
 		PagingDTO paging = new PagingDTO(page);
-		List<SeriesVO> listResult = workMapper.listUserSeries(nick, paging);
+		List<SeriesVO> listResult = workMapper.listUserSeries(id, paging);
 		long dataCount = workMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 		
