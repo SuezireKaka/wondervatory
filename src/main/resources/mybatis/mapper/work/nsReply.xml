@@ -167,24 +167,28 @@
 	
 	<!-- public PostVO getPrev(String parentId, String id); -->
 	<select id="getPrev" resultMap="rmReplyVO">
-	SELECT *
-	  FROM t_work
-	 WHERE id like CONCAT(#{parentId}, '%')
-	   AND descrim = 'Post'
-	   <![CDATA[AND id < #{id}]]>
-	   and complete = 1
-	 ORDER BY id DESC
+	SELECT w.*, a.descrim acc_descrim
+	  FROM t_work w
+	  left outer join t_account a
+	    ON w.writer_id = a.id
+	 WHERE w.id like CONCAT(#{parentId}, '%')
+	   AND w.descrim = 'Post'
+	   <![CDATA[AND w.id < #{id}]]>
+	   AND w.complete = 1
+	 ORDER BY w.id DESC
 	 LIMIT 1
 	 </select>
 
 	<!-- public PostVO getNext(String parentId, String id); -->
 	<select id="getNext" resultMap="rmReplyVO">
-	SELECT *
-	  FROM t_work
-	 WHERE id like CONCAT(#{parentId}, '%')
-	   AND descrim = 'Post'
-	   AND id > #{id}
-	   and complete = 1
+	SELECT w.*, a.descrim acc_descrim
+	  FROM t_work w
+	  left outer join t_account a
+	    ON w.writer_id = a.id
+	 WHERE w.id like CONCAT(#{parentId}, '%')
+	   AND w.descrim = 'Post'
+	   AND w.id > #{id}
+	   and w.complete = 1
 	 LIMIT 1
 	</select>
 	
