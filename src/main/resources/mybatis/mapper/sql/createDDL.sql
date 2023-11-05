@@ -133,7 +133,7 @@ create table T_TAG(
 
 create table T_TGT_TAG(
 	tgt_name	varchar(255),	/* post, party */
-	tgt_id		char(4),
+	tgt_id		varchar(255),
 	tag_id		char(4),
 	tf			int,	primary key(tgt_name, tag_id, tgt_id) /* post*/
 );
@@ -233,8 +233,8 @@ create table t_custom_obj(
 create table T_bb(
 	id			char(4) primary key,
 	name		varchar(255) not null,
-	descrip 	varchar(255)
-
+	descrip 	varchar(255),
+	post_cnt	int
 );
 
 
@@ -353,6 +353,7 @@ create table t_account(
 	id			char(4) primary key,
 	login_id	varchar(255),
 	kakao_id	long,
+	descrim		varchar(255),
 	pass_word	varchar(255),
 	owner_id	char(4),
 	response_id	char(4),
