@@ -125,8 +125,6 @@ public class WorkController {
 	public ResponseEntity<Integer> onLike(String id) {
 		return ResponseEntity.ok(workService.onLike(id));
 	}
-
-	
 	
 	/** hid like로 지우기 */
 	//@RequestMapping("/post/{id}")
