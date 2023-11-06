@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,14 +16,13 @@ import lombok.experimental.SuperBuilder;
 import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
-import www.wonder.vatory.framework.property.ano.TargetProperty;
 
 @SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountVO extends TimeEntity implements MappedTableDef {
+public class AccountVO extends TimeEntity implements MappedTableDef, UserDetails {
 
 	private OrganizationVO owner;	//주인으로서
 	private PersonVO response;	//대상으로서
@@ -53,6 +51,30 @@ public class AccountVO extends TimeEntity implements MappedTableDef {
 				.stream()
 				.map(RoleVO::getAuthority)
 				.collect(Collectors.toList());
+	}
+
+	public String getPassword() {
+		return "";
+	}
+
+	public String getUsername() {
+		return this.getId();
+	}
+
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return true;
 	}
 
 }

@@ -1,6 +1,5 @@
 package www.wonder.vatory.party.model;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WonderAccountVO extends AccountVO implements UserDetails {
+public class WonderAccountVO extends AccountVO {
 	public static final String ACCOUNT_TYPE = "원더";
 	
 	private String loginId;

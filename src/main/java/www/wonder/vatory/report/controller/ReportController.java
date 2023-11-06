@@ -38,7 +38,7 @@ public class ReportController {
 
 	// /report/listAllReports/1
 	@GetMapping("/listAllReports/{page}")
-	@PreAuthorize("hasAnyRole('manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<ReportVO>, PagingDTO>> listAllReports(
 			@AuthenticationPrincipal AccountVO manager, @PathVariable int page) {
 
@@ -48,7 +48,7 @@ public class ReportController {
 
 	// 로그인 안 한 유저의 신고 처리는 몰?루
 	@PostMapping("/manageReport")
-	@PreAuthorize("hasAnyRole('reader', 'writer', 'manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer', 'manager', 'admin')")
 	public ResponseEntity<Integer> manageReport(
 			@AuthenticationPrincipal AccountVO reporter, @RequestBody ReportVO report) {
 		if (reporter.getId().equals(report.getReporter().getId())) {

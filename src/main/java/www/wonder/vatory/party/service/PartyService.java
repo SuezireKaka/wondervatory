@@ -24,7 +24,7 @@ import www.wonder.vatory.party.model.WonderAccountVO;
 
 
 @Service
-public class PartyService {
+public class PartyService implements UserDetailsService {
 	@Autowired(required = false)
 	protected PartyMapper partyMapper;
 
@@ -126,10 +126,6 @@ public class PartyService {
 			return cnt;
 		}
 		
-		 
-		
-
-		
 	}
 	
 	public int createPerson(PersonVO person) {
@@ -143,6 +139,11 @@ public class PartyService {
 
 	public int reRole(String memberId, String role) {
 		return partyMapper.reRole(memberId, role);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+		return partyMapper.findById(id);
 	}
 
 

@@ -32,7 +32,7 @@ public class PartyController {
 
 	// /party/listAllAccount/0000/1
 	@GetMapping("/listAllAccount/{ownerId}/{page}/{orderColumn}")
-	@PreAuthorize("hasAnyRole('manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(
 			@AuthenticationPrincipal AccountVO manager, @PathVariable String ownerId, @PathVariable int page,
 			@PathVariable String orderColumn) {
@@ -42,20 +42,11 @@ public class PartyController {
 
 	// /party/findById/0003
 	@GetMapping("/findById/{id}")
-	@PreAuthorize("hasAnyRole('manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin') || #id.equals(Authentication.Principal.id)")
 	public ResponseEntity<AccountVO> findById(
-			@AuthenticationPrincipal AccountVO manager,
+			@AuthenticationPrincipal AccountVO account,
 			@PathVariable String id) {
 		AccountVO result = partyService.findById(id);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
-	// /party/searchSelf
-	@GetMapping("/searchSelf/")
-	@PreAuthorize("hasAnyRole('reader', 'writer', 'manager', 'admin')")
-	public ResponseEntity<AccountVO> searchSelf (
-			@AuthenticationPrincipal AccountVO user) {
-		AccountVO result = partyService.findById(user.getId());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -95,7 +86,7 @@ public class PartyController {
 
 	// /party/updateMember
 	@PostMapping("/updateMember")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> updateMember(@AuthenticationPrincipal AccountVO owner,
 			@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
@@ -103,7 +94,7 @@ public class PartyController {
 
 	// /party/reRole
 	@GetMapping("/reRole/{memberId}/{role}")
-	@PreAuthorize("hasAnyRole('manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
 	public ResponseEntity<Integer> reRole(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
 			@PathVariable String role) {
 		return ResponseEntity.ok(partyService.reRole(memberId, role));
@@ -111,7 +102,7 @@ public class PartyController {
 
 	// /party/deleteMember/닉
 	@GetMapping("/deleteMember/{id}")
-	@PreAuthorize("hasAnyRole('reader', 'writer','manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String id) {
 		return ResponseEntity.ok(partyService.deleteMember(id));
 	}
