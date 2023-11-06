@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.report.model.ReportCodeVO;
-import www.wonder.vatory.tool.model.CustomObjectVO;
 import www.wonder.vatory.tool.model.CustomPropertyDTO;
+import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
 
@@ -38,12 +37,13 @@ public class ToolController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /tool/anonymous/listPropertiesOf/0000
+	/* // /tool/anonymous/listPropertiesOf/0000
 	@GetMapping("/anonymous/listPropertiesOf/{objectId}")
-	public ResponseEntity<List<CustomObjectVO>> listPropertiesOf(@PathVariable String objectId) {
-		List<CustomObjectVO> result = toolService.listPropertiesOf(objectId);
+	public ResponseEntity<List<CustomPropertyVO>> listPropertiesOf(@PathVariable String objectId) {
+		List<CustomPropertyVO> result = toolService.listPropertiesOf(objectId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	--deprecated : 프론트앤드 테스트 종료 */
 	
 	// /tool/anonymous/getToolById/0000
 	@GetMapping("/anonymous/getToolById/{toolId}")
@@ -52,12 +52,13 @@ public class ToolController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /tool/anonymous/getToolByEntity/0000
+	/* // /tool/anonymous/getToolByEntity/0000
 	@GetMapping("/anonymous/getToolByEntity/{entityId}")
 	public ResponseEntity<ToolVO> getToolByEntity(@PathVariable String entityId) {
 		ToolVO result = toolService.getToolByEntity(entityId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
+	} 
+	--deprecated : 안 쓰이게끔 설계를 변경 */
 	
 	// /tool/syncPropertiesOf/0000
 	@PostMapping("/syncPropertiesOf/{objectId}")

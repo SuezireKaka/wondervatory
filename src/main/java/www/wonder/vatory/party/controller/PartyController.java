@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +21,8 @@ import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.SignUpDto;
 import www.wonder.vatory.party.service.PartyService;
+import www.wonder.vatory.security.anno.ForAccountType;
+import www.wonder.vatory.security.anno.ForManagerOrSelf;
 
 @RestController
 @CrossOrigin
@@ -42,7 +43,7 @@ public class PartyController {
 
 	// /party/findById/0003
 	@GetMapping("/findById/{id}")
-	@PreAuthorize("hasAnyAuthority('manager', 'admin') || #id.equals(Authentication.Principal.id)")
+	@ForManagerOrSelf
 	public ResponseEntity<AccountVO> findById(
 			@AuthenticationPrincipal AccountVO account,
 			@PathVariable String id) {
@@ -87,6 +88,7 @@ public class PartyController {
 	// /party/updateMember
 	@PostMapping("/updateMember")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	// @ForAccountType(accountType = "원더") - 이거 돌아가게 만들고 싶다아
 	public ResponseEntity<Integer> updateMember(@AuthenticationPrincipal AccountVO owner,
 			@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));

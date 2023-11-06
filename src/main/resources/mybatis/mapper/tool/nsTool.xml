@@ -9,10 +9,6 @@
 		<result property="name" column="name" />
 		<result property="xToolSize" column="x_tool_size" />
 		<result property="yToolSize" column="y_tool_size" />
-		<association property="parentSeries" columnPrefix="p_ser_"
-				resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmSeriesVO" />
-		<association property="parentEntity" columnPrefix="p_ent_"
-				resultMap="rmCustomEntityVO" />
 	</resultMap>
 	
 	<resultMap id="rmCustomObjectVO" extends="nsEntity.rmSpaceEntity"

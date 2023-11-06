@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
-import www.wonder.vatory.report.model.ReportCodeVO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
-import www.wonder.vatory.tool.model.CustomObjectVO;
+import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomPropertyDTO;
+import www.wonder.vatory.tool.model.CustomPropertyVO;
+import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Service
@@ -30,22 +31,29 @@ public class ToolService {
 		return new DreamPair<List<ToolVO>, PagingDTO>(listResult, paging);
 	}
 	
-	public List<CustomObjectVO> listPropertiesOf(String objectId) {
+	public List<CustomPropertyVO> listPropertiesOf(String objectId) {
 		return toolMapper.listPropertiesOf(objectId);
 	}
 
 	public ToolVO getToolById(String toolId) {
 		ToolVO result = toolMapper.getToolById(toolId);
-		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
-		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
-		return result;
-	}
-
-	public ToolVO getToolByEntity(String entityId) {
-		ToolVO result = toolMapper.getToolByEntity(entityId);
-		String toolId = result.getId();
-		result.getCustomEntityList().addAll(toolMapper.listAllEntity(toolId));
-		result.getCustomRelationList().addAll(toolMapper.listAllRelation(toolId));
+		List<CustomEntityVO> resEntityList = toolMapper.listAllEntity(toolId);
+		resEntityList.stream()
+			.forEach(entity -> {entity
+				.getCustomPropertiesList()
+				.addAll(toolMapper.listPropertiesOf(entity.getId()));
+			}
+		);
+		result.getCustomEntityList().addAll(resEntityList);
+		
+		List<CustomRelationVO> resRelationList = toolMapper.listAllRelation(toolId);
+		resRelationList.stream()
+			.forEach(relation -> {relation
+				.getCustomPropertiesList()
+				.addAll(toolMapper.listPropertiesOf(relation.getId()));
+			}
+		);
+		result.getCustomRelationList().addAll(resRelationList);
 		return result;
 	}
 

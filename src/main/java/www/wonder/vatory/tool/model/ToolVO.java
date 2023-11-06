@@ -19,8 +19,6 @@ public class ToolVO extends TimeEntity {
 	String name;
 	int xToolSize;
 	int yToolSize;
-	SeriesVO parentSeries;
-	CustomEntityVO parentEntity;
 	List<CustomEntityVO> customEntityList = new ArrayList<>();
 	List<CustomRelationVO> customRelationList = new ArrayList<>();
 }
