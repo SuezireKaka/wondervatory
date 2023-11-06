@@ -7,8 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.model.CustomEntityVO;
-import www.wonder.vatory.tool.model.CustomObjectVO;
-import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
@@ -27,10 +25,10 @@ public interface ToolMapper {
 	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
 	public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
-			@Param("insertList") List<CustomPropertyDTO> insertList);
+			@Param("insertList") List<CustomPropertyVO> insertList);
 	
 	public int updateAllPropsFrom(@Param("objectId") String objectId,
-			@Param("updateList") List<CustomPropertyDTO> updateList);
+			@Param("updateList") List<CustomPropertyVO> updateList);
 	
 	public int deleteToSync(@Param("objectId") String objectId,
 			@Param("border") int border);

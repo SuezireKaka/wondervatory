@@ -11,7 +11,6 @@ import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomEntityVO;
-import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
@@ -57,7 +56,7 @@ public class ToolService {
 		return result;
 	}
 
-	public int syncPropertiesOf(String objectId, List<CustomPropertyDTO> requestList) {
+	public int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
 		int result = 0;
 		int requestCount = requestList.size();
 		// 현재 들어있는 개수랑 비교해서 판단
@@ -67,14 +66,14 @@ public class ToolService {
 			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
 			int border = prevCount;
 			
-		    List<List<CustomPropertyDTO>> listOfLists = new ArrayList<>(
+		    List<List<CustomPropertyVO>> listOfLists = new ArrayList<>(
 		    	requestList.stream()
 		    	.collect(Collectors.groupingBy(s -> requestList.indexOf(s) >= border))
 		    	.values()
 		    );
 		    
-		    List<CustomPropertyDTO> updateList = listOfLists.get(0);
-		    List<CustomPropertyDTO> insertList = listOfLists.get(1);
+		    List<CustomPropertyVO> updateList = listOfLists.get(0);
+		    List<CustomPropertyVO> insertList = listOfLists.get(1);
 		    
 		    result = toolMapper.updateAllPropsFrom(objectId, updateList)
 		    	& toolMapper.insertToSync(objectId, updateList.size(), insertList);

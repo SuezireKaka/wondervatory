@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileService;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
@@ -15,7 +16,6 @@ import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.report.mapper.ReportMapper;
 import www.wonder.vatory.report.model.ReportCodeVO;
 import www.wonder.vatory.report.model.ReportVO;
-import www.wonder.vatory.tool.model.CustomPropertyDTO;
 
 
 @Service
@@ -38,6 +38,8 @@ public class ReportService {
 		for (ReportVO report : listResult) {
 			List<ReportCodeVO> types = reportMapper.listAllTypesOf(report.getId());
 			report.setRptTypesList(types);
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(report);
+			report.setListAttachFile(attachFileList);
 		}
 		
 		return new DreamPair<List<ReportVO>, PagingDTO>(listResult, paging);

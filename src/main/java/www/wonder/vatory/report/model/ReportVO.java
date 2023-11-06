@@ -16,7 +16,7 @@ import www.wonder.vatory.party.model.AccountVO;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ReportVO extends TimeEntity implements MappedTableDef{
+public class ReportVO extends TimeEntity implements MappedTableDef {
 	private AccountVO reporter;
 	private String suspectId;
 	private String suspectTable;

@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class CustomPropertyVO {	
 	private String propType;
 	private String propVal;
+	private boolean isEdited = true;
+	private boolean isSafe = true;
 
 	@Override
 	public String toString() {

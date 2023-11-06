@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.tool.model.CustomPropertyDTO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
@@ -64,7 +63,7 @@ public class ToolController {
 	@PostMapping("/syncPropertiesOf/{objectId}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> syncPropertiesOf(@AuthenticationPrincipal AccountVO user,
-			@PathVariable String objectId, @RequestBody List<CustomPropertyDTO> requestList) {
+			@PathVariable String objectId, @RequestBody List<CustomPropertyVO> requestList) {
 		return ResponseEntity.ok(toolService.syncPropertiesOf(objectId, requestList));
 	}
 }
