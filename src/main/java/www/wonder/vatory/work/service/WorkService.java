@@ -106,6 +106,9 @@ public class WorkService {
 		return workMapper.onLike(id);
 	}
 	
+	public int onDisLike(String id) {
+		return workMapper.onDisLike(id);
+	}
 	
 	public DreamPair<List<SeriesVO>, PagingDTO> favoritesAll(String ownerId, int page) {
 		PagingDTO paging = new PagingDTO(page);

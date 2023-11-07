@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,6 @@ import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.OrganizationVO;
 import www.wonder.vatory.party.model.SignUpDto;
 import www.wonder.vatory.party.service.PartyService;
-import www.wonder.vatory.security.anno.ForAccountType;
 import www.wonder.vatory.security.anno.ForManagerOrSelf;
 
 @RestController
@@ -102,6 +102,16 @@ public class PartyController {
 		return ResponseEntity.ok(partyService.reRole(memberId, role));
 	}
 
+	// /party/reRole
+	@GetMapping("/updateStatus/{memberId}/{loginResultCode}")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
+	public ResponseEntity<Integer> updateStatus(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
+			@PathVariable String loginResultCode) {
+		return ResponseEntity.ok(partyService.updateStatus(memberId, loginResultCode));
+	}
+	
+
+	
 	// /party/deleteMember/닉
 	@GetMapping("/deleteMember/{id}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
