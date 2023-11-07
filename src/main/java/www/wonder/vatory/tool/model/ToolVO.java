@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import www.wonder.vatory.framework.model.TimeEntity;
-import www.wonder.vatory.work.model.SeriesVO;
 
 @Getter
 @Setter

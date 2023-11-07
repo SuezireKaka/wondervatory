@@ -373,3 +373,27 @@ ALTER TABLE t_account MODIFY kakao_id bigint -- 인덱스 아웃오브 에러 �
 
 ALTER TABLE t_sys_remocon
  ADD COLUMN key_info VARCHAR(255);
+
+ 
+ ---  11-07  -------------
+ 
+ ALTER TABLE t_tool
+MODIFY id VARCHAR(255) -- 컴포즈 패턴 형식으로 수정
+
+ ALTER TABLE t_tool
+   ADD COLUMN h_tier tinyint AFTER id -- 컴포즈 패턴화에 따른 레벨 처리
+
+ ALTER TABLE t_tool
+Modify h_tier TINYINT DEFAULT 0 -- 기본 레벨은 0
+
+ ALTER TABLE t_custom_obj
+MODIFY parent_id VARCHAR(255)  -- 부모가 컴포즈 패턴에 따라 아이디가 길어졌으니 자식도 맞추기
+
+
+
+
+
+
+
+
+

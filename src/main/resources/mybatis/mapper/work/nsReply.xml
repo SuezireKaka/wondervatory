@@ -38,12 +38,12 @@
 		type="www.wonder.vatory.work.model.SeriesVO">
 		<result property="seriesState" column="series_status" />
 	</resultMap>
-
 	
-	<!-- public long getFoundRows(); -->
+	<!-- public long getFoundRows(); 
 	<select id="getFoundRows" resultType="long">
 		SELECT FOUND_ROWS()
-	</select>
+	</select> -->
+
 	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page); -->
 	<select id="listAllSeries" resultMap="rmSeriesVO">
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import www.wonder.vatory.framework.mapper.MetaMapper;
+import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
@@ -13,7 +13,7 @@ import www.wonder.vatory.work.model.SemiPostVO;
 import www.wonder.vatory.work.model.SeriesVO;
 
 @Mapper
-public interface WorkMapper extends MetaMapper {
+public interface WorkMapper extends WonderMapper {
 
 	public List<SeriesVO> listAllSeries(@Param("boardId") String boardId,
 			@Param("paging") PagingDTO paging);

@@ -32,9 +32,9 @@
 	<resultMap id="rmCustomRelationVO" extends="rmCustomObjectVO"
 		type="www.wonder.vatory.tool.model.CustomRelationVO">
 		<association property="one" columnPrefix="one_" notNullColumn="id"
-				resultMap="rmCustomEntityVO" />
+				resultMap="rmCustomObjectVO" />
 		<association property="other" columnPrefix="other_" notNullColumn="id"
-				resultMap="rmCustomEntityVO" />
+				resultMap="rmCustomObjectVO" />
 	</resultMap>
 	
 	<resultMap id="rmCustomPropertyVO"
@@ -43,17 +43,27 @@
 		<result property="propVal" column="prop_val" />
 	</resultMap>
 	
-	<!-- public long getFoundRows(); -->
-	<select id="getFoundRows" resultType="long">
-		SELECT FOUND_ROWS()
-	</select>
-
-	<!--public List<ToolVO> listAllFromSeries(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging); -->
+	<!-- public List<ToolVO> listAllFromSeries(
+			@Param("seriesId") String seriesId,
+			@Param("page") int page); -->
 	<select id="listAllFromSeries" resultMap="rmToolVO">
 		SELECT SQL_CALC_FOUND_ROWS *
-		  FROM t_tool
+		  from t_tool
 		 where parent_id = #{seriesId}
-		   and parent_type = 'Series'
+		   and parent_type = 'series'
+		 order by id DESC
+		 limit #{paging.seriesLimit} offset #{paging.offset}
+	</select>
+	
+	<!-- public List<ToolVO> listAllNextTools(
+			@Param("idPath") String idPath,
+			@Param("page") int page); -->
+	<select id="listAllNextTools" resultMap="rmToolVO">
+		SELECT SQL_CALC_FOUND_ROWS *
+		  from t_tool
+		 where id like CONCAT(#{idPath}, '____')
+		 order by id DESC
+		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 	
 	<!-- public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);  -->
@@ -66,9 +76,9 @@
 	
 	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
 	<select id="listPropertiesOf" resultMap="rmCustomPropertyVO">
-		SELECT prop.*
-		  from t_custom_property prop
-		 where prop.owner_id = #{objectId}
+		SELECT *
+		  from t_custom_property
+		 where owner_id = #{objectId}
 	</select>
 	
 	<!-- public int countPropertiesOf(@Param("objectId") String objectId); -->

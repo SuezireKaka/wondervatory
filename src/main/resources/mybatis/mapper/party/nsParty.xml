@@ -72,11 +72,6 @@
 		<id property="action" column="action" />
 		<result property="manual" column="manual" />
 	</resultMap>
-	
-	<!-- public long getFoundRows(); -->
-	<select id="getFoundRows" resultType="long">
-		SELECT FOUND_ROWS()
-	</select>
 
 	<!-- 	public List<AccountVO> listAllAccount(String ownerId, PagingDTO paging); -->
 	<select id="listAllAccount" resultMap="rmAccountVO">

@@ -318,3 +318,9 @@ insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_
 	 ) sp ON sr.key_level = sp.LEVEL
    SET sr.key_info = sp.info
  WHERE sr.remocon_name = 'relation_remocon';
+
+---  11-07 -------
+
+-- 서브툴 하나 추가
+insert into t_tool(id, h_tier, x_tool_size, y_tool_size, NAME, parent_id, parent_type)
+	VALUES("00010002", 1, 500, 500, "class 내부도", "0003", "Tool");

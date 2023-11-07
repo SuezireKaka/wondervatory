@@ -2,6 +2,7 @@ package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,33 @@ public class ToolService {
 	@Autowired(required = false)
 	private ToolMapper toolMapper;
 
-	/** 시리즈의 모든 툴 조회 */ 
+	/** 시리즈의 모든 툴 직접 붙어있는 조회 */
 	public DreamPair<List<ToolVO>, PagingDTO> listAllFromSeries(String seriesId, int page) {
 		PagingDTO paging = new PagingDTO(page);
-		List<ToolVO> listResult = toolMapper.listAllFromSeries(seriesId, paging);
+		
+		List<ToolVO> resultList = toolMapper.listAllFromSeries(seriesId, paging);
+		
 		long dataCount = toolMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 
-		return new DreamPair<List<ToolVO>, PagingDTO>(listResult, paging);
+		return new DreamPair<List<ToolVO>, PagingDTO>(resultList, paging);
 	}
 	
-	public List<CustomPropertyVO> listPropertiesOf(String objectId) {
+	public DreamPair<List<ToolVO>, PagingDTO> listAllNextTools(String idPath, int page) {
+		PagingDTO paging = new PagingDTO(page);
+		
+		List<ToolVO> resultList = toolMapper.listAllNextTools(idPath, paging);
+		
+		long dataCount = toolMapper.getFoundRows();
+		paging.buildPagination(dataCount);
+
+		return new DreamPair<List<ToolVO>, PagingDTO>(resultList, paging);
+	}
+	
+	/* public List<CustomPropertyVO> listPropertiesOf(String objectId) {
 		return toolMapper.listPropertiesOf(objectId);
 	}
+	--deprecated : 프론트앤드 테스트 종료 */
 
 	public ToolVO getToolById(String toolId) {
 		ToolVO result = toolMapper.getToolById(toolId);

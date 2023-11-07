@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
@@ -12,11 +13,21 @@ import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Mapper
-public interface ToolMapper {
-	public long getFoundRows();
-	public List<ToolVO> listAllFromSeries(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging);
+public interface ToolMapper extends WonderMapper {
+	
+	public List<ToolVO> listAllFromSeries(
+			@Param("seriesId") String seriesId,
+			@Param("paging") PagingDTO paging);
+	
+	public List<ToolVO> listAllNextTools(
+			@Param("idPath") String idPath,
+			@Param("paging") PagingDTO paging);
+	
+	public List<ToolVO> listAllSubtoolsOf(@Param("toolId") String toolId);
+	
 	public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);
 	public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);
+	
 	public List<CustomPropertyVO> listPropertiesOf(@Param("objectId") String objectId);
 	
 	public int countPropertiesOf(@Param("objectId") String objectId);

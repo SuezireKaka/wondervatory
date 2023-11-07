@@ -5,13 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import www.wonder.vatory.framework.mapper.MetaMapper;
+import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.report.model.ReportCodeVO;
 import www.wonder.vatory.report.model.ReportVO;
 
 @Mapper
-public interface ReportMapper extends MetaMapper {
+public interface ReportMapper extends WonderMapper {
 	public List<ReportCodeVO> listAllReportCodes();
 
 	public List<ReportVO> listAllReports(@Param("paging") PagingDTO paging);

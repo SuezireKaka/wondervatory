@@ -45,11 +45,6 @@
 		FROM t_sys_rptype
 	</select>
 
-	<!-- public long getFoundRows(); -->
-	<select id="getFoundRows" resultType="long">
-		SELECT FOUND_ROWS()
-	</select>
-
 	<!-- public List<ReportVO> listAllReports(PagingDTO paging); -->
 	<select id="listAllReports" resultMap="rmReportVO">
 		select SQL_CALC_FOUND_ROWS r.*,
