@@ -34,6 +34,7 @@ public interface WorkMapper extends MetaMapper {
 	public PostVO getNext(String parentId, String id);
 	
 	public int onLike(String id);
+	public int onDisLike(String id);
 	
 	public boolean isFirstFavorites(String ownerId, String responseId);
 	public boolean isFavorites(String ownerId, String responseId);

@@ -132,13 +132,12 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.createPerson(person);
 	}
 	
-	public int deleteMember(String id) {
-		return partyMapper.deleteMember(id);
+	public int updateStatus(String memberId, String role) {
+		return partyMapper.updateStatus(memberId, role);
 	}
 	
-
-	public int reRole(String memberId, String role) {
-		return partyMapper.reRole(memberId, role);
+	public int reRole(String memberId, String loginResultCode) {
+		return partyMapper.reRole(memberId, loginResultCode);
 	}
 
 	@Override
@@ -146,5 +145,9 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.findById(id);
 	}
 
+	public int deleteMember(String id) {
+		return partyMapper.deleteMember(id);
+	}
+	
 
 }

@@ -199,8 +199,13 @@
 			like_cnt = like_cnt + 1
 	 where id = #{id}
 	</update>
-	
-	
+	<!-- 	public int onDisLike(String id); -->
+		<update id="onDisLike">
+	update T_work
+	   set 	upt_dt = upt_dt,
+			dis_cnt = dis_cnt + 1
+	 where id = #{id}
+	</update>
 	<!-- 	public boolean isFirstFavorites(String ownerId, String responseId); -->
 	<select id="isFirstFavorites" resultType="boolean">
 		SELECT count(*) = 0 

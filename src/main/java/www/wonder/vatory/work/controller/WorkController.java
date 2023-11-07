@@ -126,6 +126,12 @@ public class WorkController {
 		return ResponseEntity.ok(workService.onLike(id));
 	}
 	
+	// /work/anonymous/onLike
+	@GetMapping("/anonymous/onDisLike")
+	public ResponseEntity<Integer> onDisLike(String id) {
+		return ResponseEntity.ok(workService.onDisLike(id));
+	}
+	
 	/** hid like로 지우기 */
 	//@RequestMapping("/post/{id}")
 	@DeleteMapping("/{id}")

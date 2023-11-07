@@ -226,6 +226,14 @@
 		 where account_id = #{memberId};
 	</update>
 	
+	<!-- 	public int updateStatus(String memberId, String alive);	 -->
+	<update id="updateStatus">
+		update t_account
+		   set alive = #{loginResultCode}
+		 where id = #{memberId};
+	</update>
+	
+	
 	<!-- public int deleteMember(String id); -->
 	<update id="deleteMember">
 	update t_account
