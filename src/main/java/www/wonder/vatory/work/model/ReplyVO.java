@@ -27,7 +27,6 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 	private BoardVO boardVO;
 	@TargetProperty
 	private AccountVO writer;	//게시물 작성자
-	private int hTier;
 	@TargetProperty
 	private String content;	//내용, series에서는 줄거리
 	private int readCount;
@@ -43,12 +42,6 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 	
 	public ReplyVO(String id) {
 		super.setId(id);
-	}
-	
-	public String getParentId() {
-		String myId = super.getId();
-		int len = myId.length();
-		return myId.substring(0, len - ID_LENGTH);
 	}
 
 	public void appendReply(ReplyVO reply) {

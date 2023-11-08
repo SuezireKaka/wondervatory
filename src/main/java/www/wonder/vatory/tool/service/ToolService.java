@@ -77,9 +77,10 @@ public class ToolService {
 		String seriesId = request.getFirstVal().getId();
 		ToolVO toolSkin = request.getSecondVal();
 		int result = 1;
-		// 툴스킨의 id가 없으면 새로 만들기 있으면 업데이트
-		if (ObjectUtils.isEmpty(toolSkin.getId())) {
-			result &= toolMapper.createToolSkin(toolSkin, seriesId);
+		// 툴스킨의 id가 ----로 끝나면 create 아니면 uodate
+		if (toolSkin.getId().endsWith("----")) {
+			String parentId = toolSkin.getParentId();
+			result &= toolMapper.createToolSkin(toolSkin, parentId, seriesId);
 		}
 		else {
 			result &= toolMapper.updateToolSkin(toolSkin);

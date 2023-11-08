@@ -15,11 +15,22 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public abstract class Entity {
-	/** t_work의 id 단위 길이 */
-	public static final int ID_LENGTH = 4;
+	public static final int UNIT_LENGTH = 4;
 	
 	//primitive type의 경우 기본값. reference type의 경우 null
 	private String id;
+	
+	public String getParentId() {
+		String myId = this.id;
+		int len = myId.length();
+		return myId.substring(0, len - UNIT_LENGTH);
+	}
+	
+	public int getHTier() {
+		String myId = this.id;
+		int len = myId.length();
+		return (len - 1) / 4;
+	}
 	
 	@Override
 	public String toString() {

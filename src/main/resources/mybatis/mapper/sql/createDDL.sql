@@ -378,20 +378,51 @@ ALTER TABLE t_sys_remocon
  ---  11-07  -------------
  
  ALTER TABLE t_tool
-MODIFY id VARCHAR(255) -- 컴포즈 패턴 형식으로 수정
-
+MODIFY id VARCHAR(255); -- 컴포즈 패턴 형식으로 수정
  ALTER TABLE t_tool
-   ADD COLUMN h_tier tinyint AFTER id -- 컴포즈 패턴화에 따른 레벨 처리
-
+   ADD COLUMN h_tier tinyint AFTER id; -- 컴포즈 패턴화에 따른 레벨 처리
  ALTER TABLE t_tool
-Modify h_tier TINYINT DEFAULT 0 -- 기본 레벨은 0
+Modify h_tier TINYINT DEFAULT 0; -- 기본 레벨은 0
+create table t_tool(
+	id				VARCHAR(255) primary key,
+	h_tier			h_tier tinyint DEFAULT 0,
+	x_tool_size		int,
+	y_tool_size		int,
+	name			varchar(255),
+	reg_dt			timestamp default current_timestamp(),
+	upt_dt			timestamp default current_timestamp() on update current_timestamp(),
+	parent_id		char(4),
+	parent_type		varchar(16)
+);
 
  ALTER TABLE t_custom_obj
 MODIFY parent_id VARCHAR(255)  -- 부모가 컴포즈 패턴에 따라 아이디가 길어졌으니 자식도 맞추기
+create table t_custom_obj(
+	id				char(4) primary key,
+	descrim			varchar(16),
+	x_pos			int,
+	y_pos			int,
+	x_size			int,
+	y_size			int,
+	name			varchar(255),
+	inner_color		char(7),
+	outer_color		char(7),
+	parent_id 		VARCHAR(255),
+	one_id			char(4),
+	other_id		char(4)
+);
 
  ALTER TABLE t_sys_remocon
    ADD COLUMN key_auth VARCHAR(64)  -- 프론트에서 보고 안 맞으면 아예 표시도 안 되도록
-
+create table t_sys_remocon(
+	remocon_name	varchar(32) not null,
+	key_level		tinyint not null,
+	key_name		varchar(16) not null,
+	key_use			varchar(8) not null,
+	key_click_cnt	tinyint default 1,
+	key_auth		VARCHAR(64),
+	primary key(remocon_name, key_level)
+);
 
 
 create table t_sys_genre(
@@ -425,6 +456,11 @@ create index idx_work_search on t_sys_genre(work_id);
 
  ALTER TABLE t_sys_genre Change genre_type genre VARCHAR(255)
  ALTER TABLE t_sys_genre Change genre_info info VARCHAR(255)
+create table t_sys_genre(
+	id			char(4) primary key,
+	genre		varchar(16),
+	info		varchar(255)
+);
 
 
 

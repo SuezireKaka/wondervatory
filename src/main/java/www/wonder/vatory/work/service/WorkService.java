@@ -24,9 +24,9 @@ import www.wonder.vatory.iis.model.TagRelId;
 import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
-import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.mapper.WorkMapper;
+import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
@@ -147,8 +147,15 @@ public class WorkService {
 		}
 		
 		ReplyVO ret = (ReplyVO) oneDimList.get(0);
+		
+		if (ret.getHTier() == 0) {
+			((SeriesVO) ret).setGenreList(new ArrayList<GenreVO>());
+		}
+		
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
+		
+		
 		
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);
@@ -177,16 +184,15 @@ public class WorkService {
 	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
 		SemiPostVO parent = semiPostPair.getFirstVal();
 		SemiPostVO child = semiPostPair.getSecondVal();
-		String parentId = parent.getId();
-		//parent.id가 없으면 Series
-		String type = parentId.equals("") ? "Series"
-				//parent.id가 4자리면 Post
-				: parentId.length() == 4 ? "Post"
+		//parent의 hTier가 0보다 작으면 시리즈
+		String type = parent.getHTier() < 0 ? "Series"
+				//parent의 hTier가 0이면 포스트
+				: parent.getHTier() == 0 ? "Post"
+				// 아니면 리플라이
 				: "Reply";
 		//child.id가 없으면 제작
 		if (ObjectUtils.isEmpty(child.getId())) {
 			child.setWriter(user);
-			child.setHTier(parent.getId().length() / 4);
 			int cnt = workMapper.createSemiPost(parent, child, type);
 			createTagRelation(child);
 			attachFileService.createAttachFiles(child);
