@@ -40,10 +40,10 @@ public interface WorkMapper extends WonderMapper {
 	public boolean isFirstFavorites(String ownerId, String responseId);
 	public boolean isFavorites(String ownerId, String responseId);
 	
-	public int createSemiPost(@Param("parent") SemiPostVO parent,
-			@Param("child") SemiPostVO child, @Param("type") String type);
-	public int updateSemiPost(@Param("parent") SemiPostVO parent,
-			@Param("child") SemiPostVO child, @Param("type") String type);
+	public int createSemiPost(@Param("semiPost") SemiPostVO semiPost,
+			@Param("type") String type);
+	public int updateSemiPost(@Param("semiPost") SemiPostVO semiPost,
+			@Param("type") String type);
 	public int firstFavorites(String ownerId, String responseId);
 	
 	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,

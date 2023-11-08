@@ -132,9 +132,9 @@ public class WorkController {
 	// /work/manageWork
 	@PostMapping("/manageWork")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair, GenreVO genre) {
-		if (user.getId().equals(semiPostPair.getSecondVal().getWriter().getId())) {
-			return ResponseEntity.ok(workService.manageWork(user, semiPostPair, genre));
+	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody SemiPostVO semiPost) {
+		if (user.getId().equals(semiPost.getWriter().getId())) {
+			return ResponseEntity.ok(workService.manageWork(user, semiPost));
 		}
 		return null;
 	}

@@ -202,33 +202,30 @@ public class WorkService {
 		return new DreamPair<>(prev, next);
 	}
 	
-	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair, GenreVO genre) {
-		SemiPostVO parent = semiPostPair.getFirstVal();
-		SemiPostVO child = semiPostPair.getSecondVal();
+	public int manageWork(AccountVO user, SemiPostVO semiPost) {
 		//parent의 hTier가 0보다 작으면 시리즈
-		String type = parent.getHTier() < 0 ? "Series"
+		String type = semiPost.getHTier() < 0 ? "Series"
 				//parent의 hTier가 0이면 포스트
-				: parent.getHTier() == 0 ? "Post"
+				: semiPost.getHTier() == 0 ? "Post"
 				// 아니면 리플라이
 				: "Reply";
 		int cnt = 0;
-		//child.id가 없으면 제작
-		if (ObjectUtils.isEmpty(child.getId())) {
-			child.setWriter(user);
-			child.setHTier(parent.getId().length() / 4);
-			cnt = workMapper.createSemiPost(parent, child, type);
-			cnt += genreMapper.createGenre(genre);
-			createTagRelation(child);
-			attachFileService.createAttachFiles(child);
+		// 세미포스트 id가 ----로 끝나면 create 아니면 uodate
+		if (semiPost.getId().endsWith("----")) {
+			semiPost.setWriter(user);
+			cnt = workMapper.createSemiPost(semiPost, type);
+			cnt += genreMapper.createGenre(semiPost);
+			createTagRelation(semiPost);
+			attachFileService.createAttachFiles(semiPost);
 
 		}
-		//child.id가 있으면 수정
+		// 그렇지 않으면 수정
 		else {
-			attachFileService.deleteAttachFiles(child);
-			cnt = workMapper.updateSemiPost(parent, child, type);
-			cnt += genreMapper.updateGenre(genre);
-			createTagRelation(child);
-			attachFileService.createAttachFiles(child);
+			attachFileService.deleteAttachFiles(semiPost);
+			cnt = workMapper.updateSemiPost(semiPost, type);
+			cnt += genreMapper.updateGenre(semiPost);
+			createTagRelation(semiPost);
+			attachFileService.createAttachFiles(semiPost);
 	
 		}
 

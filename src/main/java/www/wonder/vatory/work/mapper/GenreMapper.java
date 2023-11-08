@@ -7,9 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
-import www.wonder.vatory.report.model.ReportCodeVO;
-import www.wonder.vatory.report.model.ReportVO;
 import www.wonder.vatory.work.model.GenreVO;
+import www.wonder.vatory.work.model.SemiPostVO;
 
 @Mapper		
 public interface GenreMapper extends WonderMapper {
@@ -19,8 +18,8 @@ public interface GenreMapper extends WonderMapper {
 
 	public int countGenreTypesOf(String id);
 
-	public int createGenre(GenreVO genre);
-	public int updateGenre(@Param("report") GenreVO genre);
+	public int createGenre(@Param("semiPost") SemiPostVO semiPost);
+	public int updateGenre(@Param("semiPost") SemiPostVO semiPost);
 	
 	public int insertToSync(@Param("reportId") String id, @Param("offset") int offset,
 			@Param("insertList") List<GenreVO> insertList);
