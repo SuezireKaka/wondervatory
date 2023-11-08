@@ -64,8 +64,8 @@ public class WorkController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	// /report/listAllReports/1
-	@GetMapping("/listAllReports/{page}")
+	// /work/listAllGenres/1
+	@GetMapping("/listAllGenres/{page}")
 	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
 	public ResponseEntity<DreamPair<List<GenreVO>, PagingDTO>> listAllGenres(
 			@AuthenticationPrincipal GenreVO genre, @PathVariable int page) {

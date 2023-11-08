@@ -91,7 +91,6 @@ public class WorkService {
 	public List<GenreVO> listAllGenre() {
 		return genreMapper.listAllGenre();
 	}
-	
 
 	public DreamPair<List<GenreVO>, PagingDTO> listAllGenres(int page) {
 		PagingDTO paging = new PagingDTO(page);
@@ -101,14 +100,9 @@ public class WorkService {
 		
 		for (GenreVO genre : listResult) {
 			List<GenreVO> types = genreMapper.listAllGenreOfSeries(genre.getId());
-
-			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(genre);
-			genre.setListAttachFile(attachFileList);
 		}
-		
 		return new DreamPair<List<GenreVO>, PagingDTO>(listResult, paging);
 	}
-	
 	
 	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page) {
 		String[] arrSearch = search.split(" ");

@@ -16,23 +16,7 @@ import www.wonder.vatory.report.model.ReportCodeVO;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)	
-public class GenreVO extends Entity implements MappedTableDef  {
+public class GenreVO extends Entity {
 	String genre;
 	String info;
-	
-
-	private List<AttachFileDTO> listAttachFile;
-	
-
-	public String getMappedTableName() {
-		return "t_genre_work";
-	}
-
-	public String getKSuspectType() {
-		return null;
-	}
-	@Override
-	public List<AttachFileDTO> getListAttachFile() {
-		return listAttachFile;
-	}
 }
