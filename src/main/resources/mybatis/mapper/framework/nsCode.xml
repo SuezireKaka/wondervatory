@@ -19,6 +19,7 @@
 	<resultMap id="rmRemoteKeyVO" type="www.wonder.vatory.framework.model.RemoteKeyVO">
 		<result property="name" column="name" />
 		<result property="info" column="info" />
+		<result property="auth" column="auth" />
 	</resultMap>
 
 	<!-- public List<CodeVO> listAll(); -->

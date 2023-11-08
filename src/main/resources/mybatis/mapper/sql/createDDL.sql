@@ -389,8 +389,42 @@ Modify h_tier TINYINT DEFAULT 0 -- 기본 레벨은 0
  ALTER TABLE t_custom_obj
 MODIFY parent_id VARCHAR(255)  -- 부모가 컴포즈 패턴에 따라 아이디가 길어졌으니 자식도 맞추기
 
+ ALTER TABLE t_sys_remocon
+   ADD COLUMN key_auth VARCHAR(64)  -- 프론트에서 보고 안 맞으면 아예 표시도 안 되도록
 
 
+
+create table t_sys_genre(
+	id			char(4) primary key,
+	login_id	varchar(255),
+	kakao_id	long,
+	descrim		varchar(255),
+	pass_word	varchar(255),
+	owner_id	char(4),
+	response_id	char(4),
+	nick		varchar(255),
+	kakao_nick	varchar(255),
+	intro		varchar(255),
+	login_code	TINYINT(4) DEFAULT '1',
+	reg_dt		timestamp default current_timestamp(),
+	upt_dt		timestamp default current_timestamp() on update current_timestamp()
+);
+
+create table t_sys_genre(
+	id			char(4) primary key,
+	genre_type	varchar(16),
+	genre_info	varchar(255)
+);
+create index idx_genre_type on t_sys_genre(genre_type);
+
+create table t_genre_work(
+	work_id		char(4),
+	genre_id	char(4)
+);
+create index idx_work_search on t_sys_genre(work_id);
+
+ ALTER TABLE t_sys_genre Change genre_type genre VARCHAR(255)
+ ALTER TABLE t_sys_genre Change genre_info info VARCHAR(255)
 
 
 

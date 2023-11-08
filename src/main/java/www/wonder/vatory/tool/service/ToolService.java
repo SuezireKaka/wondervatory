@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
@@ -15,6 +16,7 @@ import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
+import www.wonder.vatory.work.model.SeriesVO;
 
 @Service
 public class ToolService {
@@ -68,6 +70,20 @@ public class ToolService {
 			}
 		);
 		result.getCustomRelationList().addAll(resRelationList);
+		return result;
+	}
+	
+	public int mngToolSkin(DreamPair<SeriesVO, ToolVO> request) {
+		String seriesId = request.getFirstVal().getId();
+		ToolVO toolSkin = request.getSecondVal();
+		int result = 1;
+		// 툴스킨의 id가 없으면 새로 만들기 있으면 업데이트
+		if (ObjectUtils.isEmpty(toolSkin.getId())) {
+			result &= toolMapper.createToolSkin(toolSkin, seriesId);
+		}
+		else {
+			result &= toolMapper.updateToolSkin(toolSkin);
+		}
 		return result;
 	}
 

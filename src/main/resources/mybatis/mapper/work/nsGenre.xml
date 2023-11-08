@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.work.mapper.GenreMapper">
+	<resultMap id="rmGenreVO" extends="nsEntity.rmEntity" type="www.wonder.vatory.work.model.GenreVO">
+		<result property="genre" column="genre" />
+		<result property="info" column="info" />
+	</resultMap>
+
+	<!-- List<GenreVO> listAllGenre(); -->
+	<select id="listAllGenre">
+		SELECT *
+		  from t_sys_genre
+	</select>
+	
+	<!-- List<GenreVO> listAllGenreOfSeries(String seriesId); -->
+	<select id="listAllGenreOfSeries">
+		SELECT *
+		  from t_genre_work
+		 WHERE work_id = #{seriesId}
+	</select>
+	
+</mapper>

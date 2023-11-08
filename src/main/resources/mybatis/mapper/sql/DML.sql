@@ -294,17 +294,17 @@ VALUES ('s_report', 4)
 -----  10 31 --------------------
 
 insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_cnt)
-	values ("관계리모콘", 0, "선택", "button", 1)
-		, ("관계리모콘", 1, "객체 추가", "canvas", 1)
-		, ("관계리모콘", 2, "관계 추가", "button", 2)
-		, ("관계리모콘", 3, "제거", "button", 1)
-		, ("관계리모콘", 4, "복사", "button", 1)
-		, ("관계리모콘", 5, "붙여넣기", "canvas", 1)
+	values ("relation_remocon", 0, "선택", "button", 1)
+		, ("relation_remocon", 1, "객체 추가", "canvas", 1)
+		, ("relation_remocon", 2, "관계 추가", "button", 2)
+		, ("relation_remocon", 3, "제거", "button", 1)
+		, ("relation_remocon", 4, "복사", "button", 1)
+		, ("relation_remocon", 5, "붙여넣기", "canvas", 1)
 		
 	
  UPDATE t_sys_remocon sr
  	JOIN (
-	 	SELECT 0 AS LEVEL, '커스텀 오브젝트를 한 번 눌러서 선택합니다.' AS info
+	 	SELECT 0 LEVEL, '커스텀 오브젝트를 한 번 눌러서 선택합니다.' info
 	 	UNION All
 	 	SELECT 1 , '캔버스를 한 번 눌러서 새로운 커스텀 객체를 소환합니다.'
 	 	UNION All
@@ -312,7 +312,7 @@ insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_
 	 	UNION All
 	 	SELECT 3, '커스텀 객체를 눌러서 삭제합니다.\n이때 해당 객체와 직간접적으로 연결된 모든 커스텀 관계도 삭제됩니다.'
 	 	UNION All
-	 	SELECT 4, '기본적으로 화면에 있는 툴 디테일 전체를 복사합니다.'
+	 	SELECT 4, '기본적으로 화면에 있는 툴 디테일 전체를 복사합니다. 선택된 객체가 있으면 그것만 복사합니다.'
 	 	UNION All
 	 	SELECT 5, '복사된 툴 디테일을 현재 화면에 추가합니다.'
 	 ) sp ON sr.key_level = sp.LEVEL
@@ -324,3 +324,47 @@ insert into t_sys_remocon(remocon_name, key_level, key_name, key_use, key_click_
 -- 서브툴 하나 추가
 insert into t_tool(id, h_tier, x_tool_size, y_tool_size, NAME, parent_id, parent_type)
 	VALUES("00010002", 1, 500, 500, "class 내부도", "0003", "Tool");
+
+---  11-08 -------
+
+insert into t_sys_remocon(remocon_name, key_level, key_name, key_info)
+	values ("explorer_remocon", 0, "선택", "클릭한 대상을 선택합니다.")
+		  ,("explorer_remocon", 1, "생성", "현재 위치에 새로운 대상을 생성합니다.")
+	      ,("explorer_remocon", 2, "수정", "선택한 대상의 정보를 수정합니다.")
+	      ,("explorer_remocon", 3, "삭제", "선택한 대상을 삭제합니다.")
+	      
+UPDATE t_sys_remocon sr
+ 	JOIN (
+	 	SELECT 0 LEVEL, "login" auth
+	 	UNION All
+	 	SELECT 1 , "self"
+	 	UNION All
+	 	SELECT 2, "self"
+	 	UNION All
+	 	SELECT 3, "self or manage"
+	 	UNION All
+	 	SELECT 4, "login"
+	 	UNION All
+	 	SELECT 5, "self"
+	 ) sp ON sr.key_level = sp.LEVEL
+   SET sr.key_auth = sp.auth
+ WHERE sr.remocon_name = 'relation_remocon';
+ 
+UPDATE t_sys_remocon sr
+ 	JOIN (
+	 	SELECT 0 LEVEL, "login" code
+	 	UNION All
+	 	SELECT 1 , "self"
+	 	UNION All
+	 	SELECT 2, "self"
+	 	UNION All
+	 	SELECT 3, "self or manage"
+	 ) sp ON sr.key_level = sp.LEVEL
+   SET sr.key_auth = sp.auth
+ WHERE sr.remocon_name = 'explorer_remocon';
+		
+		
+		
+		
+		
+		

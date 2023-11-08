@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class RemoteKeyVO {
 	private String name;
 	private String info;
+	private String auth;
 }

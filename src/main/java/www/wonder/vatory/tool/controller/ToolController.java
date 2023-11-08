@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
+import www.wonder.vatory.work.model.SeriesVO;
 
 @RestController
 @CrossOrigin
@@ -29,19 +29,19 @@ public class ToolController {
 	@Autowired
 	private ToolService toolService;
 
-	// /tool/anonymous/listAllFromSeries/0000/1
-	@GetMapping("/anonymous/listAllFromSeries/{seriesId}/{page}")
-	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllFromSeries(
-			@PathVariable String seriesId,
+	// /tool/listAllFromSeries/0000/1
+	@GetMapping("/listAllFromSeries/{seriesId}/{page}")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllFromSeries(@PathVariable String seriesId,
 			@PathVariable int page) {
 		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllFromSeries(seriesId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	// /tool/anonymous/listAllNextTools/0000/1
-	@GetMapping("/anonymous/listAllNextTools/{idPath}/{page}")
-	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(
-			@PathVariable String idPath,
+	// /tool/listAllNextTools/0000/1
+	@GetMapping("/listAllNextTools/{idPath}/{page}")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(@PathVariable String idPath,
 			@PathVariable int page) {
 		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllNextTools(idPath, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -57,8 +57,9 @@ public class ToolController {
 	 * HttpStatus.OK); } --deprecated : 프론트앤드 테스트 종료
 	 */
 
-	// /tool/anonymous/getToolById/0000
-	@GetMapping("/anonymous/getToolById/{toolId}")
+	// /tool/getToolById/0000
+	@GetMapping("/getToolById/{toolId}")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<ToolVO> getToolById(@PathVariable String toolId) {
 		ToolVO result = toolService.getToolById(toolId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -86,4 +87,15 @@ public class ToolController {
 	 * ResponseEntity.ok(toolService.syncPropertiesOf(objectId, requestList)); }
 	 * --deprecated : 해당 테스트 종료
 	 */
+
+	// /tool/mngToolSkin/0000
+	@PostMapping("/mngToolSkin/")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<Integer> createToolSkin(
+			@AuthenticationPrincipal AccountVO owner,
+			@PathVariable String toolId,
+			@RequestBody DreamPair<SeriesVO, ToolVO> request) {
+		int result = toolService.mngToolSkin(request);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }
