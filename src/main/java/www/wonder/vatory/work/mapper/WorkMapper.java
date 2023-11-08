@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
@@ -21,7 +22,7 @@ public interface WorkMapper extends WonderMapper {
 			@Param("paging") PagingDTO paging);
 	public List<SeriesVO> listUserSeries(@Param("id") String id,
 			@Param("paging") PagingDTO paging);
-	
+
 	
 	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);
@@ -50,6 +51,7 @@ public interface WorkMapper extends WonderMapper {
 	public int toggleFavorites(String ownerId, String responseId);
 	
 	public int deleteReply(String id);
+
 
 	
 

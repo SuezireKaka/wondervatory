@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.report.model.ReportVO;
+import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
@@ -54,6 +56,23 @@ public class WorkController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+
+	// /work/anonymous/listAllGenre
+	@GetMapping("/anonymous/listAllGenre")
+	public ResponseEntity<List<GenreVO>> listAllGenre() {
+		List<GenreVO> list = workService.listAllGenre();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
+	// /work/listAllGenres/1
+	@GetMapping("/listAllGenres/{page}")
+	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
+	public ResponseEntity<DreamPair<List<GenreVO>, PagingDTO>> listAllGenres(
+			@AuthenticationPrincipal GenreVO genre, @PathVariable int page) {
+
+		DreamPair<List<GenreVO>, PagingDTO> list = workService.listAllGenres(page);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
 	
 	// /work/anonymous/listAll/0001/타이틀/1         검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
@@ -113,9 +132,9 @@ public class WorkController {
 	// /work/manageWork
 	@PostMapping("/manageWork")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
+	public ResponseEntity<Integer> manageWork(@AuthenticationPrincipal AccountVO user, @RequestBody DreamPair<SemiPostVO, SemiPostVO> semiPostPair, GenreVO genre) {
 		if (user.getId().equals(semiPostPair.getSecondVal().getWriter().getId())) {
-			return ResponseEntity.ok(workService.manageWork(user, semiPostPair));
+			return ResponseEntity.ok(workService.manageWork(user, semiPostPair, genre));
 		}
 		return null;
 	}
