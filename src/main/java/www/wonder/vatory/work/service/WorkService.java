@@ -24,9 +24,12 @@ import www.wonder.vatory.iis.model.TagRelId;
 import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
-import www.wonder.vatory.party.mapper.PartyMapper;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.report.model.ReportCodeVO;
+import www.wonder.vatory.report.model.ReportVO;
+import www.wonder.vatory.work.mapper.GenreMapper;
 import www.wonder.vatory.work.mapper.WorkMapper;
+import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
@@ -36,6 +39,8 @@ import www.wonder.vatory.work.model.SeriesVO;
 public class WorkService {
 	@Autowired
 	private WorkMapper workMapper;
+	@Autowired
+	private GenreMapper genreMapper;
 	@Autowired
 	private TagService tagService;
 	@Autowired
@@ -82,6 +87,28 @@ public class WorkService {
 
 		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
 	}
+	
+	public List<GenreVO> listAllGenre() {
+		return genreMapper.listAllGenre();
+	}
+	
+
+	public DreamPair<List<GenreVO>, PagingDTO> listAllGenres(int page) {
+		PagingDTO paging = new PagingDTO(page);
+		List<GenreVO> listResult = genreMapper.listAllGenres(paging);
+		long dataCount = genreMapper.getFoundRows();
+		paging.buildPagination(dataCount);
+		
+		for (GenreVO genre : listResult) {
+			List<GenreVO> types = genreMapper.listAllGenreOfSeries(genre.getId());
+
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(genre);
+			genre.setListAttachFile(attachFileList);
+		}
+		
+		return new DreamPair<List<GenreVO>, PagingDTO>(listResult, paging);
+	}
+	
 	
 	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page) {
 		String[] arrSearch = search.split(" ");
@@ -174,7 +201,7 @@ public class WorkService {
 		return new DreamPair<>(prev, next);
 	}
 	
-	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair) {
+	public int manageWork(AccountVO user, DreamPair<SemiPostVO, SemiPostVO> semiPostPair, GenreVO genre) {
 		SemiPostVO parent = semiPostPair.getFirstVal();
 		SemiPostVO child = semiPostPair.getSecondVal();
 		String parentId = parent.getId();
@@ -183,24 +210,70 @@ public class WorkService {
 				//parent.id가 4자리면 Post
 				: parentId.length() == 4 ? "Post"
 				: "Reply";
+		int cnt = 0;
 		//child.id가 없으면 제작
 		if (ObjectUtils.isEmpty(child.getId())) {
 			child.setWriter(user);
 			child.setHTier(parent.getId().length() / 4);
-			int cnt = workMapper.createSemiPost(parent, child, type);
+			cnt = workMapper.createSemiPost(parent, child, type);
+			cnt += genreMapper.createGenre(genre);
 			createTagRelation(child);
 			attachFileService.createAttachFiles(child);
-			return cnt;
+
 		}
 		//child.id가 있으면 수정
 		else {
 			attachFileService.deleteAttachFiles(child);
-			int cnt = workMapper.updateSemiPost(parent, child, type);
+			cnt = workMapper.updateSemiPost(parent, child, type);
+			cnt += genreMapper.updateGenre(genre);
 			createTagRelation(child);
 			attachFileService.createAttachFiles(child);
-			return cnt;
+	
 		}
+
+		return cnt;
 	}
+	
+
+	private int syncRptTypes(String id, List<GenreVO> genreTypesList) {
+		int result = 0;
+		int requestCount = genreTypesList.size();
+		// 현재 들어있는 개수랑 비교해서 판단
+		int prevCount = genreMapper.countGenreTypesOf(id);
+		
+		if (requestCount > prevCount) {
+			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
+			int border = prevCount;
+			
+		    List<List<GenreVO>> listOfLists = new ArrayList<>(
+		    		genreTypesList.stream()
+			    	.collect(Collectors.groupingBy(s -> genreTypesList.indexOf(s) >= border))
+			    	.values()
+		    );
+		    // 둘로 쪼개는데 한 쪽이 없으면 알잘딱깔센 [[], [0, 1, 2]] 해야 할 거 아니야 ㅡ.ㅡ
+		    // 근데 못 해서 일단 마지막을 insertList로 두고
+		    int size = listOfLists.size();
+		    List<GenreVO> insertList = listOfLists.get(size - size);
+		    
+		    //사이즈에 따라 updateList를 다르게
+		    if (listOfLists.size() == 1) {
+		    	result = genreMapper.insertToSync(id, 0, insertList);
+		    }
+		    else {
+		    	List<GenreVO> updateList = listOfLists.get(0);
+		    	result = genreMapper.updateAllGenreFrom(id, updateList)
+		    		& genreMapper.insertToSync(id, updateList.size(), insertList);
+		    }
+		    
+		}
+		else {
+			result = genreMapper.deleteToSync(id, requestCount)
+				& genreMapper.updateAllGenreFrom(id, genreTypesList);
+		}
+		
+		return result;
+	}
+
 	
 	private Map<String, Integer> buildTF(SemiPostVO post) {
 		//대상이되는 문자열 추출

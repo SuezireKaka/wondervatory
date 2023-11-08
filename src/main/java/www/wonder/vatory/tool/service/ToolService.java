@@ -79,7 +79,7 @@ public class ToolService {
 		int result = 1;
 		// 툴스킨의 id가 없으면 새로 만들기 있으면 업데이트
 		if (ObjectUtils.isEmpty(toolSkin.getId())) {
-			result &= toolMapper.createToolSkin(toolSkin, seriesId);
+//			result &= toolMapper.createToolSkin(toolSkin, seriesId);
 		}
 		else {
 			result &= toolMapper.updateToolSkin(toolSkin);
