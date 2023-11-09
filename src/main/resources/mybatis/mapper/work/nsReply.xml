@@ -8,7 +8,6 @@
 	<resultMap id="rmReplyVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.work.model.ReplyVO">
 		<result property="content" column="content" />
-		<result property="hTier" column="h_tier" />
 		<result property="readCount" column="read_cnt" />
 		<result property="likeCount" column="like_cnt" />
 		<result property="dislikeCount" column="dis_cnt" />

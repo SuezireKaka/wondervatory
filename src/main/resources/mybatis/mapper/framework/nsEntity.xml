@@ -10,6 +10,7 @@
 			<idArg javaType="String" column="id"/>
 		</constructor -->
 		<id property="id" column="id" />
+		<result property="hTier" column="h_tier" />
 	</resultMap>
 
 	<resultMap id="rmTimeEntity" extends="rmEntity"
