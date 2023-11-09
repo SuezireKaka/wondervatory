@@ -76,9 +76,10 @@ public class ToolService {
 	public int manageToolSkin(String seriesId, ToolVO toolSkin) {
 		int result = 1;
 		// 툴스킨의 id가 ----로 끝나면 create 아니면 uodate
-		if (toolSkin.getId().endsWith("----")) {
-			String parentId = toolSkin.getParentId();
-			result &= toolMapper.createToolSkin(toolSkin, parentId, seriesId);
+		String toolSkinId = toolSkin.getId();
+		if (toolSkinId.endsWith("----")) {
+			toolSkin.setId(toolSkin.getParentId());
+			result &= toolMapper.createToolSkin(toolSkin, seriesId);
 		}
 		else {
 			result &= toolMapper.updateToolSkin(toolSkin);

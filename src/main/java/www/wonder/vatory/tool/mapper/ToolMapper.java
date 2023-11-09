@@ -35,8 +35,7 @@ public interface ToolMapper extends WonderMapper {
 	public ToolVO getToolById(@Param("toolId") String toolId);
 	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
-	public int createToolSkin(@Param("toolSkin") ToolVO toolSkin,
-			@Param("parentId") String parentId, @Param("seriesId") String seriesId);
+	public int createToolSkin(@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);
 	
 	public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
 			@Param("insertList") List<CustomPropertyVO> insertList);

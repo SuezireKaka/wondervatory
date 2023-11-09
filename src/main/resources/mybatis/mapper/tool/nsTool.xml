@@ -116,9 +116,11 @@
 		   and parent_type = 'Entity'
 	</select>
 	
-	<!-- public int createToolSkin(@Param("toolSkin") ToolVO toolSkin,
-			@Param("seriesId") String seriesId); -->
+	<!-- public int createToolSkin(@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);-->
 	<insert id="createToolSkin">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+    		select concat(#{toolSkin.id}, NEXT_PK('s_tool'))
+  		</selectKey>
 		INSERT INTO t_tool(id, h_tier, x_tool_size, y_tool_size, NAME, parent_id, parent_type)
 		VALUES (#{id}, #{toolSkin.hTier}, #{toolSkin.xToolSize}, #{toolSkin.yToolSize}, #{toolSkin.name}, #{seriesId}, "Series")
 	</insert>
@@ -137,8 +139,11 @@
 	
 	<!-- public int updateToolSkin(@Param("toolSkin") ToolVO toolSkin);-->
 	<update id="updateToolSkin">
-		INSERT INTO t_tool(NAME, x_tool_size, y_tool_size)
-		VALUES (#{toolSkin.name}, #{toolSkin.XToolSize}, #{toolSkin.YToolSize})
+		UPDATE t_tool
+		   set name = #{toolSkin.name},
+		       x_tool_size = #{toolSkin.xToolSize},
+		       y_tool_size = #{toolSkin.yToolSize}
+		 where id = #{toolSkin.id}
 	</update>
 	
 	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,

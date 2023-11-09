@@ -89,7 +89,7 @@ public class ToolController {
 	 */
 
 	// /tool/manageToolSkin/0000
-	@PostMapping("/manageToolSkin/0000")
+	@PostMapping("/manageToolSkin/{seriesId}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> manageToolSkin(
 			@AuthenticationPrincipal AccountVO owner,
