@@ -12,6 +12,10 @@ import www.wonder.vatory.framework.model.Entity;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)	
 public class GenreVO extends Entity {
-	String genre;
-	String info;
+	private String genre;
+	private String info;
+	
+	GenreVO(String id) {
+		super(id, 0);
+	}
 }

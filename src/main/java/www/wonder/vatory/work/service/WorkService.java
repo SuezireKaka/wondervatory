@@ -216,7 +216,7 @@ public class WorkService {
 		}
 		
 		if (type.equals("Series")) {
-			cnt &= syncGenre(semiPost.getId(), ((SeriesVO) semiPost).getGenreList());
+			cnt &= syncGenre(semiPost.getId(), semiPost.getGenreList());
 		}
 
 		return cnt;
@@ -233,14 +233,13 @@ public class WorkService {
 	
 
 	private int syncGenre(String id, List<GenreVO> genreTypesList) {
-		int requestCount = genreTypesList.size();
 		List<GenreVO> prevGenreList = genreMapper.listAllGenreOfSeries(id);
 		List<GenreVO> insertList = genreTypesList.stream()
 				.filter(genre -> ! prevGenreList.contains(genre)).collect(Collectors.toList());
 		List<GenreVO> deleteList = prevGenreList.stream()
 				.filter(genre -> ! genreTypesList.contains(genre)).collect(Collectors.toList());
 		
-		return 1;
+		return genreMapper.deleteToSync(id, insertList) & genreMapper.insertToSync(id, deleteList);
 	}
 
 	

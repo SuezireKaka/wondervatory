@@ -63,16 +63,6 @@ public class WorkController {
 		List<GenreVO> list = workService.listAllGenre();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-
-	// /work/listAllGenres/1
-	@GetMapping("/listAllGenres/{page}")
-	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
-	public ResponseEntity<DreamPair<List<GenreVO>, PagingDTO>> listAllGenres(
-			@AuthenticationPrincipal GenreVO genre, @PathVariable int page) {
-
-		DreamPair<List<GenreVO>, PagingDTO> list = workService.listAllGenres(page);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
 	
 	// /work/anonymous/listAll/0001/타이틀/1         검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")

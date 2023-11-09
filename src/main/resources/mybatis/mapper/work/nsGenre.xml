@@ -18,10 +18,12 @@
 	
 	<!-- List<GenreVO> listAllGenreOfSeries(String seriesId); -->
 	<select id="listAllGenreOfSeries">
-		SELECT *
-		  from t_genre_work
-		 WHERE work_id = #{seriesId}
-		 order by genre_id desc
+		SELECT gen.*
+		  from t_genre_work grw
+		  left outer join t_sys_genre gen
+		    on gen.id = grw.genre_id
+		 WHERE grw.work_id = #{seriesId}
+		 order by gen.id desc
 	</select>
 	
 	<!-- public int insertToSync(@Param("workId") String genreId,
