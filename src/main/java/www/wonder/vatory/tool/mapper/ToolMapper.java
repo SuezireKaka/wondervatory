@@ -15,9 +15,11 @@ import www.wonder.vatory.tool.model.ToolVO;
 @Mapper
 public interface ToolMapper extends WonderMapper {
 	
+	/*
 	public List<ToolVO> listAllFromSeries(
 			@Param("seriesId") String seriesId,
 			@Param("paging") PagingDTO paging);
+	-- deprecated : 아래 매소드로 전부 통합*/
 	
 	public List<ToolVO> listAllNextTools(
 			@Param("idPath") String idPath,

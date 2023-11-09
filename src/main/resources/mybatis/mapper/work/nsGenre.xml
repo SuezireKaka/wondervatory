@@ -13,6 +13,7 @@
 	<select id="listAllGenre">
 		SELECT *
 		  from t_sys_genre
+		 order by id desc
 	</select>
 	
 	<!-- List<GenreVO> listAllGenreOfSeries(String seriesId); -->
@@ -20,6 +21,34 @@
 		SELECT *
 		  from t_genre_work
 		 WHERE work_id = #{seriesId}
+		 order by genre_id desc
 	</select>
+	
+	<!-- public int insertToSync(@Param("workId") String genreId,
+			@Param("insertList") List<GenreVO> insertList); -->
+	<insert id="insertToSync">
+		<if test="!(insertList.isEmpty())">
+			INSERT INTO t_genre_work(work_id, genre_id)
+			VALUES
+			<foreach item="gen" collection="insertList" separator=", " close=";">
+				(#{workId}, #{gen.id})
+			</foreach>
+		</if>
+	</insert>
+	<!-- public int deleteToSync(@Param("workId") String id,
+			@Param("deleteList") List<GenreVO> deleteList); -->
+	<delete id="deleteToSync">
+		<if test="!(deleteList.isEmpty())">
+		DELETE grw.*
+		  FROM t_genre_work grw
+		 WHERE work_id = #{workId}
+		   AND genre_id
+		    IN
+		   (<foreach item="gen" collection="deleteList" separator=", ">
+				#{gen.id}
+			</foreach>)
+		</if>
+	</delete>
+	
 	
 </mapper>

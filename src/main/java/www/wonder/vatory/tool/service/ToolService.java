@@ -23,7 +23,7 @@ public class ToolService {
 	@Autowired(required = false)
 	private ToolMapper toolMapper;
 
-	/** 시리즈의 모든 툴 직접 붙어있는 조회 */
+	/* 시리즈의 모든 툴 직접 붙어있는 조회 
 	public DreamPair<List<ToolVO>, PagingDTO> listAllFromSeries(String seriesId, int page) {
 		PagingDTO paging = new PagingDTO(page);
 		
@@ -33,12 +33,13 @@ public class ToolService {
 		paging.buildPagination(dataCount);
 
 		return new DreamPair<List<ToolVO>, PagingDTO>(resultList, paging);
-	}
+	} -- deprecated : path 접두사로 아래와 통합 */
 	
 	public DreamPair<List<ToolVO>, PagingDTO> listAllNextTools(String idPath, int page) {
 		PagingDTO paging = new PagingDTO(page);
+		String id = idPath.substring(4);
 		
-		List<ToolVO> resultList = toolMapper.listAllNextTools(idPath, paging);
+		List<ToolVO> resultList = toolMapper.listAllNextTools(id, paging);
 		
 		long dataCount = toolMapper.getFoundRows();
 		paging.buildPagination(dataCount);

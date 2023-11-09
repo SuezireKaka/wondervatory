@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,18 +88,6 @@ public class WorkService {
 	
 	public List<GenreVO> listAllGenre() {
 		return genreMapper.listAllGenre();
-	}
-
-	public DreamPair<List<GenreVO>, PagingDTO> listAllGenres(int page) {
-		PagingDTO paging = new PagingDTO(page);
-		List<GenreVO> listResult = genreMapper.listAllGenres(paging);
-		long dataCount = genreMapper.getFoundRows();
-		paging.buildPagination(dataCount);
-		
-		for (GenreVO genre : listResult) {
-			List<GenreVO> types = genreMapper.listAllGenreOfSeries(genre.getId());
-		}
-		return new DreamPair<List<GenreVO>, PagingDTO>(listResult, paging);
 	}
 	
 	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page) {
@@ -202,9 +191,9 @@ public class WorkService {
 	public int manageWork(AccountVO user, SemiPostVO semiPost) {
 		//parent의 hTier가 0보다 작으면 시리즈
 		String type;
-		int cnt = 0;
+		int cnt = 1;
 		String semiPostId = semiPost.getId();
-		// 세미포스트 id가 ----로 끝나면 create 아니면 uodate
+		// 세미포스트 id가 ----로 끝나면 create 아니면 update
 		if (semiPostId.endsWith("----")) {
 			semiPost.setWriter(user);
 			semiPost.recurToParent();
@@ -225,6 +214,10 @@ public class WorkService {
 			attachFileService.createAttachFiles(semiPost);
 	
 		}
+		
+		if (type.equals("Series")) {
+			cnt &= syncGenre(semiPost.getId(), ((SeriesVO) semiPost).getGenreList());
+		}
 
 		return cnt;
 	}
@@ -239,43 +232,15 @@ public class WorkService {
 	}
 	
 
-	private int syncRptTypes(String id, List<GenreVO> genreTypesList) {
-		int result = 0;
+	private int syncGenre(String id, List<GenreVO> genreTypesList) {
 		int requestCount = genreTypesList.size();
-		// 현재 들어있는 개수랑 비교해서 판단
-		int prevCount = genreMapper.countGenreTypesOf(id);
+		List<GenreVO> prevGenreList = genreMapper.listAllGenreOfSeries(id);
+		List<GenreVO> insertList = genreTypesList.stream()
+				.filter(genre -> ! prevGenreList.contains(genre)).collect(Collectors.toList());
+		List<GenreVO> deleteList = prevGenreList.stream()
+				.filter(genre -> ! genreTypesList.contains(genre)).collect(Collectors.toList());
 		
-		if (requestCount > prevCount) {
-			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
-			int border = prevCount;
-			
-		    List<List<GenreVO>> listOfLists = new ArrayList<>(
-		    		genreTypesList.stream()
-			    	.collect(Collectors.groupingBy(s -> genreTypesList.indexOf(s) >= border))
-			    	.values()
-		    );
-		    // 둘로 쪼개는데 한 쪽이 없으면 알잘딱깔센 [[], [0, 1, 2]] 해야 할 거 아니야 ㅡ.ㅡ
-		    // 근데 못 해서 일단 마지막을 insertList로 두고
-		    int size = listOfLists.size();
-		    List<GenreVO> insertList = listOfLists.get(size - size);
-		    
-		    //사이즈에 따라 updateList를 다르게
-		    if (listOfLists.size() == 1) {
-		    	result = genreMapper.insertToSync(id, 0, insertList);
-		    }
-		    else {
-		    	List<GenreVO> updateList = listOfLists.get(0);
-		    	result = genreMapper.updateAllGenreFrom(id, updateList)
-		    		& genreMapper.insertToSync(id, updateList.size(), insertList);
-		    }
-		    
-		}
-		else {
-			result = genreMapper.deleteToSync(id, requestCount)
-				& genreMapper.updateAllGenreFrom(id, genreTypesList);
-		}
-		
-		return result;
+		return 1;
 	}
 
 	

@@ -45,7 +45,7 @@
 	
 	<!-- public List<ToolVO> listAllFromSeries(
 			@Param("seriesId") String seriesId,
-			@Param("page") int page); -->
+			@Param("page") int page);
 	<select id="listAllFromSeries" resultMap="rmToolVO">
 		SELECT SQL_CALC_FOUND_ROWS *
 		  from t_tool
@@ -54,6 +54,7 @@
 		 order by id DESC
 		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
+	→ deprecated : 아래 매소드로 전부 통합  -->
 	
 	<!-- public List<ToolVO> listAllNextTools(
 			@Param("idPath") String idPath,

@@ -29,16 +29,16 @@ public class ToolController {
 	@Autowired
 	private ToolService toolService;
 
-	// /tool/listAllFromSeries/0000/1
+	/* // /tool/listAllFromSeries/0000/1
 	@GetMapping("/listAllFromSeries/{seriesId}/{page}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllFromSeries(@PathVariable String seriesId,
 			@PathVariable int page) {
 		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllFromSeries(seriesId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
+	} -- deprecated : path 접두사로 아래랑 통합*/
 
-	// /tool/listAllNextTools/0000/1
+	// /tool/listAllNextTools/path0000/1
 	@GetMapping("/listAllNextTools/{idPath}/{page}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(@PathVariable String idPath,
@@ -91,8 +91,7 @@ public class ToolController {
 	// /tool/manageToolSkin/0000
 	@PostMapping("/manageToolSkin/{seriesId}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> manageToolSkin(
-			@AuthenticationPrincipal AccountVO owner,
+	public ResponseEntity<Integer> manageToolSkin(@AuthenticationPrincipal AccountVO owner,
 			@RequestBody ToolVO toolSkin, @PathVariable String seriesId) {
 		int result = toolService.manageToolSkin(seriesId, toolSkin);
 		return new ResponseEntity<>(result, HttpStatus.OK);
