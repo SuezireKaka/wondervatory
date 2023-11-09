@@ -88,14 +88,13 @@ public class ToolController {
 	 * --deprecated : 해당 테스트 종료
 	 */
 
-	// /tool/mngToolSkin/0000
-	@PostMapping("/mngToolSkin/")
+	// /tool/manageToolSkin/0000
+	@PostMapping("/manageToolSkin/0000")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> createToolSkin(
+	public ResponseEntity<Integer> manageToolSkin(
 			@AuthenticationPrincipal AccountVO owner,
-			@PathVariable String toolId,
-			@RequestBody DreamPair<SeriesVO, ToolVO> request) {
-		int result = toolService.mngToolSkin(request);
+			@RequestBody ToolVO toolSkin, @PathVariable String seriesId) {
+		int result = toolService.manageToolSkin(seriesId, toolSkin);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

@@ -73,9 +73,7 @@ public class ToolService {
 		return result;
 	}
 	
-	public int mngToolSkin(DreamPair<SeriesVO, ToolVO> request) {
-		String seriesId = request.getFirstVal().getId();
-		ToolVO toolSkin = request.getSecondVal();
+	public int manageToolSkin(String seriesId, ToolVO toolSkin) {
 		int result = 1;
 		// 툴스킨의 id가 ----로 끝나면 create 아니면 uodate
 		if (toolSkin.getId().endsWith("----")) {

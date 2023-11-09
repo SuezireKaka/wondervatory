@@ -19,7 +19,7 @@ public abstract class TimeEntity extends Entity {
 	private Date uptDt;
 
 	public TimeEntity(String id) {
-		super(id);
+		super(id, (id.length() - 1) / 4);
 	}
 
 	public void setCurDate() {
