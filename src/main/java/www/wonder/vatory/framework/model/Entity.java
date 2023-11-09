@@ -21,10 +21,19 @@ public abstract class Entity {
 	private String id;
 	private int hTier;
 	
+	public void recurToParent() {
+		this.id = id.substring(0, id.length() - 4);
+		this.retier(0);
+	}
+	
 	public String getParentId() {
 		String myId = this.id;
 		int len = myId.length();
 		return myId.substring(0, len - UNIT_LENGTH);
+	}
+	
+	public void retier(int control) {
+		this.hTier = (this.id.length() - control) / 4;
 	}
 	
 	@Override

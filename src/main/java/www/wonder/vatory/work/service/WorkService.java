@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileService;
@@ -25,8 +24,6 @@ import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.report.model.ReportCodeVO;
-import www.wonder.vatory.report.model.ReportVO;
 import www.wonder.vatory.work.mapper.GenreMapper;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.GenreVO;
@@ -204,17 +201,14 @@ public class WorkService {
 	
 	public int manageWork(AccountVO user, SemiPostVO semiPost) {
 		//parent의 hTier가 0보다 작으면 시리즈
-		String type = semiPost.getHTier() < 0 ? "Series"
-				//parent의 hTier가 0이면 포스트
-				: semiPost.getHTier() == 0 ? "Post"
-				// 아니면 리플라이
-				: "Reply";
+		String type;
 		int cnt = 0;
 		String semiPostId = semiPost.getId();
 		// 세미포스트 id가 ----로 끝나면 create 아니면 uodate
 		if (semiPostId.endsWith("----")) {
 			semiPost.setWriter(user);
-			semiPost.setId(semiPostId.substring(0, semiPostId.length() - 4));
+			semiPost.recurToParent();
+			type = calcType(semiPost);
 			cnt = workMapper.createSemiPost(semiPost, type);
 			//cnt += genreMapper.createGenre(semiPost);
 			createTagRelation(semiPost);
@@ -223,6 +217,7 @@ public class WorkService {
 		}
 		// 그렇지 않으면 수정
 		else {
+			type = calcType(semiPost);
 			attachFileService.deleteAttachFiles(semiPost);
 			cnt = workMapper.updateSemiPost(semiPost, type);
 			//cnt += genreMapper.updateGenre(semiPost);
@@ -232,6 +227,15 @@ public class WorkService {
 		}
 
 		return cnt;
+	}
+
+	public String calcType(SemiPostVO semiPost) {
+		// 자신의 hTier가 0이면 Series
+		return semiPost.getHTier() < 1 ? "Series"
+				//parent의 hTier가 1이면 Post
+				: semiPost.getHTier() < 2 ? "Post"
+				// 아니면 리플라이
+				: "Reply";
 	}
 	
 
