@@ -155,16 +155,6 @@
 	 order by w.id DESC
 	 LIMIT #{paging.seriesLimit} offset #{paging.offset}
 	</select>
-	
-	<!-- public void incReadCount(String id); -->
-	<update id="incReadCount">
-	update T_work
-	   set 	upt_dt = upt_dt,
-			read_cnt = read_cnt + 1
-	 where id = #{id}
-	</update>
-	
-	
 	<!-- public PostVO getPrev(String parentId, String id); -->
 	<select id="getPrev" resultMap="rmReplyVO">
 	SELECT w.*, a.descrim acc_descrim <!-- association에 discriminator가 있으면 무조건 acc_descrim -->
@@ -191,6 +181,16 @@
 	   and w.complete = 1
 	 LIMIT 1
 	</select>
+	
+	<!-- public void incReadCount(String id); -->
+	<update id="incReadCount">
+	update T_work
+	   set 	upt_dt = upt_dt,
+			read_cnt = read_cnt + 1
+	 where id = #{id}
+	</update>
+	
+	
 	
 	<!-- public int onLike(String id); -->
 	<update id="onLike">
@@ -224,14 +224,27 @@
 	</select>
 	
 	<!-- public int createSemiPost(@Param("parent") SemiPostVO parent,
-			@Param("child") SemiPostVO child, @Param("type") String type); -->
+			@Param("child") SemiPostVO child, @Param("type") String type); 
 	<insert id="createSemiPost">
 		<selectKey keyProperty="child.id" resultType="String" order="BEFORE">
     		select CONCAT(#{parent.id}, NEXT_PK('s_${type}'))  
   		</selectKey>
 	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
 		VALUES (#{child.id}, #{child.hTier}, #{type}, #{child.boardVO.id}, #{child.writer.id}, #{child.title}, #{child.content}, #{child.isComplete});
+	</insert>-->
+	
+	<!-- public int createSemiPost(@Param("semiPost") SemiPostVO semiPost,
+			@Param("type") String type); -->
+	<insert id="createSemiPost">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+    		select CONCAT(#{semiPost.id}, NEXT_PK('s_${type}'))  
+  		</selectKey>
+	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
+		VALUES (#{id}, #{semiPost.hTier}, #{type}, #{semiPost.boardVO.id}, #{semiPost.writer.id}, #{semiPost.title}, #{semiPost.content}, #{semiPost.isComplete});
 	</insert>
+	
+	
+	
 	
 	<!-- public int updateSemiPost(@Param("parent") SemiPostVO parent,
 			@Param("child") SemiPostVO child, @Param("type") String type); -->
