@@ -19,17 +19,12 @@ public abstract class Entity {
 	
 	//primitive type의 경우 기본값. reference type의 경우 null
 	private String id;
+	private int hTier;
 	
 	public String getParentId() {
 		String myId = this.id;
 		int len = myId.length();
 		return myId.substring(0, len - UNIT_LENGTH);
-	}
-	
-	public int getHTier() {
-		String myId = this.id;
-		int len = myId.length();
-		return (len - 1) / 4;
 	}
 	
 	@Override

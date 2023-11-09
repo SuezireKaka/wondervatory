@@ -93,8 +93,7 @@ public class ToolController {
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
 	public ResponseEntity<Integer> manageToolSkin(
 			@AuthenticationPrincipal AccountVO owner,
-			@PathVariable String seriesId,
-			@RequestBody ToolVO toolSkin) {
+			@RequestBody ToolVO toolSkin, @PathVariable String seriesId) {
 		int result = toolService.manageToolSkin(seriesId, toolSkin);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

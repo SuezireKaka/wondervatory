@@ -15,7 +15,7 @@ public class BoardVO extends Entity {
 
 
 	public BoardVO(String id) {
-		super(id);
+		super(id, 0);
 	}
 	
 	/**
