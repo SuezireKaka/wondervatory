@@ -235,11 +235,11 @@
 	<!-- public int createSemiPost(@Param("semiPost") SemiPostVO semiPost,
 			@Param("type") String type); -->
 	<insert id="createSemiPost">
-		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+		<selectKey keyProperty="semiPost.id" resultType="String" order="BEFORE">
     		select CONCAT(#{semiPost.id}, NEXT_PK('s_${type}'))  
   		</selectKey>
 	INSERT INTO T_work(id, h_tier, descrim, bb_id, writer_id, TITLE, content, complete)
-		VALUES (#{id}, #{semiPost.hTier}, #{type}, #{semiPost.boardVO.id}, #{semiPost.writer.id}, #{semiPost.title}, #{semiPost.content}, #{semiPost.isComplete});
+		VALUES (#{semiPost.id}, #{semiPost.hTier}, #{type}, #{semiPost.boardVO.id}, #{semiPost.writer.id}, #{semiPost.title}, #{semiPost.content}, #{semiPost.isComplete});
 	</insert>
 	
 	
