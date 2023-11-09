@@ -20,6 +20,7 @@
 		<result property="name" column="name" />
 		<result property="info" column="info" />
 		<result property="auth" column="auth" />
+		<result property="isImmediate" column="immedi" />
 	</resultMap>
 
 	<!-- public List<CodeVO> listAll(); -->

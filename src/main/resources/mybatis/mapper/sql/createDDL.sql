@@ -463,7 +463,17 @@ create table t_sys_genre(
 );
 
 
+ Alter table t_sys_remocon
+   ADD COLUMN key_immedi TINYINT NOT null DEFAULT 0
 
-
-
+create table t_sys_remocon(
+	remocon_name	varchar(32) not null,
+	key_level		tinyint not null,
+	key_name		varchar(16) not null,
+	key_use			varchar(8) not null,
+	key_click_cnt	tinyint default 1,
+	key_auth		VARCHAR(64),
+	key_immedi 		TINYINT NOT null DEFAULT 0,
+	primary key(remocon_name, key_level)
+);
 

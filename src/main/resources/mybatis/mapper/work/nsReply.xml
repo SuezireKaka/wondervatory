@@ -8,7 +8,6 @@
 	<resultMap id="rmReplyVO" extends="nsEntity.rmTimeEntity"
 		type="www.wonder.vatory.work.model.ReplyVO">
 		<result property="content" column="content" />
-		<result property="hTier" column="h_tier" />
 		<result property="readCount" column="read_cnt" />
 		<result property="likeCount" column="like_cnt" />
 		<result property="dislikeCount" column="dis_cnt" />
@@ -239,7 +238,7 @@
 		<selectKey keyProperty="id" resultType="String" order="BEFORE">
     		select CONCAT(#{semiPost.id}, NEXT_PK('s_${type}'))  
   		</selectKey>
-	INSERT INTO T_work(id, h_level, descrim, bb_id, writer_id, TITLE, content, complete)
+	INSERT INTO T_work(id, h_tier, descrim, bb_id, writer_id, TITLE, content, complete)
 		VALUES (#{id}, #{semiPost.hTier}, #{type}, #{semiPost.boardVO.id}, #{semiPost.writer.id}, #{semiPost.title}, #{semiPost.content}, #{semiPost.isComplete});
 	</insert>
 	

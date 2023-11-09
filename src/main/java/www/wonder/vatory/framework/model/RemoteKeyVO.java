@@ -12,4 +12,5 @@ public class RemoteKeyVO {
 	private String name;
 	private String info;
 	private String auth;
+	private boolean isImmediate;
 }
