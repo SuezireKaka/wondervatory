@@ -210,9 +210,11 @@ public class WorkService {
 				// 아니면 리플라이
 				: "Reply";
 		int cnt = 0;
+		String semiPostId = semiPost.getId();
 		// 세미포스트 id가 ----로 끝나면 create 아니면 uodate
-		if (semiPost.getId().endsWith("----")) {
+		if (semiPostId.endsWith("----")) {
 			semiPost.setWriter(user);
+			semiPost.setId(semiPostId.substring(0, semiPostId.length() - 4));
 			cnt = workMapper.createSemiPost(semiPost, type);
 			cnt += genreMapper.createGenre(semiPost);
 			createTagRelation(semiPost);
