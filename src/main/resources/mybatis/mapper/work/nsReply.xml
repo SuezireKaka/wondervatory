@@ -250,10 +250,10 @@
 			@Param("child") SemiPostVO child, @Param("type") String type); -->
 	<insert id="updateSemiPost">
 	update T_work
-	   set TITLE = #{child.title},
-	       content = #{child.content},
-	       complete = #{child.isComplete}
-	 where id = #{child.id}
+	   set TITLE = #{semiPost.title},
+	       content = #{semiPost.content},
+	       complete = #{semiPost.isComplete}
+	 where id = #{semiPost.id}
 	</insert>
 	
 	<!-- 	public int firstFavorites(String ownerId, String responseId); -->
