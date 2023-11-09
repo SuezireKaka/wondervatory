@@ -261,14 +261,6 @@
 		VALUES (#{ownerId}, #{responseId});
 	</insert>
 	
-	<!-- public int updatePost(PostVO post);-->
-	<update id="updatePost">
-	update T_work
-	   set TITLE = #{title},
-	       content = #{content}
-	 where id = #{id} 
-	</update>
-	
 	<!-- 	public AccountVO toggleFavorites(String ownerId); -->
 	<update id="toggleFavorites">
 	update t_favorites
