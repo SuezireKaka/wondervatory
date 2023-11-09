@@ -35,11 +35,13 @@ public class ToolService {
 		return new DreamPair<List<ToolVO>, PagingDTO>(resultList, paging);
 	} -- deprecated : path 접두사로 아래와 통합 */
 	
-	public DreamPair<List<ToolVO>, PagingDTO> listAllNextTools(String idPath, int page) {
+	public DreamPair<List<ToolVO>, PagingDTO> listAllNextTools(
+			String seriesId, String idPath, int page) {
+		
 		PagingDTO paging = new PagingDTO(page);
 		String id = idPath.substring(4);
 		
-		List<ToolVO> resultList = toolMapper.listAllNextTools(id, paging);
+		List<ToolVO> resultList = toolMapper.listAllNextTools(seriesId, id, paging);
 		
 		long dataCount = toolMapper.getFoundRows();
 		paging.buildPagination(dataCount);

@@ -477,3 +477,14 @@ create table t_sys_remocon(
 	primary key(remocon_name, key_level)
 );
 
+ ALTER TABLE t_tool drop parent_id, drop parent_type
+ Alter table t_tool create column series_id after id
+create table t_tool(
+	id				VARCHAR(255) primary key,
+	h_tier			h_tier tinyint DEFAULT 0,
+	x_tool_size		int,
+	y_tool_size		int,
+	name			varchar(255),
+	reg_dt			timestamp default current_timestamp(),
+	upt_dt			timestamp default current_timestamp() on update current_timestamp()
+);

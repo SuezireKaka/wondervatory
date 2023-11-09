@@ -21,9 +21,8 @@ public interface ToolMapper extends WonderMapper {
 			@Param("paging") PagingDTO paging);
 	-- deprecated : 아래 매소드로 전부 통합*/
 	
-	public List<ToolVO> listAllNextTools(
-			@Param("idPath") String idPath,
-			@Param("paging") PagingDTO paging);
+	public List<ToolVO> listAllNextTools(@Param("seriesId") String seriesId,
+			@Param("idPath") String idPath, @Param("paging") PagingDTO paging);
 	
 	public List<ToolVO> listAllSubtoolsOf(@Param("toolId") String toolId);
 	
@@ -35,7 +34,6 @@ public interface ToolMapper extends WonderMapper {
 	public int countPropertiesOf(@Param("objectId") String objectId);
 	
 	public ToolVO getToolById(@Param("toolId") String toolId);
-	public ToolVO getToolByEntity(@Param("entityId") String entityId);
 	
 	public int createToolSkin(@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);
 	

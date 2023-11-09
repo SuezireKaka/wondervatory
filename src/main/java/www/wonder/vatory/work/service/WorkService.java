@@ -155,14 +155,8 @@ public class WorkService {
 		
 		ReplyVO ret = (ReplyVO) oneDimList.get(0);
 		
-		if (ret.getHTier() == 0) {
-			((SeriesVO) ret).setGenreList(new ArrayList<GenreVO>());
-		}
-		
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
-		
-		
 		
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);

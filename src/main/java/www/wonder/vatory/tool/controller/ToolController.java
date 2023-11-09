@@ -39,11 +39,14 @@ public class ToolController {
 	} -- deprecated : path 접두사로 아래랑 통합*/
 
 	// /tool/listAllNextTools/path0000/1
-	@GetMapping("/listAllNextTools/{idPath}/{page}")
+	@GetMapping("/listAllNextTools/{seriesId}/{idPath}/{page}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(@PathVariable String idPath,
+	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(
+			@PathVariable String seriesId,
+			@PathVariable String idPath,
 			@PathVariable int page) {
-		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllNextTools(idPath, page);
+		DreamPair<List<ToolVO>, PagingDTO> result =
+				toolService.listAllNextTools(seriesId, idPath, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
