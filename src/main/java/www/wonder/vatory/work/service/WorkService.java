@@ -216,7 +216,7 @@ public class WorkService {
 			semiPost.setWriter(user);
 			semiPost.setId(semiPostId.substring(0, semiPostId.length() - 4));
 			cnt = workMapper.createSemiPost(semiPost, type);
-			cnt += genreMapper.createGenre(semiPost);
+			//cnt += genreMapper.createGenre(semiPost);
 			createTagRelation(semiPost);
 			attachFileService.createAttachFiles(semiPost);
 
@@ -225,7 +225,7 @@ public class WorkService {
 		else {
 			attachFileService.deleteAttachFiles(semiPost);
 			cnt = workMapper.updateSemiPost(semiPost, type);
-			cnt += genreMapper.updateGenre(semiPost);
+			//cnt += genreMapper.updateGenre(semiPost);
 			createTagRelation(semiPost);
 			attachFileService.createAttachFiles(semiPost);
 	
