@@ -186,7 +186,7 @@ create table t_work(
 	writer_id		char(4),
 	bb_id			char(4),
 	descrim			varchar(16),
-	h_level			tinyint,
+	h_tier			tinyint,
 	title			varchar(255),
 	content			text(10000),
 	read_cnt		int default 0,
@@ -385,7 +385,7 @@ MODIFY id VARCHAR(255); -- 컴포즈 패턴 형식으로 수정
 Modify h_tier TINYINT DEFAULT 0; -- 기본 레벨은 0
 create table t_tool(
 	id				VARCHAR(255) primary key,
-	h_tier			h_tier tinyint DEFAULT 0,
+	h_tier			tinyint DEFAULT 0,
 	x_tool_size		int,
 	y_tool_size		int,
 	name			varchar(255),
@@ -452,7 +452,7 @@ create table t_genre_work(
 	work_id		char(4),
 	genre_id	char(4)
 );
-create index idx_work_search on t_sys_genre(work_id);
+create index idx_work_search on t_genre_work(work_id);
 
  ALTER TABLE t_sys_genre Change genre_type genre VARCHAR(255)
  ALTER TABLE t_sys_genre Change genre_info info VARCHAR(255)
@@ -481,7 +481,7 @@ create table t_sys_remocon(
  Alter table t_tool create column series_id after id
 create table t_tool(
 	id				VARCHAR(255) primary key,
-	h_tier			h_tier tinyint DEFAULT 0,
+	h_tier			 tinyint DEFAULT 0,
 	x_tool_size		int,
 	y_tool_size		int,
 	name			varchar(255),

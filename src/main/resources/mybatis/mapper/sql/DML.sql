@@ -364,7 +364,8 @@ UPDATE t_sys_remocon sr
  WHERE sr.remocon_name = 'explorer_remocon';
 		
 		
-		
-		
+--이거 안적어둬서 확인필요 --
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "기타", "대충 설명0");
 		
 		
