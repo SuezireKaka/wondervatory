@@ -40,7 +40,6 @@
 	<!-- public int deleteToSync(@Param("workId") String id,
 			@Param("deleteList") List<GenreVO> deleteList); -->
 	<delete id="deleteToSync">
-		<if test="!(deleteList.isEmpty())">
 		DELETE grw.*
 		  FROM t_genre_work grw
 		 WHERE work_id = #{workId}
@@ -49,7 +48,6 @@
 		   (<foreach item="gen" collection="deleteList" separator=", ">
 				#{gen.id}
 			</foreach>)
-		</if>
 	</delete>
 	
 	

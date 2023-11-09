@@ -244,7 +244,13 @@ public class WorkService {
 		List<GenreVO> deleteList = prevGenreList.stream()
 				.filter(genre -> ! newGenreIdList.contains(genre.getId())).collect(Collectors.toList());
 		
-		return genreMapper.deleteToSync(id, deleteList) & genreMapper.insertToSync(id, insertList);
+		int result = 1;
+		
+		if (!deleteList.isEmpty()) {
+			result &= genreMapper.deleteToSync(id, deleteList);
+		}
+		
+		return result & genreMapper.insertToSync(id, insertList);
 	}
 
 	
