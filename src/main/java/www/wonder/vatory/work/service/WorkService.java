@@ -234,12 +234,17 @@ public class WorkService {
 
 	private int syncGenre(String id, List<GenreVO> genreTypesList) {
 		List<GenreVO> prevGenreList = genreMapper.listAllGenreOfSeries(id);
-		List<GenreVO> insertList = genreTypesList.stream()
-				.filter(genre -> ! prevGenreList.contains(genre)).collect(Collectors.toList());
-		List<GenreVO> deleteList = prevGenreList.stream()
-				.filter(genre -> ! genreTypesList.contains(genre)).collect(Collectors.toList());
+		List<String> prevGenreIdList = prevGenreList.stream()
+				.map(gen -> gen.getId()).collect(Collectors.toList());
+		List<String> newGenreIdList = genreTypesList.stream()
+				.map(gen -> gen.getId()).collect(Collectors.toList());
 		
-		return genreMapper.deleteToSync(id, insertList) & genreMapper.insertToSync(id, deleteList);
+		List<GenreVO> insertList = genreTypesList.stream()
+				.filter(genre -> ! prevGenreIdList.contains(genre.getId())).collect(Collectors.toList());
+		List<GenreVO> deleteList = prevGenreList.stream()
+				.filter(genre -> ! newGenreIdList.contains(genre.getId())).collect(Collectors.toList());
+		
+		return genreMapper.deleteToSync(id, deleteList) & genreMapper.insertToSync(id, insertList);
 	}
 
 	
