@@ -2,21 +2,20 @@ package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomEntityVO;
+import www.wonder.vatory.tool.model.CustomObjectVO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
-import www.wonder.vatory.work.model.SeriesVO;
 
 @Service
 public class ToolService {
@@ -76,21 +75,54 @@ public class ToolService {
 		return result;
 	}
 	
-	public int manageToolSkin(String seriesId, ToolVO toolSkin) {
-		int result = 1;
-		// 툴스킨의 id가 ----로 끝나면 create 아니면 uodate
+	public ToolVO manageToolSkin(AccountVO writer, String seriesId, ToolVO toolSkin) {
+		// 툴스킨의 id가 ----로 끝나면 create 아니면 update
 		String toolSkinId = toolSkin.getId();
 		if (toolSkinId.endsWith("----")) {
 			toolSkin.setId(toolSkin.getParentId());
-			result &= toolMapper.createToolSkin(toolSkin, seriesId);
+			toolMapper.createToolSkin(writer, toolSkin, seriesId);
 		}
 		else {
-			result &= toolMapper.updateToolSkin(toolSkin);
+			toolMapper.updateToolSkin(toolSkin);
 		}
-		return result;
+		return toolSkin;
+	}
+	
+	public ToolVO saveToolDetails(AccountVO writer, ToolVO toolData) {
+		// 일단 툴을 해부해서 바뀔 것만 꺼내보자
+		String toolId = toolData.getId();
+		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
+		List<CustomRelationVO> relationList = toolData.getCustomRelationList();
+		// 해부되어 나온 애들을 또 해부해서 담아보자
+		List<List<CustomPropertyVO>> entityPropList =
+				entityList.stream().map(entity -> {return entity.getCustomPropertiesList();})
+				.collect(Collectors.toList());
+		List<List<CustomPropertyVO>> relationPropList =
+				relationList.stream().map(relation -> {return relation.getCustomPropertiesList();})
+				.collect(Collectors.toList());
+		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
+		entityList.stream().forEach(entity -> {
+			syncEntitiesOf(toolId, entityList);
+		});
+		// 해당 정보를 syncPropertiesOf에 활용한다
+		return null;
+	}
+	
+	private int syncEntitiesOf(String toolId, List<CustomEntityVO> entityList) {
+		// requestList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 createList 생성
+		// 해당 툴의 객체들을 전부 가져오고 requestList랑 비교해서 delete리스트 생성
+		// 나머지는 그냥 업데이트 한다고 생각하자
+		return 0;
+	}
+	
+	private int syncRelationsOf(String toolId, List<CustomRelationVO> entityList) {
+		// requestList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 createList 생성
+		// 해당 툴의 객체들을 전부 가져오고 requestList랑 비교해서 delete리스트 생성
+		// 나머지는 그냥 업데이트 한다고 생각하자
+		return 0;
 	}
 
-	public int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
+	private int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
 		int result = 0;
 		int requestCount = requestList.size();
 		// 현재 들어있는 개수랑 비교해서 판단

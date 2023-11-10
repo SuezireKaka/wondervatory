@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import www.wonder.vatory.framework.mapper.WonderMapper;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
@@ -35,7 +36,8 @@ public interface ToolMapper extends WonderMapper {
 	
 	public ToolVO getToolById(@Param("toolId") String toolId);
 	
-	public int createToolSkin(@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);
+	public int createToolSkin(@Param("writer") AccountVO writer,
+			@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);
 	
 	public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
 			@Param("insertList") List<CustomPropertyVO> insertList);

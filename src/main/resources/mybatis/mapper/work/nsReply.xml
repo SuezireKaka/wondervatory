@@ -5,7 +5,13 @@
 
 <mapper namespace="www.wonder.vatory.work.mapper.WorkMapper">
 	<!-- resultMap : PROJECTION 결과를 객체 속성에 바인딩 -->
-	<resultMap id="rmReplyVO" extends="nsEntity.rmTimeEntity"
+	<resultMap id="rmWorkVO" extends="nsEntity.rmTimeEntity"
+		type="www.wonder.vatory.work.model.WorkVO">
+		<association property="writer" columnPrefix="acc_"
+				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />	
+	</resultMap>
+	
+	<resultMap id="rmReplyVO" extends="rmWorkVO"
 		type="www.wonder.vatory.work.model.ReplyVO">
 		<result property="content" column="content" />
 		<result property="readCount" column="read_cnt" />
@@ -14,8 +20,6 @@
 		<result property="favorites" column="favorites" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
-		<association property="writer" columnPrefix="acc_"
-				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />	
 		<discriminator javaType="String" column="descrim">
          	<case value="Series" resultMap="rmSeriesVO" />
          	<case value="Post" resultMap="rmPostVO" />
@@ -51,11 +55,16 @@
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
 	 		a.id acc_id, a.descrim acc_descrim,
 			a.login_id acc_login_id, a.nick acc_nick,
-	 		a.login_id acc_login_id, a.kakao_nick acc_kakao_nick
+	 		a.login_id acc_login_id, a.kakao_nick acc_kakao_nick,
+	 					gen.id gen_id, gen.genre gen_genre, gen.info gen_info
 	  from T_work w LEFT OUTER JOIN t_bb b
 	       ON w.bb_id = b.id
 	       LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
+	       	  LEFT OUTER JOIN t_genre_work rel
+	    ON w.id = rel.work_id
+	  LEFT OUTER JOIN t_sys_genre gen
+	    ON rel.genre_id = gen.id
 	where w.bb_id = #{boardId}
 	  and w.descrim = 'Series'
 	 order by w.id DESC

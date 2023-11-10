@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="www.wonder.vatory.tool.mapper.ToolMapper">
-	<resultMap id="rmToolVO" extends="nsEntity.rmTimeEntity"
+	<resultMap id="rmToolVO" extends="www.wonder.vatory.work.mapper.WorkMapper.rmWorkVO"
 		type="www.wonder.vatory.tool.model.ToolVO">
 		<result property="name" column="name" />
 		<result property="xToolSize" column="x_tool_size" />
@@ -59,11 +59,13 @@
 	<!-- public List<ToolVO> listAllNextTools(@Param("seriesId") String seriesId,
 			@Param("idPath") String idPath, @Param("paging") PagingDTO paging);; -->
 	<select id="listAllNextTools" resultMap="rmToolVO">
-		SELECT SQL_CALC_FOUND_ROWS *
-		  from t_tool
-		 where series_id = #{seriesId}
-		   and id like CONCAT(#{idPath}, '____')
-		 order by id DESC
+		SELECT SQL_CALC_FOUND_ROWS t.*, acc.id acc_id, acc.descrim acc_descrim
+		  from t_tool t
+		  Left outer join t_account acc
+		    on t.writer_id = acc.id
+		 where t.series_id = #{seriesId}
+		   and t.id like CONCAT(#{idPath}, '____')
+		 order by t.id DESC
 		 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
 	
@@ -92,8 +94,10 @@
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
 		SELECT rel.*,
+			one.descrim one_descrim,
 			one.x_pos one_x_pos, one.y_pos one_y_pos,
 			one.x_size one_x_size, one.y_size one_y_size,
+			other.descrim other_descrim,
 			other.x_pos other_x_pos, other.y_pos other_y_pos,
 			other.x_size other_x_size, other.y_size other_y_size
 		  from t_custom_obj rel, t_custom_obj one, t_custom_obj other
@@ -104,18 +108,21 @@
 	
 	<!-- public ToolVO getToolById(@Param("toolId") String toolId); -->
 	<select id="getToolById" resultMap="rmToolVO">
-		SELECT *
-		  from t_tool
-		 where id = #{toolId}
+		SELECT t.*, acc.id acc_id, acc.descrim acc_descrim
+		  from t_tool t
+		  Left outer join t_account acc
+		    on t.writer_id = acc.id
+		 where t.id = #{toolId}
 	</select>
 	
-	<!-- public int createToolSkin(@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);-->
+	<!-- public int createToolSkin(@Param("writer") AccountVO writer,
+			@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);-->
 	<insert id="createToolSkin">
-		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+		<selectKey keyProperty="toolSkin.id" resultType="String" order="BEFORE">
     		select concat(#{toolSkin.id}, NEXT_PK('s_tool'))
   		</selectKey>
-		INSERT INTO t_tool(id, series_id, h_tier, x_tool_size, y_tool_size, NAME)
-		VALUES (#{id}, #{seriesId}, #{toolSkin.hTier}, #{toolSkin.xToolSize}, #{toolSkin.yToolSize}, #{toolSkin.name})
+		INSERT INTO t_tool(id, series_id, writer_id, h_tier, x_tool_size, y_tool_size, NAME)
+		VALUES (#{toolSkin.id}, #{seriesId}, #{writer.id}, #{toolSkin.hTier}, #{toolSkin.xToolSize}, #{toolSkin.yToolSize}, #{toolSkin.name})
 	</insert>
 	
 	<!-- public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,

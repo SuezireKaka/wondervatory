@@ -479,9 +479,12 @@ create table t_sys_remocon(
 );
 
  ALTER TABLE t_tool drop parent_id, drop parent_type
- Alter table t_tool create column series_id after id
+ Alter table t_tool add column series_id char(4) after id
+ Alter table t_tool add column writer_id char(4) after series_id
 create table t_tool(
 	id				VARCHAR(255) primary key,
+	series_id		char(4),
+	writer_id		char(4),
 	h_tier			 tinyint DEFAULT 0,
 	x_tool_size		int,
 	y_tool_size		int,

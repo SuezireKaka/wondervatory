@@ -8,16 +8,16 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import www.wonder.vatory.framework.model.TimeEntity;
+import www.wonder.vatory.work.model.WorkVO;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ToolVO extends TimeEntity {
-	String name;
-	int xToolSize;
-	int yToolSize;
-	List<CustomEntityVO> customEntityList = new ArrayList<>();
-	List<CustomRelationVO> customRelationList = new ArrayList<>();
+public class ToolVO extends WorkVO {
+	private String name;
+	private int xToolSize;
+	private int yToolSize;
+	private List<CustomEntityVO> customEntityList = new ArrayList<>();
+	private List<CustomRelationVO> customRelationList = new ArrayList<>();
 }
