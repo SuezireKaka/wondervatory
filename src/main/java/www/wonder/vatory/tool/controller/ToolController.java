@@ -108,10 +108,11 @@ public class ToolController {
 	// /tool/saveToolDetails/
 	@PostMapping("/saveToolDetails/")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> saveToolDetails(@AuthenticationPrincipal AccountVO writer,
+	public ResponseEntity<ToolVO> saveToolDetails(@AuthenticationPrincipal AccountVO writer,
 			@RequestBody ToolVO toolData) {
 		if (writer.getId().equals(toolData.getWriter().getId())) {
-			return new ResponseEntity<>(0, HttpStatus.OK);
+			ToolVO result = toolService.saveToolDetails(writer, toolData);
+			return new ResponseEntity<>(new ToolVO(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
