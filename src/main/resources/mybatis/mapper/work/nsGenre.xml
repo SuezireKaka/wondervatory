@@ -29,13 +29,11 @@
 	<!-- public int insertToSync(@Param("workId") String genreId,
 			@Param("insertList") List<GenreVO> insertList); -->
 	<insert id="insertToSync">
-		<if test="!(insertList.isEmpty())">
-			INSERT INTO t_genre_work(work_id, genre_id)
-			VALUES
-			<foreach item="gen" collection="insertList" separator=", " close=";">
-				(#{workId}, #{gen.id})
-			</foreach>
-		</if>
+		INSERT INTO t_genre_work(work_id, genre_id)
+		VALUES
+		<foreach item="gen" collection="insertList" separator=", " close=";">
+			(#{workId}, #{gen.id})
+		</foreach>
 	</insert>
 	<!-- public int deleteToSync(@Param("workId") String id,
 			@Param("deleteList") List<GenreVO> deleteList); -->
