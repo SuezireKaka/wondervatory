@@ -5,7 +5,13 @@
 
 <mapper namespace="www.wonder.vatory.work.mapper.WorkMapper">
 	<!-- resultMap : PROJECTION 결과를 객체 속성에 바인딩 -->
-	<resultMap id="rmReplyVO" extends="nsEntity.rmTimeEntity"
+	<resultMap id="rmWorkVO" extends="nsEntity.rmTimeEntity"
+		type="www.wonder.vatory.work.model.WorkVO">
+		<association property="writer" columnPrefix="acc_"
+				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />	
+	</resultMap>
+	
+	<resultMap id="rmReplyVO" extends="rmWorkVO"
 		type="www.wonder.vatory.work.model.ReplyVO">
 		<result property="content" column="content" />
 		<result property="readCount" column="read_cnt" />
@@ -14,8 +20,6 @@
 		<result property="favorites" column="favorites" />
 		<association property="boardVO" columnPrefix="bb_"
 				resultMap="www.wonder.vatory.work.mapper.BoardMapper.rmBoardVO" />
-		<association property="writer" columnPrefix="acc_"
-				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />	
 		<discriminator javaType="String" column="descrim">
          	<case value="Series" resultMap="rmSeriesVO" />
          	<case value="Post" resultMap="rmPostVO" />

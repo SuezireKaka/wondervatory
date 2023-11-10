@@ -29,24 +29,26 @@ public class ToolController {
 	@Autowired
 	private ToolService toolService;
 
-	/* // /tool/listAllFromSeries/0000/1
-	@GetMapping("/listAllFromSeries/{seriesId}/{page}")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllFromSeries(@PathVariable String seriesId,
-			@PathVariable int page) {
-		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllFromSeries(seriesId, page);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	} -- deprecated : path 접두사로 아래랑 통합*/
+	/*
+	 * // /tool/listAllFromSeries/0000/1
+	 * 
+	 * @GetMapping("/listAllFromSeries/{seriesId}/{page}")
+	 * 
+	 * @PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	 * public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>>
+	 * listAllFromSeries(@PathVariable String seriesId,
+	 * 
+	 * @PathVariable int page) { DreamPair<List<ToolVO>, PagingDTO> result =
+	 * toolService.listAllFromSeries(seriesId, page); return new
+	 * ResponseEntity<>(result, HttpStatus.OK); } -- deprecated : path 접두사로 아래랑 통합
+	 */
 
-	// /tool/listAllNextTools/path0000/1
+	// /tool/listAllNextTools/0000/path0000/1
 	@GetMapping("/listAllNextTools/{seriesId}/{idPath}/{page}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(
-			@PathVariable String seriesId,
-			@PathVariable String idPath,
-			@PathVariable int page) {
-		DreamPair<List<ToolVO>, PagingDTO> result =
-				toolService.listAllNextTools(seriesId, idPath, page);
+	public ResponseEntity<DreamPair<List<ToolVO>, PagingDTO>> listAllNextTools(@PathVariable String seriesId,
+			@PathVariable String idPath, @PathVariable int page) {
+		DreamPair<List<ToolVO>, PagingDTO> result = toolService.listAllNextTools(seriesId, idPath, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -94,9 +96,24 @@ public class ToolController {
 	// /tool/manageToolSkin/0000
 	@PostMapping("/manageToolSkin/{seriesId}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> manageToolSkin(@AuthenticationPrincipal AccountVO owner,
+	public ResponseEntity<ToolVO> manageToolSkin(@AuthenticationPrincipal AccountVO writer,
 			@RequestBody ToolVO toolSkin, @PathVariable String seriesId) {
-		int result = toolService.manageToolSkin(seriesId, toolSkin);
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		if (writer.getId().equals(toolSkin.getWriter().getId())) {
+			ToolVO result = toolService.manageToolSkin(writer, seriesId, toolSkin);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
+
+	// /tool/saveToolDetails/
+	@PostMapping("/saveToolDetails/")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<Integer> saveToolDetails(@AuthenticationPrincipal AccountVO writer,
+			@RequestBody ToolVO toolData) {
+		if (writer.getId().equals(toolData.getWriter().getId())) {
+			return new ResponseEntity<>(0, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
 }

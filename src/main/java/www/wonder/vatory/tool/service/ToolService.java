@@ -2,21 +2,19 @@ package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomPropertyVO;
 import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
-import www.wonder.vatory.work.model.SeriesVO;
 
 @Service
 public class ToolService {
@@ -76,18 +74,17 @@ public class ToolService {
 		return result;
 	}
 	
-	public int manageToolSkin(String seriesId, ToolVO toolSkin) {
-		int result = 1;
-		// 툴스킨의 id가 ----로 끝나면 create 아니면 uodate
+	public ToolVO manageToolSkin(AccountVO writer, String seriesId, ToolVO toolSkin) {
+		// 툴스킨의 id가 ----로 끝나면 create 아니면 update
 		String toolSkinId = toolSkin.getId();
 		if (toolSkinId.endsWith("----")) {
 			toolSkin.setId(toolSkin.getParentId());
-			result &= toolMapper.createToolSkin(toolSkin, seriesId);
+			toolMapper.createToolSkin(writer, toolSkin, seriesId);
 		}
 		else {
-			result &= toolMapper.updateToolSkin(toolSkin);
+			toolMapper.updateToolSkin(toolSkin);
 		}
-		return result;
+		return toolSkin;
 	}
 
 	public int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
