@@ -364,8 +364,35 @@ UPDATE t_sys_remocon sr
  WHERE sr.remocon_name = 'explorer_remocon';
 		
 		
---이거 안적어둬서 확인필요 --
+-- --
 insert into t_sys_genre(id, genre, info)
-values(NEXT_PK('s_genre'), "기타", "대충 설명0");
-		
-		
+values(NEXT_PK('s_genre'), "기타", "대충 설명 0");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "판타지", "대충 설명 1");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "액션", "대충 설명 2");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "일상", "대충 설명 3");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "스릴러", "대충 설명 4");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "개그", "대충 설명 5");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "드라마", "대충 설명 6");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "스포츠", "대충 설명 7");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "현대판타지", "대충 설명 8");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "퓨전", "대충 설명 9");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "무협", "대충 설명 10");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "대체역사", "대충 설명 11");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "로맨스", "대충 설명 12");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "게임", "대충 설명 13");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "사극", "대충 설명 14");
+
