@@ -361,6 +361,7 @@ create table t_account(
 	kakao_nick	varchar(255),
 	intro		varchar(255),
 	login_code	TINYINT(4) DEFAULT '1',
+	alive		TINYINT(4) DEFAULT '1',
 	reg_dt		timestamp default current_timestamp(),
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
 );
