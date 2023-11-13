@@ -50,7 +50,7 @@
 		SELECT FOUND_ROWS()
 	</select> -->
 
-	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page); -->
+	<!-- public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> listAllSeries(@PathVariable String boardId, @PathVariable int page, String genreId); -->
 	<select id="listAllSeries" resultMap="rmSeriesVO">
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
 	 		a.id acc_id, a.descrim acc_descrim,
@@ -67,6 +67,7 @@
 	    ON rel.genre_id = gen.id
 	where w.bb_id = #{boardId}
 	  and w.descrim = 'Series'
+	  	  AND (#{genreId} is null or gen.id = #{genreId})
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>

@@ -17,7 +17,7 @@ import www.wonder.vatory.work.model.SeriesVO;
 public interface WorkMapper extends WonderMapper {
 
 	public List<SeriesVO> listAllSeries(@Param("boardId") String boardId,
-			@Param("paging") PagingDTO paging);
+			@Param("paging") PagingDTO paging, String genreId);
 	public List<PostVO> listAllPost(@Param("seriesId") String seriesId,
 			@Param("paging") PagingDTO paging);
 	public List<SeriesVO> listUserSeries(@Param("id") String id,
