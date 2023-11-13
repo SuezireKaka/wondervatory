@@ -56,7 +56,7 @@
 	 		a.id acc_id, a.descrim acc_descrim,
 			a.login_id acc_login_id, a.nick acc_nick,
 	 		a.login_id acc_login_id, a.kakao_nick acc_kakao_nick,
-	 					gen.id gen_id, gen.genre gen_genre, gen.info gen_info
+	 		gen.id gen_id, gen.genre gen_genre, gen.info gen_info
 	  from T_work w LEFT OUTER JOIN t_bb b
 	       ON w.bb_id = b.id
 	       LEFT OUTER JOIN t_account a
@@ -67,7 +67,9 @@
 	    ON rel.genre_id = gen.id
 	where w.bb_id = #{boardId}
 	  and w.descrim = 'Series'
-	  	  AND (#{genreId} is null or gen.id = #{genreId})
+	  <if test="! genreId.isEmpty()">
+	  	and gen.id = #{genreId}
+	  </if>
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
