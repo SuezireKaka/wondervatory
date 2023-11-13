@@ -492,3 +492,27 @@ create table t_tool(
 	reg_dt			timestamp default current_timestamp(),
 	upt_dt			timestamp default current_timestamp() on update current_timestamp()
 );
+
+-- 2023-11-13 -----------------------------
+
+create table t_read(
+	id			char(8) primary key, /* t_squence 두 개를 이용 */
+	reader_id	char(4),
+	readee_id	varchar(8),
+	time		timestamp default current_timestamp()
+);
+
+-- 1. id가 필요한가? 2. 아예 엘라스틱 서치에다 넣는 게 낫지 않나?
+-- 1. 필요 없어보임 2. 이게 수입이랑 엮인다고 생각하면 무결성이 엄청 중요해져서 DB가 나은 듯
+
+ alter table t_read drop column id
+create table t_read(
+	reader_id	char(4),
+	readee_id	varchar(8),
+	time		timestamp default current_timestamp()
+);
+
+
+
+
+

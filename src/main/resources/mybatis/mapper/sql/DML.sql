@@ -396,3 +396,23 @@ values(NEXT_PK('s_genre'), "게임", "대충 설명 13");
 insert into t_sys_genre(id, genre, info)
 values(NEXT_PK('s_genre'), "사극", "대충 설명 14");
 
+
+-- 2023-11-13 ------------------
+
+-- t_read.id 생성 쿼리
+SELECT concat(ids_q.SEED, ids_r.SEED) id
+  FROM t_idseed ids_q, t_idseed ids_r,
+      /* 다음 수의 몫과 나머지를 구하기 */
+  		(select FLOOR(next_num.val / total_num.val) + 1 front,
+  					next_num.val % total_num.val + 1 back
+		   FROM
+		   	(SELECT ifnull(COUNT(id), 0) + 1 val
+  					FROM t_read rid) next_num,
+  				(SELECT COUNT(SEQ) val
+  					FROM t_idseed) total_num
+		) countid
+ WHERE ids_q.SEQ = countid.front
+   AND ids_r.SEQ = countid.back
+   
+-- 근데 생각해보니까 t_read에 id가 왜 필요하지???
+

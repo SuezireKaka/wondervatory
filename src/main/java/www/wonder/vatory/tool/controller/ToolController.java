@@ -112,7 +112,7 @@ public class ToolController {
 			@RequestBody ToolVO toolData) {
 		if (writer.getId().equals(toolData.getWriter().getId())) {
 			ToolVO result = toolService.saveToolDetails(writer, toolData);
-			return new ResponseEntity<>(new ToolVO(), HttpStatus.OK);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}

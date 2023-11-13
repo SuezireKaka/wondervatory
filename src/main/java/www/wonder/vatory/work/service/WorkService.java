@@ -243,7 +243,7 @@ public class WorkService {
 		if (!deleteList.isEmpty()) {
 			result &= genreMapper.deleteToSync(id, deleteList);
 		}
-		if (!deleteList.isEmpty()) {
+		if (!insertList.isEmpty()) {
 			result &=genreMapper.insertToSync(id, insertList);
 		}
 		
