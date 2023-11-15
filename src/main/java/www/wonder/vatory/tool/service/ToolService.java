@@ -2,6 +2,7 @@ package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.tool.mapper.CustomObjectMapper;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomEntityVO;
 import www.wonder.vatory.tool.model.CustomObjectVO;
@@ -21,6 +23,9 @@ import www.wonder.vatory.tool.model.ToolVO;
 public class ToolService {
 	@Autowired(required = false)
 	private ToolMapper toolMapper;
+	
+	@Autowired(required = false)
+	private CustomObjectMapper customObjectMapper;
 
 	/* 시리즈의 모든 툴 직접 붙어있는 조회 
 	public DreamPair<List<ToolVO>, PagingDTO> listAllFromSeries(String seriesId, int page) {
@@ -55,20 +60,20 @@ public class ToolService {
 
 	public ToolVO getToolById(String toolId) {
 		ToolVO result = toolMapper.getToolById(toolId);
-		List<CustomEntityVO> resEntityList = toolMapper.listAllEntity(toolId);
+		List<CustomEntityVO> resEntityList = customObjectMapper.listAllEntity(toolId);
 		resEntityList.stream()
 			.forEach(entity -> {entity
 				.getCustomPropertiesList()
-				.addAll(toolMapper.listPropertiesOf(entity.getId()));
+				.addAll(customObjectMapper.listPropertiesOf(entity.getId()));
 			}
 		);
 		result.getCustomEntityList().addAll(resEntityList);
 		
-		List<CustomRelationVO> resRelationList = toolMapper.listAllRelation(toolId);
+		List<CustomRelationVO> resRelationList = customObjectMapper.listAllRelation(toolId);
 		resRelationList.stream()
 			.forEach(relation -> {relation
 				.getCustomPropertiesList()
-				.addAll(toolMapper.listPropertiesOf(relation.getId()));
+				.addAll(customObjectMapper.listPropertiesOf(relation.getId()));
 			}
 		);
 		result.getCustomRelationList().addAll(resRelationList);
@@ -91,8 +96,17 @@ public class ToolService {
 	public ToolVO saveToolDetails(AccountVO writer, ToolVO toolData) {
 		// 일단 툴을 해부해서 바뀔 것만 꺼내보자
 		String toolId = toolData.getId();
-		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
-		List<CustomRelationVO> relationList = toolData.getCustomRelationList();
+		int newXToolSize = toolData.getXToolSize();
+		int newYToolSize = toolData.getYToolSize();
+		
+		toolMapper.updateToolSkin(toolData);
+		
+		List<CustomObjectVO> entityList = toolData.getCustomEntityList().stream()
+				.map(entity -> (CustomObjectVO) entity)
+				.collect(Collectors.toList());
+		List<CustomObjectVO> relationList = toolData.getCustomRelationList().stream()
+				.map(relation -> (CustomObjectVO) relation)
+				.collect(Collectors.toList());
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
 				entityList.stream().map(entity -> {return entity.getCustomPropertiesList();})
@@ -101,24 +115,41 @@ public class ToolService {
 				relationList.stream().map(relation -> {return relation.getCustomPropertiesList();})
 				.collect(Collectors.toList());
 		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
-		entityList.stream().forEach(entity -> {
-			syncEntitiesOf(toolId, entityList);
-		});
+		syncObjetsOf(toolId, "Entity", entityList);
+		
+		syncObjetsOf(toolId, "Relation", relationList);
 		// 해당 정보를 syncPropertiesOf에 활용한다
-		return null;
+		return toolData;
 	}
 	
-	private int syncEntitiesOf(String toolId, List<CustomEntityVO> entityList) {
-		// requestList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 createList 생성
-		// 해당 툴의 객체들을 전부 가져오고 requestList랑 비교해서 delete리스트 생성
-		// 나머지는 그냥 업데이트 한다고 생각하자
-		return 0;
-	}
-	
-	private int syncRelationsOf(String toolId, List<CustomRelationVO> entityList) {
-		// requestList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 createList 생성
-		// 해당 툴의 객체들을 전부 가져오고 requestList랑 비교해서 delete리스트 생성
-		// 나머지는 그냥 업데이트 한다고 생각하자
+	private int syncObjetsOf(String toolId, String type,
+			List<CustomObjectVO> objectList) {
+
+		Optional<Boolean> isAllNew = objectList.stream()
+				.map(obj -> obj.getId().startsWith("----"))
+				.reduce((isNew1, isNew2) -> isNew1 && isNew2);
+		// 다 새로우면 아래 과정은 할 필요 없음
+		if (! isAllNew.get()) {
+			// 해당 툴의 객체들을 전부 가져오고
+			List<CustomObjectVO> prevObjectList = customObjectMapper.listAllObject(toolId);
+			// 새 엔티티 리스트에 없는 애들을 deleteList로 
+			List<String> objectIdList = objectList.stream()
+					.map(obj -> obj.getId())
+					.collect(Collectors.toList());
+			List<CustomObjectVO> deleteList = prevObjectList.stream()
+					.filter(obj -> ! objectIdList.contains(obj.getId()))
+					.collect(Collectors.toList());
+			List<CustomObjectVO> updateList = prevObjectList.stream()
+					.filter(obj -> ! objectIdList.contains(obj.getId()))
+					.collect(Collectors.toList());
+		}
+		// objectList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 insertList 생성
+		List<CustomObjectVO> insertList = objectList.stream()
+				.filter(obj -> obj.getId().startsWith("----"))
+				.collect(Collectors.toList());
+		
+		customObjectMapper.insertObjectsToSync(toolId, type, insertList);
+		
 		return 0;
 	}
 
@@ -126,7 +157,7 @@ public class ToolService {
 		int result = 0;
 		int requestCount = requestList.size();
 		// 현재 들어있는 개수랑 비교해서 판단
-		int prevCount = toolMapper.countPropertiesOf(objectId);
+		int prevCount = customObjectMapper.countPropertiesOf(objectId);
 		
 		if (requestCount > prevCount) {
 			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
@@ -141,12 +172,12 @@ public class ToolService {
 		    List<CustomPropertyVO> updateList = listOfLists.get(0);
 		    List<CustomPropertyVO> insertList = listOfLists.get(1);
 		    
-		    result = toolMapper.updateAllPropsFrom(objectId, updateList)
-		    	& toolMapper.insertToSync(objectId, updateList.size(), insertList);
+		    result = customObjectMapper.updateAllPropsFrom(objectId, updateList)
+		    	& customObjectMapper.insertPropsToSync(objectId, updateList.size(), insertList);
 		}
 		else {
-			result = toolMapper.deleteToSync(objectId, requestCount)
-				& toolMapper.updateAllPropsFrom(objectId, requestList);
+			result = customObjectMapper.deletePropsToSync(objectId, requestCount)
+				& customObjectMapper.updateAllPropsFrom(objectId, requestList);
 		}
 		
 		return result;

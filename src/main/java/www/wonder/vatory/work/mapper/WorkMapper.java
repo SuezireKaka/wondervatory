@@ -27,8 +27,8 @@ public interface WorkMapper extends WonderMapper {
 	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);
 	
-	public List<ReplyVO> findSeriesById(String id);
-	public List<ReplyVO> findPostById(String id);
+	public List<SemiPostVO> findSeriesById(String id);
+	public List<SemiPostVO> findPostById(String id);
 	public void incReadCount(String id);
 	
 	public PostVO getPrev(String parentId, String id);

@@ -11,38 +11,6 @@
 		<result property="yToolSize" column="y_tool_size" />
 	</resultMap>
 	
-	<resultMap id="rmCustomObjectVO" extends="nsEntity.rmSpaceEntity"
-		type="www.wonder.vatory.tool.model.CustomObjectVO">
-		<result property="name" column="name" />
-		<collection property="customPropertiesList" columnPrefix="prop_"
-			resultMap="rmCustomPropertyVO">
-		</collection>
-		<discriminator javaType="String" column="descrim">
-         	<case value="Entity" resultMap="rmCustomEntityVO" />
-         	<case value="Relation" resultMap="rmCustomRelationVO" />
-        </discriminator>
-	</resultMap>
-	
-	<resultMap id="rmCustomEntityVO" extends="rmCustomObjectVO"
-		type="www.wonder.vatory.tool.model.CustomEntityVO">
-		<association property="childTool" columnPrefix="c_tol_"
-				resultMap="rmToolVO" />
-	</resultMap>
-	
-	<resultMap id="rmCustomRelationVO" extends="rmCustomObjectVO"
-		type="www.wonder.vatory.tool.model.CustomRelationVO">
-		<association property="one" columnPrefix="one_" notNullColumn="id"
-				resultMap="rmCustomObjectVO" />
-		<association property="other" columnPrefix="other_" notNullColumn="id"
-				resultMap="rmCustomObjectVO" />
-	</resultMap>
-	
-	<resultMap id="rmCustomPropertyVO"
-		type="www.wonder.vatory.tool.model.CustomPropertyVO">
-		<result property="propType" column="prop_type" />
-		<result property="propVal" column="prop_val" />
-	</resultMap>
-	
 	<!-- public List<ToolVO> listAllFromSeries(
 			@Param("seriesId") String seriesId,
 			@Param("page") int page);
@@ -57,7 +25,7 @@
 	→ deprecated : 아래 매소드로 전부 통합  -->
 	
 	<!-- public List<ToolVO> listAllNextTools(@Param("seriesId") String seriesId,
-			@Param("idPath") String idPath, @Param("paging") PagingDTO paging);; -->
+			@Param("idPath") String idPath, @Param("paging") PagingDTO paging); -->
 	<select id="listAllNextTools" resultMap="rmToolVO">
 		SELECT SQL_CALC_FOUND_ROWS t.*, acc.id acc_id, acc.descrim acc_descrim
 		  from t_tool t
@@ -67,43 +35,6 @@
 		   and t.id like CONCAT(#{idPath}, '____')
 		 order by t.id DESC
 		 limit #{paging.seriesLimit} offset #{paging.offset}
-	</select>
-	
-	<!-- public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);  -->
-	<select id="listAllEntity" resultMap="rmCustomEntityVO">
-		SELECT *
-		  from t_custom_obj
-		 where parent_id = #{toolId}
-		   and descrim = 'Entity'
-	</select>
-	
-	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
-	<select id="listPropertiesOf" resultMap="rmCustomPropertyVO">
-		SELECT *
-		  from t_custom_property
-		 where owner_id = #{objectId}
-	</select>
-	
-	<!-- public int countPropertiesOf(@Param("objectId") String objectId); -->
-	<select id="countPropertiesOf">
-		SELECT count(*)
-		  from t_custom_property
-		 where owner_id = #{objectId}
-	</select>
-	
-	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
-	<select id="listAllRelation" resultMap="rmCustomRelationVO">
-		SELECT rel.*,
-			one.descrim one_descrim,
-			one.x_pos one_x_pos, one.y_pos one_y_pos,
-			one.x_size one_x_size, one.y_size one_y_size,
-			other.descrim other_descrim,
-			other.x_pos other_x_pos, other.y_pos other_y_pos,
-			other.x_size other_x_size, other.y_size other_y_size
-		  from t_custom_obj rel, t_custom_obj one, t_custom_obj other
-		 where rel.parent_id = #{toolId}
-		   and one.id = rel.one_id
-		   and other.id = rel.other_id
 	</select>
 	
 	<!-- public ToolVO getToolById(@Param("toolId") String toolId); -->
@@ -125,18 +56,6 @@
 		VALUES (#{toolSkin.id}, #{seriesId}, #{writer.id}, #{toolSkin.hTier}, #{toolSkin.xToolSize}, #{toolSkin.yToolSize}, #{toolSkin.name})
 	</insert>
 	
-	<!-- public int insertToSync(@Param("objectId") String objectId, @Param("offset") int offset,
-			@Param("insertList") List<CustomPropertyDTO> insertList);-->
-	<insert id="insertToSync">
-		<if test="!(insertList.isEmpty())">
-			INSERT INTO t_custom_property(owner_id, level, prop_type, prop_val)
-			VALUES
-			<foreach item="prop" collection="insertList" separator="," index="index" close=";">
-				(#{objectId}, (#{index} + #{offset}), #{prop.propType}, #{prop.propVal})
-			</foreach>
-		</if>
-	</insert>
-	
 	<!-- public int updateToolSkin(@Param("toolSkin") ToolVO toolSkin);-->
 	<update id="updateToolSkin">
 		UPDATE t_tool
@@ -145,37 +64,5 @@
 		       y_tool_size = #{toolSkin.yToolSize}
 		 where id = #{toolSkin.id}
 	</update>
-	
-	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,
-			@Param("updateList") List<CustomPropertyDTO> updateList);-->
-	<update id="updateAllPropsFrom">
-		<if test="!(updateList.isEmpty())">
-			UPDATE t_custom_property prop
-			  JOIN (
-			<foreach item="prop" collection="updateList" separator=" UNION ALL " index="index" close=")">
-			<if test="prop.isEdited">
-			  <choose>
-			    <when test = "index == 0">
-				  SELECT #{index} as LEVEL, #{prop.propType} as prop_type, #{prop.propVal} as prop_val
-			    </when>
-			    <otherwise>
-				  SELECT #{index}, #{prop.propType}, #{prop.propVal}
-			    </otherwise>
-			  </choose>
-			</if>
-			</foreach> vals ON prop.level = vals.level
-			   SET prop.prop_type = vals.prop_type, prop.prop_val = vals.prop_val
-			 WHERE prop.owner_id = #{objectId}
-		</if>
-	</update>
-	
-	<!-- public int deleteToSync(@Param("objectId") String objectId,
-			@Param("border") long border);-->
-	<delete id="deleteToSync">
-		DELETE prop.*
-		  from t_custom_property prop
-		 where prop.owner_id = #{objectId}
-		   and prop.level >= ${border}
-	</delete>
 
 </mapper>

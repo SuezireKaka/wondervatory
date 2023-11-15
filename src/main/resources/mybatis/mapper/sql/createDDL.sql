@@ -471,8 +471,7 @@ create table t_sys_remocon(
 	remocon_name	varchar(32) not null,
 	key_level		tinyint not null,
 	key_name		varchar(16) not null,
-	key_use			varchar(8) not null,
-	key_click_cnt	tinyint default 1,
+	key_info		VARCHAR(255),
 	key_auth		VARCHAR(64),
 	key_immedi 		TINYINT NOT null DEFAULT 0,
 	primary key(remocon_name, key_level)
@@ -511,6 +510,38 @@ create table t_read(
 	readee_id	varchar(8),
 	time		timestamp default current_timestamp()
 );
+
+
+-- 2023-11-15 -----------------------------
+
+
+
+ Alter table t_custom_obj
+   add column text_color char(7) after outer_color
+create table t_custom_obj(
+	id				char(4) primary key,
+	descrim			varchar(16),
+	x_pos			int,
+	y_pos			int,
+	x_size			int,
+	y_size			int,
+	name			varchar(255),
+	inner_color		char(7),
+	outer_color		char(7),
+	text_color		char(7),
+	parent_id		char(4),
+	one_id			char(4),
+	other_id		char(4)
+);
+
+
+
+
+
+
+
+
+
 
 
 

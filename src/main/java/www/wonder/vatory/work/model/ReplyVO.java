@@ -29,7 +29,6 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 	private AccountVO writer;	//게시물 작성자
 	@TargetProperty
 	private String content;	//내용, series에서는 줄거리
-	private int readCount;
 	private int likeCount; //series는 post 총합
 	private int dislikeCount; //series는 post 총합
 	
@@ -46,10 +45,6 @@ public class ReplyVO extends TimeEntity implements MappedTableDef {
 
 	public void appendReply(ReplyVO reply) {
 		repliesList.add(reply);
-	}
-	
-	public void incReadCount() {
-		readCount++;
 	}
 	
 	public void incLikeCount() {

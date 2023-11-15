@@ -27,5 +27,6 @@
 		<result property="ySize" column="y_size" />
 		<result property="innerColor" column="inner_color" />
 		<result property="outerColor" column="outer_color" />
+		<result property="textColor" column="text_color" />
 	</resultMap>
 </mapper>

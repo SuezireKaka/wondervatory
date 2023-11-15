@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.tool.mapper.CustomObjectMapper">
+	
+	<resultMap id="rmCustomObjectVO" extends="nsEntity.rmSpaceEntity"
+		type="www.wonder.vatory.tool.model.CustomObjectVO">
+		<result property="name" column="name" />
+		<collection property="customPropertiesList" columnPrefix="prop_"
+			resultMap="rmCustomPropertyVO">
+		</collection>
+		<discriminator javaType="String" column="descrim">
+         	<case value="Entity" resultMap="rmCustomEntityVO" />
+         	<case value="Relation" resultMap="rmCustomRelationVO" />
+        </discriminator>
+	</resultMap>
+	
+	<resultMap id="rmCustomEntityVO" extends="rmCustomObjectVO"
+		type="www.wonder.vatory.tool.model.CustomEntityVO">
+		<association property="childTool" columnPrefix="c_tool_"
+				resultMap="rmToolVO" />
+	</resultMap>
+	
+	<resultMap id="rmCustomRelationVO" extends="rmCustomObjectVO"
+		type="www.wonder.vatory.tool.model.CustomRelationVO">
+		<association property="one" columnPrefix="one_" notNullColumn="id"
+				resultMap="rmCustomObjectVO" />
+		<association property="other" columnPrefix="other_" notNullColumn="id"
+				resultMap="rmCustomObjectVO" />
+	</resultMap>
+	
+	<resultMap id="rmCustomPropertyVO"
+		type="www.wonder.vatory.tool.model.CustomPropertyVO">
+		<result property="propType" column="prop_type" />
+		<result property="propVal" column="prop_val" />
+	</resultMap>
+
+	<!-- public List<CustomObjectVO> listAllObject(@Param("toolId") String toolId);  -->
+	<select id="listAllObject" resultMap="rmCustomObjectVO">
+		SELECT *
+		  from t_custom_obj
+		 where parent_id = #{toolId}
+		   and descrim = 'Entity'
+	</select>
+	
+	<!-- public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);  -->
+	<select id="listAllEntity" resultMap="rmCustomEntityVO">
+		SELECT *
+		  from t_custom_obj
+		 where parent_id = #{toolId}
+		   and descrim = 'Entity'
+	</select>
+
+	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
+	<select id="listAllRelation" resultMap="rmCustomRelationVO">
+		SELECT rel.*,
+			one.descrim one_descrim,
+			one.x_pos one_x_pos, one.y_pos one_y_pos,
+			one.x_size one_x_size, one.y_size one_y_size,
+			other.descrim other_descrim,
+			other.x_pos other_x_pos, other.y_pos other_y_pos,
+			other.x_size other_x_size, other.y_size other_y_size
+		  from t_custom_obj rel, t_custom_obj one, t_custom_obj other
+		 where rel.parent_id = #{toolId}
+		   and one.id = rel.one_id
+		   and other.id = rel.other_id
+	</select>
+	
+	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
+	<select id="listPropertiesOf" resultMap="rmCustomPropertyVO">
+		SELECT *
+		  from t_custom_property
+		 where owner_id = #{objectId}
+	</select>
+	
+	<!-- public int countPropertiesOf(@Param("objectId") String objectId); -->
+	<select id="countPropertiesOf">
+		SELECT count(*)
+		  from t_custom_property
+		 where owner_id = #{objectId}
+	</select>
+	
+	<!-- public int insertObjectsToSync(@Param("objectId") String objectId, @Param("type") String type,
+			@Param("insertList") List<CustomObjectVO> insertList);-->
+	<insert id="insertObjectsToSync">
+         INSERT INTO t_custom_obj (id, descrim,
+         	x_pos, y_pos, x_size, y_size, name,
+         	inner_color, outer_color, text_color, parent_id
+         	<if test='type.equals("Relation")'>
+         		, one_id, other_id
+         	</if>
+         	)
+         SELECT NEXT_PK('s_object'), sub.* from (
+         <foreach collection="insertList" item="obj" separator=" union all ">
+         	SELECT 
+         		#{type} as descrim,
+         		#{obj.xPos} as x_pos,
+         		#{obj.yPos} as y_pos,
+         		#{obj.xSize} as x_size,
+         		#{obj.ySize} as y_size,
+         		#{obj.name} as name,
+         		#{obj.innerColor} as inner_color,
+         		#{obj.outerColor} as outer_color,
+         		#{obj.textColor} as text_color,
+         		#{objectId} as parent_id
+         		<if test='type.equals("Relation")'>
+					 ,
+         			#{obj.one.id} as one_id,
+         			#{obj.other.id} as other_id
+				</if>
+         </foreach> ) sub
+    </insert>
+	
+	<!-- public int insertPropsToSync(@Param("objectId") String objectId, @Param("offset") int offset,
+			@Param("insertList") List<CustomPropertyVO> insertList);-->
+	<insert id="insertPropsToSync">
+		<if test="!(insertList.isEmpty())">
+			INSERT INTO t_custom_property(owner_id, level, prop_type, prop_val)
+			VALUES
+			<foreach item="prop" collection="insertList" separator="," index="index">
+				(#{objectId}, (#{index} + #{offset}), #{prop.propType}, #{prop.propVal})
+			</foreach>
+		</if>
+		;
+	</insert>
+	
+	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,
+			@Param("updateList") List<CustomPropertyVO> updateList);-->
+	<update id="updateAllPropsFrom">
+		<if test="!(updateList.isEmpty())">
+			UPDATE t_custom_property prop
+			  JOIN (
+			<foreach item="prop" collection="updateList" separator=" UNION ALL " index="index" close=")">
+			<if test="prop.isEdited">
+			  <choose>
+			    <when test = "index == 0">
+				  SELECT #{index} as LEVEL, #{prop.propType} as prop_type, #{prop.propVal} as prop_val
+			    </when>
+			    <otherwise>
+				  SELECT #{index}, #{prop.propType}, #{prop.propVal}
+			    </otherwise>
+			  </choose>
+			</if>
+			</foreach> vals ON prop.level = vals.level
+			   SET prop.prop_type = vals.prop_type, prop.prop_val = vals.prop_val
+			 WHERE prop.owner_id = #{objectId}
+		</if>
+	</update>
+	
+	<!-- public int deletePropsToSync(@Param("objectId") String objectId,
+			@Param("border") int border);-->
+	<delete id="deleteToSync">
+		DELETE prop.*
+		  from t_custom_property prop
+		 where prop.owner_id = #{objectId}
+		   and prop.level >= ${border}
+	</delete>
+
+</mapper>
