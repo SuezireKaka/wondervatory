@@ -111,7 +111,7 @@
 	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId, @Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
 	<select id="searchByTfIdf" resultMap="rmPostVO">
 	select SQL_CALC_FOUND_ROWS
-			w.*, a.kakao_id acc_kakao_id, a.descrim acc_descrim, a.login_id acc_login_id
+			w.*, a.id acc_id, a.kakao_id acc_kakao_id, a.descrim acc_descrim, a.login_id acc_login_id
 	  from (select w.id wid, sum(r.tf) * log(b.post_cnt / (count(w.id) + 1)) importance
 		  from t_tag t, t_tgt_tag r, T_work w, t_bb b
 	 WHERE t.word IN 

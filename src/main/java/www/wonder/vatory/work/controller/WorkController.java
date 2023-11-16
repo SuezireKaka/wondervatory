@@ -66,7 +66,7 @@ public class WorkController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	// /work/anonymous/listAll/0001/타이틀/1 검색 아직 안됨
+	// /work/anonymous/search/0002/타이틀/1?genreId= 검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
 	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId,
 			@PathVariable String search, @PathVariable int page, String genreId) {
