@@ -102,7 +102,14 @@ public class ToolService {
 		int newYToolSize = toolData.getYToolSize();
 		
 		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
+		List<CustomEntityVO> newEntityList = entityList.stream()
+				.filter(entity -> entity.getId().startsWith("----"))
+				.collect(Collectors.toList());
+
 		List<CustomRelationVO> relationList = toolData.getCustomRelationList();
+		List<CustomRelationVO> newRelationList = relationList.stream()
+				.filter(relation -> relation.getId().startsWith("----"))
+				.collect(Collectors.toList());
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
 				entityList.stream().map(entity -> {return entity.getCustomPropertiesList();})
@@ -111,7 +118,7 @@ public class ToolService {
 				relationList.stream().map(relation -> {return relation.getCustomPropertiesList();})
 				.collect(Collectors.toList());
 		
-		grantNewIds(entityList, relationList);
+		grantNewIds(newEntityList, newRelationList);
 		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
 		//syncObjetsOf(toolId, "Entity", entityList);
 		
@@ -120,23 +127,58 @@ public class ToolService {
 		return toolData;
 	}
 	
-	private void grantNewIds(List<CustomEntityVO> entityList,
-			List<CustomRelationVO> relationList) {
+	private void grantNewIds(List<CustomEntityVO> newEntityList,
+			List<CustomRelationVO> newRelationList) {
 		// relationList의 순서에 맞는 oneList와 otherList를 추출
 		
 		// 먼저 새롭게 t_custom_object로 들어갈 애들의 개수를 세고
-		int summonCount = entityList.size() + relationList.size();
+		int newEntityCount = newEntityList.size();
+		int newRelationCount = newRelationList.size();
+		int summonCount = newEntityCount + newRelationCount;
 		// 그 개수만큼 아이디를 뽑아온다
-		List<String> newIdList = Arrays.asList(
-				customObjectMapper
+		String[] newIdArray = customObjectMapper
 				.getNextMultiIdConcat("s_object", summonCount)
-				.split(", "));
+				.split(", ");
 		
-		String res = Entity.setMultiId(newIdList,
-				entityList.stream().map(entity -> (Entity) entity)
-				.collect(Collectors.toList()));
+		// entityList와 relationList를 합친 List<CustomObjectVO>의 n번째 원소에 대해
+		List<CustomObjectVO> newObjectList = new ArrayList<>();
+		newObjectList.addAll(newEntityList);
+		newObjectList.addAll(newRelationList);
+		String memoId = "";
+		for (int n = 0; n < summonCount; n++) {
+			String grantId = newIdArray[n];
+			CustomObjectVO target = newObjectList.get(n);
+			// 얘 n번째 녀석의 id를 memoId에 기억한다
+			memoId = target.getId();
+			// target
+			// relation 위치면 릴레이션으로 간주하고 처리
+			if (n >= newEntityCount) {
+				// n번째 녀석에 해당되는 object의 id를 바꾸고
+				newRelationList.get(n - newEntityCount)
+					.setId(newIdArray[n]);
+			}
+			// 아니면 엔티티로 간주하고 처리
+			else {
+				// n번째 녀석에 해당되는 object의 id를 바꾸고
+				newEntityList.get(n)
+					.setId(grantId);
+			}
+			// relationList 각각에 대해
+			for (CustomRelationVO rel : newRelationList) {
+				// one과 other의 id가 memoId와 같으면 걔들도 다 바꾼다
+				if (rel.getOne().getId().equals(memoId)) {
+					rel.getOne().setId(grantId);
+				}
+				if (rel.getOther().getId().equals(memoId)) {
+					rel.getOther().setId(grantId);
+				}
+			}
+			
+			
+			
+		}
 		
-		int a = newIdList.size();
+		int iiii = 0;
 		
 	}
 	
