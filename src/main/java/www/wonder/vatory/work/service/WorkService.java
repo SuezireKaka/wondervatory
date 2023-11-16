@@ -92,7 +92,7 @@ public class WorkService {
 		return genreMapper.listAllGenre();
 	}
 	
-	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page) {
+	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page, String genreId) {
 		String[] arrSearch = search.split(" ");
 		if (arrSearch.length == 0) {
 			PagingDTO paging = new PagingDTO(page);
@@ -320,11 +320,6 @@ public class WorkService {
 	public int deleteReply(String id) {
 		return workMapper.deleteReply(id);
 	}
-
-	public List<GenreVO> listAllReadBetween(Date startTime, Date endTime, String args) {
-		return null;
-	}
-	
 	
 	
 }

@@ -69,20 +69,9 @@ public class WorkController {
 	// /work/anonymous/listAll/0001/타이틀/1 검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
 	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId,
-			@PathVariable String search, @PathVariable int page) {
-		DreamPair<List<ReplyVO>, PagingDTO> result = workService.search(boardId, search, page);
+			@PathVariable String search, @PathVariable int page, String genreId) {
+		DreamPair<List<ReplyVO>, PagingDTO> result = workService.search(boardId, search, page, genreId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
-	// /work/listAllReadBetween
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	@GetMapping("/listAllReadBetween/{startTime}/{endTime}/{args}")
-	public ResponseEntity<List<GenreVO>> listAllReadBetween(
-			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
-			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
-			@PathVariable String args) {
-		List<GenreVO> list = workService.listAllReadBetween(startTime, endTime, args);
-		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	/** 원글 상세. 첨부파일 목록, 댓글, 대댓 목록이 내부 변수에 채워짐 */
