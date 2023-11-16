@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CustomRelationVO extends CustomObjectVO {
-	CustomEntityVO one;
-	CustomEntityVO other;
+	CustomObjectVO one;
+	CustomObjectVO other;
 }

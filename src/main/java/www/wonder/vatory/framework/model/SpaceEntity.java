@@ -21,4 +21,5 @@ public abstract class SpaceEntity extends Entity {
 	private int ySize;
 	private String innerColor;
 	private String outerColor;
+	private String textColor;
 }

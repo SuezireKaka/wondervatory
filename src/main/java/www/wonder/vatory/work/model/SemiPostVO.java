@@ -18,7 +18,6 @@ public class SemiPostVO extends ReplyVO {
 	private String title;
 	private int readCount;
 	private boolean isComplete;
-	// 편법 - 이래놓고 세미포스트에만 쓰기
 	private List<GenreVO> genreList;
 	
 	public void incReadCount() {
