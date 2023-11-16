@@ -103,6 +103,13 @@ public class WorkService {
 		List<ReplyVO> listResult = workMapper.searchByTfIdf(boardId, arrSearch, paging);
 		long dataCount = workMapper.getFoundRows();
 		paging.buildPagination(dataCount);
+		
+
+		// listResult의 각각에 썸네일 뿌리기
+		for (ReplyVO series : listResult) {
+			List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(series);
+			series.setListAttachFile(attachFileList);
+		}
 
 		return new DreamPair(listResult, paging);
 	}
