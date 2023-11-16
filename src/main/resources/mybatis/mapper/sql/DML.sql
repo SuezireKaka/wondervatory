@@ -394,8 +394,9 @@ values(NEXT_PK('s_genre'), "로맨스", "대충 설명 12");
 insert into t_sys_genre(id, genre, info)
 values(NEXT_PK('s_genre'), "게임", "대충 설명 13");
 insert into t_sys_genre(id, genre, info)
-values(NEXT_PK('s_genre'), "사극", "대충 설명 14");
-
+values(NEXT_PK('s_genre'), "힐링", "대충 설명 14");
+insert into t_sys_genre(id, genre, info)
+values(NEXT_PK('s_genre'), "아포칼립스", "대충 설명 15");
 
 -- 2023-11-13 ------------------
 
