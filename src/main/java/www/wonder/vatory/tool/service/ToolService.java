@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,6 +111,18 @@ public class ToolService {
 		List<CustomRelationVO> newRelationList = relationList.stream()
 				.filter(relation -> relation.getId().startsWith("----"))
 				.collect(Collectors.toList());
+		
+		grantNewIds(newEntityList, newRelationList);
+		
+		customObjectMapper.insertObjectsToSync(toolId, "Entity",
+				newEntityList.stream()
+				.map(CustomObjectVO.class::cast)
+				.collect(Collectors.toList()));
+		customObjectMapper.insertObjectsToSync(toolId, "Relation",
+				newRelationList.stream()
+				.map(CustomObjectVO.class::cast)
+				.collect(Collectors.toList()));
+		
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
 				entityList.stream().map(entity -> {return entity.getCustomPropertiesList();})
@@ -118,12 +131,6 @@ public class ToolService {
 				relationList.stream().map(relation -> {return relation.getCustomPropertiesList();})
 				.collect(Collectors.toList());
 		
-		grantNewIds(newEntityList, newRelationList);
-		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
-		//syncObjetsOf(toolId, "Entity", entityList);
-		
-		//syncObjetsOf(toolId, "Relation", relationList);
-		// 해당 정보를 syncPropertiesOf에 활용한다
 		return toolData;
 	}
 	
@@ -150,12 +157,11 @@ public class ToolService {
 			CustomObjectVO target = newObjectList.get(n);
 			// 얘 n번째 녀석의 id를 memoId에 기억한다
 			memoId = target.getId();
-			// target
 			// relation 위치면 릴레이션으로 간주하고 처리
 			if (n >= newEntityCount) {
 				// n번째 녀석에 해당되는 object의 id를 바꾸고
 				newRelationList.get(n - newEntityCount)
-					.setId(newIdArray[n]);
+					.setId(grantId);
 			}
 			// 아니면 엔티티로 간주하고 처리
 			else {
@@ -166,51 +172,15 @@ public class ToolService {
 			// relationList 각각에 대해
 			for (CustomRelationVO rel : newRelationList) {
 				// one과 other의 id가 memoId와 같으면 걔들도 다 바꾼다
-				if (rel.getOne().getId().equals(memoId)) {
-					rel.getOne().setId(grantId);
+				if (rel.getOneId().equals(memoId)) {
+					rel.setOneId(grantId);
 				}
-				if (rel.getOther().getId().equals(memoId)) {
-					rel.getOther().setId(grantId);
+				if (rel.getOtherId().equals(memoId)) {
+					rel.setOtherId(grantId);
 				}
 			}
 			
-			
-			
 		}
-		
-		int iiii = 0;
-		
-	}
-	
-	private int syncObjetsOf(String toolId, String type,
-			List<CustomObjectVO> objectList) {
-
-		Optional<Boolean> isAllNew = objectList.stream()
-				.map(obj -> obj.getId().startsWith("----"))
-				.reduce((isNew1, isNew2) -> isNew1 && isNew2);
-		// 다 새로우면 아래 과정은 할 필요 없음
-		if (! isAllNew.get()) {
-			// 해당 툴의 객체들을 전부 가져오고
-			List<CustomObjectVO> prevObjectList = customObjectMapper.listAllObject(toolId);
-			// 새 엔티티 리스트에 없는 애들을 deleteList로 
-			List<String> objectIdList = objectList.stream()
-					.map(obj -> obj.getId())
-					.collect(Collectors.toList());
-			List<CustomObjectVO> deleteList = prevObjectList.stream()
-					.filter(obj -> ! objectIdList.contains(obj.getId()))
-					.collect(Collectors.toList());
-			List<CustomObjectVO> updateList = prevObjectList.stream()
-					.filter(obj -> ! objectIdList.contains(obj.getId()))
-					.collect(Collectors.toList());
-		}
-		// objectList에 있는 애들 중 아이디가 ----로 시작하는 애들 찾아서 insertList 생성
-		List<CustomObjectVO> insertList = objectList.stream()
-				.filter(obj -> obj.getId().startsWith("----"))
-				.collect(Collectors.toList());
-		
-		customObjectMapper.insertObjectsToSync(toolId, type, insertList);
-		
-		return 0;
 	}
 
 	private int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {

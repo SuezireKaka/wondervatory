@@ -20,15 +20,13 @@
 	<resultMap id="rmCustomEntityVO" extends="rmCustomObjectVO"
 		type="www.wonder.vatory.tool.model.CustomEntityVO">
 		<association property="childTool" columnPrefix="c_tool_"
-				resultMap="rmToolVO" />
+				resultMap="www.wonder.vatory.tool.mapper.ToolMapper.rmToolVO" />
 	</resultMap>
 	
 	<resultMap id="rmCustomRelationVO" extends="rmCustomObjectVO"
 		type="www.wonder.vatory.tool.model.CustomRelationVO">
-		<association property="one" columnPrefix="one_" notNullColumn="id"
-				resultMap="rmCustomObjectVO" />
-		<association property="other" columnPrefix="other_" notNullColumn="id"
-				resultMap="rmCustomObjectVO" />
+		<result property="oneId" column="one_id" />
+		<result property="otherId" column="other_id" />
 	</resultMap>
 	
 	<resultMap id="rmCustomPropertyVO"
@@ -55,17 +53,9 @@
 
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
-		SELECT rel.*,
-			one.descrim one_descrim,
-			one.x_pos one_x_pos, one.y_pos one_y_pos,
-			one.x_size one_x_size, one.y_size one_y_size,
-			other.descrim other_descrim,
-			other.x_pos other_x_pos, other.y_pos other_y_pos,
-			other.x_size other_x_size, other.y_size other_y_size
-		  from t_custom_obj rel, t_custom_obj one, t_custom_obj other
-		 where rel.parent_id = #{toolId}
-		   and one.id = rel.one_id
-		   and other.id = rel.other_id
+		SELECT *
+		  from t_custom_obj
+		 where parent_id = #{toolId}
 	</select>
 	
 	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
@@ -92,9 +82,10 @@
          		, one_id, other_id
          	</if>
          	)
-         SELECT NEXT_PK('s_object'), sub.* from (
-         <foreach collection="insertList" item="obj" separator=" union all ">
+         SELECT sub.* from
+         <foreach open="(" collection="insertList" item="obj" separator=" union all " close=")">
          	SELECT 
+         		#{obj.id} as id,
          		#{type} as descrim,
          		#{obj.xPos} as x_pos,
          		#{obj.yPos} as y_pos,
@@ -110,7 +101,7 @@
          			#{obj.one.id} as one_id,
          			#{obj.other.id} as other_id
 				</if>
-         </foreach> ) sub
+         </foreach> sub
     </insert>
 	
 	<!-- public int insertPropsToSync(@Param("objectId") String objectId, @Param("offset") int offset,
