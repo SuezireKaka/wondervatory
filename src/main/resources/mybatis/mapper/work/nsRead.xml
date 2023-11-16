@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.wonder.vatory.work.mapper.ReadMapper">
+	<!-- resultMap : PROJECTION 결과를 객체 속성에 바인딩 -->
+	<resultMap id="rmReadVO" type="www.wonder.vatory.work.model.ReadVO">
+		<result property="time" column="time " />
+		<association property="reader" columnPrefix="acc_"
+				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
+		<association property="readee" columnPrefix="red_"
+				resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmSemiPostVO" />	
+	</resultMap>
+	
+	
+
+</mapper>

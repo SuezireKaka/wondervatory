@@ -1,6 +1,7 @@
 package www.wonder.vatory.work.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -318,6 +319,10 @@ public class WorkService {
 	*/
 	public int deleteReply(String id) {
 		return workMapper.deleteReply(id);
+	}
+
+	public List<GenreVO> listAllReadBetween(Date startTime, Date endTime, String args) {
+		return null;
 	}
 	
 	

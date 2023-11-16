@@ -1,6 +1,7 @@
 package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.framework.model.DreamPair;
+import www.wonder.vatory.framework.model.Entity;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.mapper.CustomObjectMapper;
@@ -94,19 +96,13 @@ public class ToolService {
 	}
 	
 	public ToolVO saveToolDetails(AccountVO writer, ToolVO toolData) {
-		// 일단 툴을 해부해서 바뀔 것만 꺼내보자
+		// 일단 툴을 해부해서 필요한 걸 꺼내보자
 		String toolId = toolData.getId();
 		int newXToolSize = toolData.getXToolSize();
 		int newYToolSize = toolData.getYToolSize();
 		
-		toolMapper.updateToolSkin(toolData);
-		
-		List<CustomObjectVO> entityList = toolData.getCustomEntityList().stream()
-				.map(entity -> (CustomObjectVO) entity)
-				.collect(Collectors.toList());
-		List<CustomObjectVO> relationList = toolData.getCustomRelationList().stream()
-				.map(relation -> (CustomObjectVO) relation)
-				.collect(Collectors.toList());
+		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
+		List<CustomRelationVO> relationList = toolData.getCustomRelationList();
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
 				entityList.stream().map(entity -> {return entity.getCustomPropertiesList();})
@@ -114,12 +110,34 @@ public class ToolService {
 		List<List<CustomPropertyVO>> relationPropList =
 				relationList.stream().map(relation -> {return relation.getCustomPropertiesList();})
 				.collect(Collectors.toList());
-		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
-		syncObjetsOf(toolId, "Entity", entityList);
 		
-		syncObjetsOf(toolId, "Relation", relationList);
+		grantNewIds(entityList, relationList);
+		// 먼저 foreach로 entityList, relationList의 싱크를 맞춰서 아이디를 얻고
+		//syncObjetsOf(toolId, "Entity", entityList);
+		
+		//syncObjetsOf(toolId, "Relation", relationList);
 		// 해당 정보를 syncPropertiesOf에 활용한다
 		return toolData;
+	}
+	
+	private void grantNewIds(List<CustomEntityVO> entityList,
+			List<CustomRelationVO> relationList) {
+		// relationList의 순서에 맞는 oneList와 otherList를 추출
+		
+		// 먼저 새롭게 t_custom_object로 들어갈 애들의 개수를 세고
+		int summonCount = entityList.size() + relationList.size();
+		// 그 개수만큼 아이디를 뽑아온다
+		List<String> newIdList = Arrays.asList(
+				customObjectMapper
+				.getNextMultiIdConcat("s_object", summonCount)
+				.split(", "));
+		
+		String res = Entity.setMultiId(newIdList,
+				entityList.stream().map(entity -> (Entity) entity)
+				.collect(Collectors.toList()));
+		
+		int a = newIdList.size();
+		
 	}
 	
 	private int syncObjetsOf(String toolId, String type,
