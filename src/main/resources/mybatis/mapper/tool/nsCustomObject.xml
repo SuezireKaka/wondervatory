@@ -56,6 +56,7 @@
 		SELECT *
 		  from t_custom_obj
 		 where parent_id = #{toolId}
+		   and descrim = 'Relation'
 	</select>
 	
 	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
@@ -82,7 +83,8 @@
          		, one_id, other_id
          	</if>
          	)
-         SELECT sub.* from
+         SELECT sub.*
+           from
          <foreach open="(" collection="insertList" item="obj" separator=" union all " close=")">
          	SELECT 
          		#{obj.id} as id,
@@ -98,8 +100,8 @@
          		#{objectId} as parent_id
          		<if test='type.equals("Relation")'>
 					 ,
-         			#{obj.one.id} as one_id,
-         			#{obj.other.id} as other_id
+         			#{obj.oneId} as one_id,
+         			#{obj.otherId} as other_id
 				</if>
          </foreach> sub
     </insert>

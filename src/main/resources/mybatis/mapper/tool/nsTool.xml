@@ -9,6 +9,10 @@
 		<result property="name" column="name" />
 		<result property="xToolSize" column="x_tool_size" />
 		<result property="yToolSize" column="y_tool_size" />
+		<association property="series" columnPrefix="ser_"
+				resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmSeriesVO" />
+		<association property="writer" columnPrefix="acc_"
+				resultMap="www.wonder.vatory.party.mapper.PartyMapper.rmAccountVO" />
 	</resultMap>
 	
 	<!-- public List<ToolVO> listAllFromSeries(
@@ -39,9 +43,16 @@
 	
 	<!-- public ToolVO getToolById(@Param("toolId") String toolId); -->
 	<select id="getToolById" resultMap="rmToolVO">
-		SELECT t.*, acc.id acc_id, acc.descrim acc_descrim
+		SELECT t.*,
+			ser.id ser_id, ser.descrim ser_descrim,
+				wrt.id ser_acc_id, wrt.descrim ser_acc_descrim, 
+			acc.id acc_id, acc.descrim acc_descrim
 		  from t_tool t
+		  Left outer join t_work ser
+		    on t.series_id = ser.id
 		  Left outer join t_account acc
+		    on t.writer_id = acc.id
+		  Left outer join t_account wrt
 		    on t.writer_id = acc.id
 		 where t.id = #{toolId}
 	</select>

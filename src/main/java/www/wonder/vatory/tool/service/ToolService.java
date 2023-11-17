@@ -97,10 +97,11 @@ public class ToolService {
 	}
 	
 	public ToolVO saveToolDetails(AccountVO writer, ToolVO toolData) {
-		// 일단 툴을 해부해서 필요한 걸 꺼내보자
 		String toolId = toolData.getId();
-		int newXToolSize = toolData.getXToolSize();
-		int newYToolSize = toolData.getYToolSize();
+		String seriesId = toolData.getSeries().getId();
+		
+		manageToolSkin(writer, seriesId, toolData);
+		
 		
 		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
 		List<CustomEntityVO> newEntityList = entityList.stream()
@@ -111,17 +112,23 @@ public class ToolService {
 		List<CustomRelationVO> newRelationList = relationList.stream()
 				.filter(relation -> relation.getId().startsWith("----"))
 				.collect(Collectors.toList());
+		if (newEntityList.size() + newRelationList.size() > 0) {
+			grantNewIds(newEntityList, newRelationList);
+		}
 		
-		grantNewIds(newEntityList, newRelationList);
+		if (newEntityList.size() > 0) {
+			customObjectMapper.insertObjectsToSync(toolId, "Entity",
+					newEntityList.stream()
+					.map(CustomObjectVO.class::cast)
+					.collect(Collectors.toList()));
+		}
 		
-		customObjectMapper.insertObjectsToSync(toolId, "Entity",
-				newEntityList.stream()
-				.map(CustomObjectVO.class::cast)
-				.collect(Collectors.toList()));
+		if (newRelationList.size() > 0) {
 		customObjectMapper.insertObjectsToSync(toolId, "Relation",
 				newRelationList.stream()
 				.map(CustomObjectVO.class::cast)
 				.collect(Collectors.toList()));
+		}
 		
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
