@@ -1,7 +1,6 @@
 package www.wonder.vatory.work.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +25,11 @@ import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.mapper.GenreMapper;
+import www.wonder.vatory.work.mapper.ReadMapper;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
+import www.wonder.vatory.work.model.ReadVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
 import www.wonder.vatory.work.model.SeriesVO;
@@ -40,6 +40,9 @@ public class WorkService {
 	private WorkMapper workMapper;
 	@Autowired
 	private GenreMapper genreMapper;
+	@Autowired
+	private ReadMapper readMapper;
+	
 	@Autowired
 	private TagService tagService;
 	@Autowired
@@ -88,8 +91,8 @@ public class WorkService {
 		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
 	}
 	
-	public List<SeriesVO> listRead() {
-		return workMapper.listRead();
+	public List<ReadVO> listRead() {
+		return readMapper.listRead();
 	}
 	
 	public List<GenreVO> listAllGenre() {

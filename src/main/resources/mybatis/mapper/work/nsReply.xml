@@ -105,13 +105,7 @@
 	 order by w.id DESC
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>
-	
-	<!-- 	public List<SeriesVO> listRead(); -->
-		<select id="listRead" resultMap="rmReplyVO">
-	select *
-	  from t_read
-	
-	</select>
+
 	
 	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
