@@ -1,10 +1,8 @@
 package www.wonder.vatory.work.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +21,7 @@ import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
+import www.wonder.vatory.work.model.ReadVO;
 import www.wonder.vatory.work.model.ReplyVO;
 import www.wonder.vatory.work.model.SemiPostVO;
 import www.wonder.vatory.work.model.SeriesVO;
@@ -66,6 +65,14 @@ public class WorkController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	// /work/anonymous/listRead
+	@GetMapping("/anonymous/listRead")
+	public ResponseEntity<List<ReadVO>> listRead() {
+		List<ReadVO> list = workService.listRead();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	
 	// /work/anonymous/search/0002/타이틀/1?genreId= 검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
 	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId,

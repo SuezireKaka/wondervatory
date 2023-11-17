@@ -12,7 +12,19 @@
 		<association property="readee" columnPrefix="red_"
 				resultMap="www.wonder.vatory.work.mapper.WorkMapper.rmSemiPostVO" />	
 	</resultMap>
-	
+		
+	<!-- 	public List<ReadVO> listRead();  -->
+	<select id="listRead" resultMap="rmReadVO">
+	select r.*, r.reader_id acc_id, acc.descrim acc_descrim,
+		r.readee_id red_id, red.descrim red_descrim, wrt.id red_acc_id, wrt.descrim red_acc_descrim 
+	  from t_read r
+	  left outer join t_account acc
+	    on r.reader_id = acc.id
+	  left outer join t_work red
+	    on r.readee_id = red.id
+	  left outer join t_account wrt
+	    on red.writer_id = wrt.id
+	</select>
 	
 
 </mapper>

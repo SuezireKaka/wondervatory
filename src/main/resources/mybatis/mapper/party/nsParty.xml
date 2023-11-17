@@ -80,12 +80,12 @@
 			rsp.id rsp_id, rsp.name rsp_name, rsp.birth rsp_birth, rsp.sex rsp_sex,
 			role.role role_role, role.account_id role_account_id,
 			acc.descrim rsp_acc_descrim
-		  FROM T_Account acc
-		  LEFT OUTER JOIN T_party owner
+		  FROM t_Account acc
+		  LEFT OUTER JOIN t_party owner
 		    on owner.id = acc.owner_id
-		  LEFT OUTER JOIN T_party rsp
+		  LEFT OUTER JOIN t_party rsp
 		    on rsp.id = acc.response_id
-		  LEFT OUTER JOIN T_role role
+		  LEFT OUTER JOIN t_role role
 		    on role.account_id = acc.id
 		 where acc.owner_id = #{ownerId}
 		 order by acc.id DESC
@@ -107,11 +107,11 @@
 			role.role role_role,
 			acc.descrim rsp_acc_descrim
 		  FROM T_Account acc
-		  LEFT OUTER JOIN T_role role
+		  LEFT OUTER JOIN t_role role
 		    on role.account_id = acc.id
-		  LEFT OUTER JOIN T_party own
+		  LEFT OUTER JOIN t_party own
 		    on own.id = acc.owner_id
-		  LEFT OUTER JOIN T_party rsp
+		  LEFT OUTER JOIN t_party rsp
 		    on rsp.id = acc.response_id
 		 where acc.login_id = #{loginId}
 	</select>
@@ -124,13 +124,13 @@
 			role.role role_role,
 			acc.descrim rsp_acc_descrim
 		  FROM T_Account acc
-		  LEFT OUTER JOIN T_role role
+		  LEFT OUTER JOIN t_role role
 		    on role.account_id = acc.id
-		  LEFT OUTER JOIN T_party own
+		  LEFT OUTER JOIN t_party own
 		    on own.id = acc.owner_id
-		  LEFT OUTER JOIN T_party rsp
+		  LEFT OUTER JOIN t_party rsp
 		    on rsp.id = acc.response_id
-		  LEFT OUTER JOIN T_contact_Point cp
+		  LEFT OUTER JOIN t_contact_Point cp
 		    on cp.owner_id = acc.id
 		 where acc.id = #{id}
 	</select>
@@ -163,7 +163,7 @@
 			select NEXT_PK('s_party')
 		</selectKey>
 
-		INSERT INTO T_party(id, descrim, name, sex, birth)
+		INSERT INTO t_party(id, descrim, name, sex, birth)
 		VALUES (#{id}, 'Person', #{name}, #{sex}, #{birthDate});
 	</insert>
 	
@@ -198,7 +198,7 @@
 	
 	<!-- 	public int updatePerson(@Param("person") PersonVO person); -->
 	<update id="updatePerson">
-		update T_party
+		update t_party
 		   set name = #{person.name},
 			   birth = #{person.birthDate},
 			   sex = #{person.sex}
@@ -207,7 +207,7 @@
 	
 	<!-- public int updateAccount(@Param("account") AccountVO account); -->
 	<update id="updateAccount">
-		update T_account
+		update t_account
 		   set nick = #{account.nick},
 			   pass_word = #{account.passWord},
 			   intro = #{account.introduction}
