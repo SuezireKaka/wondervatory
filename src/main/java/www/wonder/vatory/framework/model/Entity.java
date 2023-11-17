@@ -1,6 +1,7 @@
 package www.wonder.vatory.framework.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
@@ -36,6 +37,11 @@ public abstract class Entity {
 	
 	public void retier(int control) {
 		this.hTier = (this.id.length() - control) / 4;
+	}
+	
+	public static List<String> getMultiId(List<Entity> entityList) {
+		return entityList.stream()
+				.map(entity -> entity.getId()).collect(Collectors.toList()	);
 	}
 	
 	public static String setMultiId(List<String> idList, List<Entity> entityList) {

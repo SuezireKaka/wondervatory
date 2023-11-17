@@ -40,7 +40,6 @@
 		SELECT *
 		  from t_custom_obj
 		 where parent_id = #{toolId}
-		   and descrim = 'Entity'
 	</select>
 	
 	<!-- public List<CustomEntityVO> listAllEntity(@Param("toolId") String toolId);  -->

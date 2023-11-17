@@ -432,3 +432,8 @@ VALUES ('0002', '0006', '2023-10-03 12:12:12'),
 INSERT into t_read(reader_id, readee_id)
 VALUES ('000c', '003x')
 
+
+-- 백업용
+SELECT GROUP_CONCAT(tuple.val SEPARATOR ', ')
+	FROM (SELECT CONCAT('(\'', reader_id, '\',\'', readee_id, '\',\'', TIME, '\')') val
+	  FROM t_read) tuple

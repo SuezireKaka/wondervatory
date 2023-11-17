@@ -1,5 +1,12 @@
 package www.wonder.vatory.framework.model;
 
-public class DreamUtility {
-	// 언젠가는 채워줄게
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class DreamUtility<T> {
+	public static <T> List<T> upcastList(List<? extends T> extendsList) {
+		List<T> resultList = new ArrayList<>();
+		resultList.addAll(extendsList);
+		return resultList;
+	}
 }
