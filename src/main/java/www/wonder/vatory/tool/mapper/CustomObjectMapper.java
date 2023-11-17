@@ -31,9 +31,12 @@ public interface CustomObjectMapper extends WonderMapper {
 	public int insertPropsToSync(@Param("objectId") String objectId, @Param("offset") int offset,
 			@Param("insertList") List<CustomPropertyVO> insertList);
 	
+	public int updateAllObjectsFrom(@Param("toolId") String toolId,
+			@Param("updateList") List<CustomObjectVO> updateList);
 	public int updateAllPropsFrom(@Param("objectId") String objectId,
 			@Param("updateList") List<CustomPropertyVO> updateList);
 	
+	public int deleteObjectsToSync(@Param("deleteList") List<CustomObjectVO> deleteList);
 	public int deletePropsToSync(@Param("objectId") String objectId,
 			@Param("border") int border);
 	

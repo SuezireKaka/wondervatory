@@ -118,6 +118,39 @@
 		;
 	</insert>
 	
+	<!-- public int updateAllObjectsFrom(@Param("toolId") String toolId,
+			@Param("updateList") List<CustomObjectVO> updateList);-->
+	<update id="updateAllObjectsFrom">
+		<if test="!(updateList.isEmpty())">
+			UPDATE t_custom_obj obj
+			  JOIN
+			<foreach open="(" item="obj" collection="updateList" separator=" UNION ALL " index="index" close=")">
+			<if test="obj.isEdited">
+			  <choose>
+			    <when test = "index == 0">
+				  SELECT #{obj.id} as id, 
+				  		#{obj.xPos} as x_pos, #{obj.yPos} as y_pos, #{obj.xSize} as x_size, #{obj.ySize} as y_size,
+				  		#{obj.innerColor} as inner_color, #{obj.outerColor} as outer_color, #{obj.textColor} as text_color
+			    </when>
+			    <otherwise>
+				  SELECT #{obj.id},
+				  		#{obj.xPos}, #{obj.yPos}, #{obj.xSize}, #{obj.ySize},
+				  		#{obj.innerColor}, #{obj.outerColor}, #{obj.textColor}
+			    </otherwise>
+			  </choose>
+			</if>
+			</foreach> vals ON obj.id = vals.id
+			   SET obj.x_pos = vals.x_pos,
+			   		obj.y_pos = vals.y_pos,
+			   		obj.x_size = vals.x_size,
+			   		obj.y_size = vals.y_size,
+			   		obj.inner_color = vals.inner_color,
+			   		obj.outer_color = vals.outer_color,
+			   		obj.text_color = vals.text_color
+			 WHERE obj.parent_id = #{toolId}
+		</if>
+	</update>
+	
 	<!-- public int updateAllPropsFrom(@Param("objectId") String objectId,
 			@Param("updateList") List<CustomPropertyVO> updateList);-->
 	<update id="updateAllPropsFrom">
@@ -141,9 +174,19 @@
 		</if>
 	</update>
 	
+	<!-- public int deleteObjectsToSync(@Param("deleteList") List<CustomObjectVO> deleteList);-->
+	<delete id="deleteObjectsToSync">
+		DELETE obj.*
+		  FROM t_custom_obj obj
+		 where obj.id IN
+		<foreach open="(" collection="deleteList" item="obj" separator=", " close=")">
+			#{obj.id}
+		</foreach>
+	</delete>
+	
 	<!-- public int deletePropsToSync(@Param("objectId") String objectId,
 			@Param("border") int border);-->
-	<delete id="deleteToSync">
+	<delete id="deletePropsToSync">
 		DELETE prop.*
 		  from t_custom_property prop
 		 where prop.owner_id = #{objectId}

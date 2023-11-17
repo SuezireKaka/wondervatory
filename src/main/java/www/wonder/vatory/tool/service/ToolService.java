@@ -106,16 +106,22 @@ public class ToolService {
 		List<CustomEntityVO> newEntityList = entityList.stream()
 				.filter(entity -> entity.getId().startsWith("----"))
 				.collect(Collectors.toList());
+		List<CustomEntityVO> editedEntityList = entityList.stream()
+				.filter(entity -> entity.isEdited())
+				.collect(Collectors.toList());
 
 		List<CustomRelationVO> relationList = toolData.getCustomRelationList();
 		List<CustomRelationVO> newRelationList = relationList.stream()
 				.filter(relation -> relation.getId().startsWith("----"))
 				.collect(Collectors.toList());
+		List<CustomRelationVO> editedRelationList = relationList.stream()
+				.filter(relation -> relation.isEdited())
+				.collect(Collectors.toList());
 		
 		if (newEntityList.size() + newRelationList.size() > 0) {
 			grantNewIds(newEntityList, newRelationList);
 		}
-		
+
 		// 판단 기준은 id 비교로
 		List<String> bringIdList = Entity.getMultiId(DreamUtility.upcastList(entityList));
 		bringIdList.addAll(Entity.getMultiId(DreamUtility.upcastList(relationList)));
@@ -126,6 +132,19 @@ public class ToolService {
 				.filter(obj -> ! bringIdList.contains(obj.getId()))
 				.collect(Collectors.toList());
 		
+		// 먼저 delete
+		if (deleteList.size() > 0) {
+			customObjectMapper.deleteObjectsToSync(deleteList);
+		}
+		
+		// 그 다음 update
+		if (editedEntityList.size() + editedRelationList.size() > 0) {
+			List<CustomObjectVO> updateList = DreamUtility.upcastList(editedEntityList);
+			updateList.addAll(editedRelationList);
+			customObjectMapper.updateAllObjectsFrom(toolId, updateList);
+		}
+		
+		// 마지막으로 insert
 		insertNewObjects(toolId, newEntityList, newRelationList);
 		
 		// 해부되어 나온 애들을 또 해부해서 담아보자

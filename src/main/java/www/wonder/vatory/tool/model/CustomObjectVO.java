@@ -13,6 +13,7 @@ import www.wonder.vatory.framework.model.SpaceEntity;
 @NoArgsConstructor
 public class CustomObjectVO extends SpaceEntity {
 	String name;
+	boolean isEdited;
 	
 	List<CustomPropertyVO> customPropertiesList = new ArrayList<>();
 }
