@@ -206,7 +206,7 @@ create table t_work(
 --화수표시도 필요할거같은--
 
 -- tool --
-create table t_tool(
+--create table t_tool(
 	id				char(4) primary key,
 	x_tool_size		int,
 	y_tool_size		int,
@@ -215,7 +215,7 @@ create table t_tool(
 	upt_dt			timestamp default current_timestamp() on update current_timestamp(),
 	parent_id		char(4),
 	parent_type		varchar(16)
-);
+--);
 
 
 create table t_custom_obj(
@@ -330,14 +330,14 @@ create table t_rpt_process(
 
 -----  10 31 --------------------
 
-create table t_sys_remocon(
+--create table t_sys_remocon(
 	remocon_name	varchar(32) not null,
 	key_level		tinyint not null,
 	key_name		varchar(16) not null,
 	key_use			varchar(8) not null,
 	key_click_cnt	tinyint default 1,
 	primary key(remocon_name, key_level)
-);
+--);
 
 
 -----  11 02 ---------------------
@@ -386,13 +386,13 @@ ALTER TABLE t_sys_remocon
  
  ---  11-07  -------------
  
- ALTER TABLE t_tool
-MODIFY id VARCHAR(255); -- 컴포즈 패턴 형식으로 수정
- ALTER TABLE t_tool
-   ADD COLUMN h_tier tinyint AFTER id; -- 컴포즈 패턴화에 따른 레벨 처리
- ALTER TABLE t_tool
-Modify h_tier TINYINT DEFAULT 0; -- 기본 레벨은 0
-create table t_tool(
+-- ALTER TABLE t_tool
+--MODIFY id VARCHAR(255); -- 컴포즈 패턴 형식으로 수정
+-- ALTER TABLE t_tool
+--   ADD COLUMN h_tier tinyint AFTER id; -- 컴포즈 패턴화에 따른 레벨 처리
+-- ALTER TABLE t_tool
+--Modify h_tier TINYINT DEFAULT 0; -- 기본 레벨은 0
+--create table t_tool(
 	id				VARCHAR(255) primary key,
 	h_tier			tinyint DEFAULT 0,
 	x_tool_size		int,
@@ -402,11 +402,11 @@ create table t_tool(
 	upt_dt			timestamp default current_timestamp() on update current_timestamp(),
 	parent_id		char(4),
 	parent_type		varchar(16)
-);
+--);
 
- ALTER TABLE t_custom_obj
-MODIFY parent_id VARCHAR(255)  -- 부모가 컴포즈 패턴에 따라 아이디가 길어졌으니 자식도 맞추기
-create table t_custom_obj(
+-- ALTER TABLE t_custom_obj
+--MODIFY parent_id VARCHAR(255)  -- 부모가 컴포즈 패턴에 따라 아이디가 길어졌으니 자식도 맞추기
+--create table t_custom_obj(
 	id				char(4) primary key,
 	descrim			varchar(16),
 	x_pos			int,
@@ -419,11 +419,11 @@ create table t_custom_obj(
 	parent_id 		VARCHAR(255),
 	one_id			char(4),
 	other_id		char(4)
-);
+--);
 
- ALTER TABLE t_sys_remocon
-   ADD COLUMN key_auth VARCHAR(64)  -- 프론트에서 보고 안 맞으면 아예 표시도 안 되도록
-create table t_sys_remocon(
+-- ALTER TABLE t_sys_remocon
+--   ADD COLUMN key_auth VARCHAR(64)  -- 프론트에서 보고 안 맞으면 아예 표시도 안 되도록
+--create table t_sys_remocon(
 	remocon_name	varchar(32) not null,
 	key_level		tinyint not null,
 	key_name		varchar(16) not null,
@@ -431,10 +431,10 @@ create table t_sys_remocon(
 	key_click_cnt	tinyint default 1,
 	key_auth		VARCHAR(64),
 	primary key(remocon_name, key_level)
-);
+--);
 
 
-create table t_sys_genre(
+--create table t_sys_genre(
 	id			char(4) primary key,
 	login_id	varchar(255),
 	kakao_id	long,
@@ -448,14 +448,14 @@ create table t_sys_genre(
 	login_code	TINYINT(4) DEFAULT '1',
 	reg_dt		timestamp default current_timestamp(),
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
-);
+--);
 
-create table t_sys_genre(
+--create table t_sys_genre(
 	id			char(4) primary key,
 	genre_type	varchar(16),
 	genre_info	varchar(255)
-);
-create index idx_genre_type on t_sys_genre(genre_type);
+--);
+--create index idx_genre_type on t_sys_genre(genre_type);
 
 create table t_genre_work(
 	work_id		char(4),
@@ -463,8 +463,8 @@ create table t_genre_work(
 );
 create index idx_work_search on t_genre_work(work_id);
 
- ALTER TABLE t_sys_genre Change genre_type genre VARCHAR(255)
- ALTER TABLE t_sys_genre Change genre_info info VARCHAR(255)
+-- ALTER TABLE t_sys_genre Change genre_type genre VARCHAR(255)
+-- ALTER TABLE t_sys_genre Change genre_info info VARCHAR(255)
 create table t_sys_genre(
 	id			char(4) primary key,
 	genre		varchar(16),
@@ -472,8 +472,8 @@ create table t_sys_genre(
 );
 
 
- Alter table t_sys_remocon
-   ADD COLUMN key_immedi TINYINT NOT null DEFAULT 0
+-- Alter table t_sys_remocon
+--   ADD COLUMN key_immedi TINYINT NOT null DEFAULT 0
 
 create table t_sys_remocon(
 	remocon_name	varchar(32) not null,
@@ -485,9 +485,10 @@ create table t_sys_remocon(
 	primary key(remocon_name, key_level)
 );
 
- ALTER TABLE t_tool drop parent_id, drop parent_type
- Alter table t_tool add column series_id char(4) after id
- Alter table t_tool add column writer_id char(4) after series_id
+-- ALTER TABLE t_tool drop parent_id, drop parent_type
+-- Alter table t_tool add column series_id char(4) after id
+-- Alter table t_tool add column writer_id char(4) after series_id
+ 
 create table t_tool(
 	id				VARCHAR(255) primary key,
 	series_id		char(4),
@@ -502,17 +503,17 @@ create table t_tool(
 
 -- 2023-11-13 -----------------------------
 
-create table t_read(
+--create table t_read(
 	id			char(8) primary key, /* t_squence 두 개를 이용 */
 	reader_id	char(4),
 	readee_id	varchar(8),
 	time		timestamp default current_timestamp()
-);
+--);
 
 -- 1. id가 필요한가? 2. 아예 엘라스틱 서치에다 넣는 게 낫지 않나?
 -- 1. 필요 없어보임 2. 이게 수입이랑 엮인다고 생각하면 무결성이 엄청 중요해져서 DB가 나은 듯
 
- alter table t_read drop column id
+-- alter table t_read drop column id
 create table t_read(
 	reader_id	char(4),
 	readee_id	varchar(8),
@@ -524,8 +525,8 @@ create table t_read(
 
 
 
- Alter table t_custom_obj
-   add column text_color char(7) after outer_color
+-- Alter table t_custom_obj
+--   add column text_color char(7) after outer_color
 create table t_custom_obj(
 	id				char(4) primary key,
 	descrim			varchar(16),

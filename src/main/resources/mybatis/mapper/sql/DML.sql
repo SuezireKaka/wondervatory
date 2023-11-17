@@ -4,13 +4,10 @@ values(NEXT_PK('S_bb'), '공지사항', '회사공지');
 insert into T_bb(id, name, descrip)
 values(NEXT_PK('S_bb'), '자유게시판', '자유게시판');
 insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '시리즈', '시리즈');
+values(NEXT_PK('S_bb'), '웹소설', '웹소설 게시판');
 insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), 'Q&A', '질문게시판');
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '쇼케이스', '쇼케이스');
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '댓글', '댓글대댓글');
+values(NEXT_PK('S_bb'), '웹툰', '웹툰 게시판');
+
 
 
 insert into t_work(id, writer_id, bb_id, descrim, h_level,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
