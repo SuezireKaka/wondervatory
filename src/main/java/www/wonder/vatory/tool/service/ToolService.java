@@ -1,16 +1,14 @@
 package www.wonder.vatory.tool.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.framework.model.DreamPair;
+import www.wonder.vatory.framework.model.DreamUtility;
 import www.wonder.vatory.framework.model.Entity;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
@@ -97,11 +95,13 @@ public class ToolService {
 	}
 	
 	public ToolVO saveToolDetails(AccountVO writer, ToolVO toolData) {
-		// 일단 툴을 해부해서 필요한 걸 꺼내보자
 		String toolId = toolData.getId();
-		int newXToolSize = toolData.getXToolSize();
-		int newYToolSize = toolData.getYToolSize();
+		String seriesId = toolData.getSeries().getId();
 		
+		// 툴스킨 먼저 처리
+		manageToolSkin(writer, seriesId, toolData);
+		
+		// 커스텀 오브젝트들 중 새로운 애들에 ID 부여
 		List<CustomEntityVO> entityList = toolData.getCustomEntityList();
 		List<CustomEntityVO> newEntityList = entityList.stream()
 				.filter(entity -> entity.getId().startsWith("----"))
@@ -112,16 +112,21 @@ public class ToolService {
 				.filter(relation -> relation.getId().startsWith("----"))
 				.collect(Collectors.toList());
 		
-		grantNewIds(newEntityList, newRelationList);
+		if (newEntityList.size() + newRelationList.size() > 0) {
+			grantNewIds(newEntityList, newRelationList);
+		}
 		
-		customObjectMapper.insertObjectsToSync(toolId, "Entity",
-				newEntityList.stream()
-				.map(CustomObjectVO.class::cast)
-				.collect(Collectors.toList()));
-		customObjectMapper.insertObjectsToSync(toolId, "Relation",
-				newRelationList.stream()
-				.map(CustomObjectVO.class::cast)
-				.collect(Collectors.toList()));
+		// 판단 기준은 id 비교로
+		List<String> bringIdList = Entity.getMultiId(DreamUtility.upcastList(entityList));
+		bringIdList.addAll(Entity.getMultiId(DreamUtility.upcastList(relationList)));
+				
+		// 기존 커스텀 오브젝트에 있던 애가 없어졌으면 deleteList
+		List<CustomObjectVO> oldObjectList = customObjectMapper.listAllObject(toolId);
+		List<CustomObjectVO> deleteList = oldObjectList.stream()
+				.filter(obj -> ! bringIdList.contains(obj.getId()))
+				.collect(Collectors.toList());
+		
+		insertNewObjects(toolId, newEntityList, newRelationList);
 		
 		// 해부되어 나온 애들을 또 해부해서 담아보자
 		List<List<CustomPropertyVO>> entityPropList =
@@ -133,8 +138,25 @@ public class ToolService {
 		
 		return toolData;
 	}
+
+	private void insertNewObjects(String toolId, List<CustomEntityVO> newEntityList,
+			List<CustomRelationVO> newRelationList) {
+		if (newEntityList.size() > 0) {
+			customObjectMapper.insertObjectsToSync(toolId, "Entity",
+					newEntityList.stream()
+					.map(CustomObjectVO.class::cast)
+					.collect(Collectors.toList()));
+		}
+		
+		if (newRelationList.size() > 0) {
+			customObjectMapper.insertObjectsToSync(toolId, "Relation",
+				newRelationList.stream()
+				.map(CustomObjectVO.class::cast)
+				.collect(Collectors.toList()));
+		}
+	}
 	
-	private void grantNewIds(List<CustomEntityVO> newEntityList,
+	private String[] grantNewIds(List<CustomEntityVO> newEntityList,
 			List<CustomRelationVO> newRelationList) {
 		// relationList의 순서에 맞는 oneList와 otherList를 추출
 		
@@ -181,6 +203,8 @@ public class ToolService {
 			}
 			
 		}
+		
+		return newIdArray;
 	}
 
 	private int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
