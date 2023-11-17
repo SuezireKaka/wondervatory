@@ -88,6 +88,10 @@ public class WorkService {
 		return new DreamPair<List<SeriesVO>, PagingDTO>(listResult, paging);
 	}
 	
+	public List<SeriesVO> listRead() {
+		return workMapper.listRead();
+	}
+	
 	public List<GenreVO> listAllGenre() {
 		return genreMapper.listAllGenre();
 	}

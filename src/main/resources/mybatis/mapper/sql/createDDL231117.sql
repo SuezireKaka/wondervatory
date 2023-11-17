@@ -114,7 +114,7 @@ DELIMITER ;
 
 
 
-create table T_CODE(
+create table t_code(
 	Code_type	varchar(255) not null,
 	code_val	varchar(255),
 	validation_re varchar(255)
@@ -195,9 +195,9 @@ create table t_work(
 	read_cnt		int default 0,
 	like_cnt		int default 0,
 	dis_cnt			int default 0,
-	complete		tinyint default 1,
-	series_status	varchar(16),
-	free			tinyint,
+	complete		tinyint default 0,
+	series_status	varchar(16) DEFAULT "무료",
+	free			tinyint DEFAULT 1,
 	reg_dt			timestamp default current_timestamp(),
 	upt_dt			timestamp default current_timestamp() on update current_timestamp()
 );

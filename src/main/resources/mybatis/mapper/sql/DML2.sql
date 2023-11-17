@@ -1,12 +1,12 @@
 
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '공지사항', '회사공지');
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '자유게시판', '자유게시판');
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '웹소설', '웹소설 게시판');
-insert into T_bb(id, name, descrip)
-values(NEXT_PK('S_bb'), '웹툰', '웹툰 게시판');
+insert into t_bb(id, name, descrip)
+values(NEXT_PK('s_bb'), '공지사항', '회사공지');
+insert into t_bb(id, name, descrip)
+values(NEXT_PK('s_bb'), '자유게시판', '자유게시판');
+insert into t_bb(id, name, descrip)
+values(NEXT_PK('s_bb'), '웹소설', '웹소설 게시판');
+insert into t_bb(id, name, descrip)
+values(NEXT_PK('s_bb'), '웹툰', '웹툰 게시판');
 
 insert into t_sys_remocon(remocon_name, key_level, key_name, key_info, key_auth, key_immedi )
 	values ("explorer_remocon", 0, "선택", "클릭한 대상을 선택합니다.","login")
@@ -81,14 +81,26 @@ insert into t_sys_rptype(level, rpt_type, rpt_info)
 values (6, "저작권 침해", "대충 설명 7");
 
 
+insert into t_code(Code_type, code_val) values('accountability type', 'admin');
+insert into t_code(Code_type, code_val) values('accountability type', 'manager');
+insert into t_code(Code_type, code_val) values('accountability type', 'reader');
+insert into t_code(Code_type, code_val) values('accountability type', 'writer');
+
+insert into t_code(Code_type, code_val) values('contect point type', 'phone number');
+insert into t_code(Code_type, code_val) values('contect point type', 'home address');
+insert into t_code(Code_type, code_val, validation_re) values('contect point type', 'email', '[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
+insert into t_code(Code_type, code_val) values('rel target tag', 'post');
+insert into t_code(Code_type, code_val) values('rel target tag', 'party');
+
+
+insert into t_work(id, writer_id, bb_id, descrim, h_tier,title, content, like_cnt, dis_cnt, read_cnt, complete, series_status, free)
+	values("0000", "0002", "0000", "Series", 0, "타이틀" ,"컨텐츠", 0, 0, 0, 0, "유료화", 1);
 
 
 
 
 
-
-
-
-
-
+insert into t_party(id, descrim, name, birth)
+	values("0000", "Organization", "회사11", "800101");
 

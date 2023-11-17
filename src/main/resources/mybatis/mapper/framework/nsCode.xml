@@ -25,13 +25,13 @@
 
 	<!-- public List<CodeVO> listAll(); -->
 	<select id="listAll" resultMap="rmCodeVO">
-		select * from T_CODE where Code_type = 'contect point type'
+		select * from t_code where Code_type = 'contect point type'
 	</select>
 	
 	<!-- public RemoconVO getRemoconByName(String name); -->
 	<select id="getRemoconByName" resultMap="rmRemoconVO">
 		select *
-		  from T_sys_remocon
+		  from t_sys_remocon
 		 where remocon_name = #{name}
 	</select>
 </mapper>

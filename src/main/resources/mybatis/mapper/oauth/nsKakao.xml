@@ -19,14 +19,14 @@
 			cp.cp_type rsp_cp_cp_type, cp.cp_val rsp_cp_cp_val,
 			role.role role_role,
 			acc.descrim rsp_acc_descrim
-		  FROM T_Account acc
-		  LEFT OUTER JOIN T_role role
+		  FROM t_Account acc
+		  LEFT OUTER JOIN t_role role
 		    on role.account_id = acc.id
-		  LEFT OUTER JOIN T_party own
+		  LEFT OUTER JOIN t_party own
 		    on own.id = acc.owner_id
-		  LEFT OUTER JOIN T_party rsp
+		  LEFT OUTER JOIN t_party rsp
 		    on rsp.id = acc.response_id
-		  LEFT OUTER JOIN T_contact_Point cp
+		  LEFT OUTER JOIN t_contact_Point cp
 		    on cp.owner_id = acc.id
 		 where acc.kakao_id = ${id}
 	</select>
@@ -37,7 +37,7 @@
 			order="BEFORE">
 			select NEXT_PK('s_account')
 		</selectKey>
-		INSERT INTO T_Account(id, descrim, kakao_id, owner_id, response_id, kakao_nick)
+		INSERT INTO t_Account(id, descrim, kakao_id, owner_id, response_id, kakao_nick)
 		VALUES (#{id}, 'kakao', #{kakaoId}, #{owner.id}, #{response.id}, #{kakaoNick});
 	</insert>
 	

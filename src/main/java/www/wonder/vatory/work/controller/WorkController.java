@@ -66,6 +66,14 @@ public class WorkController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	// /work/anonymous/listRead
+	@GetMapping("/anonymous/listRead")
+	public ResponseEntity<List<SeriesVO>> listRead() {
+		List<SeriesVO> list = workService.listRead();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	
 	// /work/anonymous/search/0002/타이틀/1?genreId= 검색 아직 안됨
 	@GetMapping("/anonymous/search/{boardId}/{search}/{page}")
 	public ResponseEntity<DreamPair<List<ReplyVO>, PagingDTO>> search(@PathVariable String boardId,
