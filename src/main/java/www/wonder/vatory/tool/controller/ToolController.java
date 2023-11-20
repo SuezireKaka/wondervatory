@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -115,6 +116,12 @@ public class ToolController {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	// @RequestMapping("/post/{id}")
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Integer> deleteTool(@PathVariable String id) {
+		return new ResponseEntity<>(toolService.deleteTool(id), HttpStatus.OK);
 	}
 
 }

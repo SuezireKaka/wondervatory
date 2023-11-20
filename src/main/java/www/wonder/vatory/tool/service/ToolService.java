@@ -255,5 +255,9 @@ public class ToolService {
 		
 		return result;
 	}
+	
+	public int deleteTool(String id) {
+		return toolMapper.deleteTool(id);
+	}
 
 }

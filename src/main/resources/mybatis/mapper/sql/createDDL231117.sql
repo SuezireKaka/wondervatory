@@ -571,6 +571,39 @@ create table t_custom_obj(
 );
 
 
+-- ALTER TABLE t_account
+--change alive login_code TINYINT(4) DEFAULT 1;
+create table t_account(
+	id			char(4) primary key,
+	login_id	varchar(255),
+	pass_word	varchar(255),
+	owner_id	char(4),
+	response_id	char(4),
+	nick		varchar(255),
+	intro		varchar(255),
+	login_code	TINYINT(4) DEFAULT '1',
+	reg_dt		timestamp default current_timestamp(),
+	upt_dt		timestamp default current_timestamp() on update current_timestamp()
+);
+
+create table t_alive(
+	target_id		varchar(255),
+	target_table	varchar(16),
+	alive			tinyint default 1,
+	primary key(target_id, target_table)
+);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

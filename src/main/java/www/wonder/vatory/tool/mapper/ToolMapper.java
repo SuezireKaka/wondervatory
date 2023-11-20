@@ -28,5 +28,7 @@ public interface ToolMapper extends WonderMapper {
 			@Param("toolSkin") ToolVO toolSkin, @Param("seriesId") String seriesId);
 	
 	public int updateToolSkin(@Param("toolSkin") ToolVO toolSkin);
+
+	public int deleteTool(String id);
 	
 }

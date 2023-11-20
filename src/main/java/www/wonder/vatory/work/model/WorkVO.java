@@ -17,6 +17,7 @@ public class WorkVO extends TimeEntity {
 	
 	@TargetProperty
 	private AccountVO writer;	//게시물 작성자
+	private boolean alive;
 	
 	public WorkVO(String id) {
 		super.setId(id);
