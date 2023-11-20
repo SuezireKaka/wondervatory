@@ -586,6 +586,8 @@ create table t_account(
 	upt_dt		timestamp default current_timestamp() on update current_timestamp()
 );
 
+-- 복구 시스템 다 좋은데 삭제된 게시물을 강제로 진입하려고 하면 어떡해?
+-- 뭘 어떡하긴 서비스에서 다 해야지
 create table t_alive(
 	target_id		varchar(255),
 	target_table	varchar(16),

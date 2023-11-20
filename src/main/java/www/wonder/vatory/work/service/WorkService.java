@@ -24,6 +24,7 @@ import www.wonder.vatory.iis.model.TagRelVO;
 import www.wonder.vatory.iis.model.TagVO;
 import www.wonder.vatory.iis.service.TagService;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.party.model.RoleVO;
 import www.wonder.vatory.work.mapper.GenreMapper;
 import www.wonder.vatory.work.mapper.ReadMapper;
 import www.wonder.vatory.work.mapper.WorkMapper;
@@ -162,10 +163,19 @@ public class WorkService {
 		return ret;
 	}
 	
-	public ReplyVO findById(String id) {
+	public ReplyVO findById(AccountVO askAccount, String id) {
 		//postMapper.findById(id)는 id의 primary key 특성으로 사전순서가 보장되어 있음
 		List<SemiPostVO> oneDimList = id.length() == 4 ? workMapper.findSeriesById(id) : workMapper.findPostById(id) ;
 		if (oneDimList.isEmpty()) {
+			return null;
+		}
+		// 작품이 살아있지 않고, 유저가 익명이거나, 매니저나 어드민이 아니라면
+		boolean condi = ! workMapper.isAlive(id, "t_work");
+		condi &= askAccount == null || ! (
+				askAccount.getRoleList().contains(new RoleVO("Manager"))
+				|| askAccount.getRoleList().contains(new RoleVO("Admin")));
+		if (condi) {
+			// 여기는 접근금지에요
 			return null;
 		}
 		

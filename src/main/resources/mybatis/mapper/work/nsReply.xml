@@ -57,7 +57,10 @@
 			 		a.id acc_id, a.descrim acc_descrim,
 					a.login_id acc_login_id, a.nick acc_nick,
 			 		a.login_id acc_login_id, a.kakao_nick acc_kakao_nick
-		  from t_work w LEFT OUTER JOIN t_bb b
+		  from t_work w
+		  Left outer join t_alive alive
+		    on alive.target_id = w.id
+		  LEFT OUTER JOIN t_bb b
 		    ON w.bb_id = b.id
 		  LEFT OUTER JOIN t_account a
 		    ON w.writer_id = a.id
@@ -66,7 +69,9 @@
 				  FROM t_genre_work
 				 WHERE genre_id = #{genreId}
 		  		) search ON search.work_id = w.id
-		 where w.bb_id = #{boardId}
+		 where alive.target_table = 't_work'
+		   and alive.alive = 1
+		   and w.bb_id = #{boardId}
 		   and w.descrim = 'Series'
 		<if test="! genreId.isEmpty()">
 		   and search.genre_id = #{genreId}
@@ -81,12 +86,17 @@
 			a.id acc_id, a.descrim acc_descrim,
 			a.login_id acc_login_id, a.nick acc_nick,
 	 		a.login_id acc_login_id, a.kakao_nick acc_kakao_nick
-	  from T_work w LEFT OUTER JOIN t_bb b
-	       ON w.bb_id = b.id
-	       LEFT OUTER JOIN t_account a
-	       ON w.writer_id = a.id
+	  from T_work w
+	  Left outer join t_alive alive
+		on alive.target_id = w.id
+	  LEFT OUTER JOIN t_bb b
+	    ON w.bb_id = b.id
+	  LEFT OUTER JOIN t_account a
+	    ON w.writer_id = a.id
 	where w.id like CONCAT(#{seriesId}, '%')
 	  and w.descrim = 'Post'
+	  and alive.target_table = 't_work'
+	  and alive.alive = 1
 	  and w.complete = 1
 	 order by w.id DESC
 	 limit #{paging.postLimit} offset #{paging.offset}
@@ -119,15 +129,21 @@
 			<foreach item="word" collection="arrSearch" open="(" separator="," close=")">
 				#{word}
 			</foreach>
-		   and t.id = r.tag_id
-		   and r.tgt_name = 'T_work'
-		   and r.tgt_id = w.id
-		   and w.bb_id = b.id
-		   and b.id = #{boardId}
-	  group by w.id) pst,
-	  T_work w LEFT OUTER JOIN t_account a
+	   and t.id = r.tag_id
+	   and r.tgt_name = 'T_work'
+	   and r.tgt_id = w.id
+	   and w.bb_id = b.id
+	   and b.id = #{boardId}
+	 group by w.id) pst,
+	  T_work w
+	  Left outer join t_alive alive
+	    on w.id = alive.target_id
+	  LEFT OUTER JOIN t_account a
 	       ON w.writer_id = a.id
-	 where pst.wid = w.id
+	 where alive.target_table = 't_work'
+	   and alive.alive = 1
+	   AND w.descrim = 'Series'
+	   and pst.wid = w.id
 	 order by pst.importance desc
 	 limit #{paging.seriesLimit} offset #{paging.offset}
 	</select>

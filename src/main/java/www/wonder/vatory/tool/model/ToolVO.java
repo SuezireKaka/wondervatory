@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import www.wonder.vatory.fileattachment.model.MappedTableDef;
+import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.work.model.SeriesVO;
 import www.wonder.vatory.work.model.WorkVO;
@@ -16,7 +18,7 @@ import www.wonder.vatory.work.model.WorkVO;
 @Setter
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ToolVO extends WorkVO {
+public class ToolVO extends WorkVO implements MappedTableDef {
 	private String name;
 	private int xToolSize;
 	private int yToolSize;
@@ -24,4 +26,17 @@ public class ToolVO extends WorkVO {
 	private AccountVO writer;
 	private List<CustomEntityVO> customEntityList = new ArrayList<>();
 	private List<CustomRelationVO> customRelationList = new ArrayList<>();
+	private List<AttachFileDTO> listAttachFile;
+	
+	public String getMappedTableName() {
+		return "t_tool";
+	}
+	
+	public String getKSuspectType() {
+		return "툴";
+	}
+	
+	public List<AttachFileDTO> getListAttachFile() {
+		return listAttachFile;
+	}
 }

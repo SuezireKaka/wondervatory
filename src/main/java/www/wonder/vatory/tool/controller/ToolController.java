@@ -66,8 +66,9 @@ public class ToolController {
 	// /tool/getToolById/0000
 	@GetMapping("/getToolById/{toolId}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<ToolVO> getToolById(@PathVariable String toolId) {
-		ToolVO result = toolService.getToolById(toolId);
+	public ResponseEntity<ToolVO> getToolById(@AuthenticationPrincipal AccountVO askAccount, 
+			@PathVariable String toolId) {
+		ToolVO result = toolService.getToolById(askAccount, toolId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
