@@ -544,6 +544,34 @@ create table t_custom_obj(
 );
 
 
+--  2023-11-20 --------------------
+
+CREATE TABLE t_custom_rel(
+	id			CHAR(4),
+	one_id	CHAR(4),
+	other_id	CHAR(4)
+);
+
+-- Alter table t_custom_obj
+--   drop one_id
+-- Alter table t_custom_obj
+--   drop other_id
+create table t_custom_obj(
+	id				char(4) primary key,
+	descrim			varchar(16),
+	x_pos			int,
+	y_pos			int,
+	x_size			int,
+	y_size			int,
+	name			varchar(255),
+	inner_color		char(7),
+	outer_color		char(7),
+	text_color		char(7),
+	parent_id		char(4)
+);
+
+
+
 
 
 

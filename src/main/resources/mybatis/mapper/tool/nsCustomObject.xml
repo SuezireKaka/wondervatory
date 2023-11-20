@@ -52,10 +52,12 @@
 
 	<!-- public List<CustomRelationVO> listAllRelation(@Param("toolId") String toolId);-->
 	<select id="listAllRelation" resultMap="rmCustomRelationVO">
-		SELECT *
-		  from t_custom_obj
-		 where parent_id = #{toolId}
-		   and descrim = 'Relation'
+		SELECT obj.*, rel.one_id one_id, rel.other_id other_id
+		  from t_custom_obj obj
+		  Left outer join t_custom_rel rel
+		    on rel.id = obj.id
+		 where obj.parent_id = #{toolId}
+		   and obj.descrim = 'Relation'
 	</select>
 	
 	<!-- public List<CustomObjectVO> listPropertiesOf(@Param("objectId") String objectId); -->
@@ -77,11 +79,7 @@
 	<insert id="insertObjectsToSync">
          INSERT INTO t_custom_obj (id, descrim,
          	x_pos, y_pos, x_size, y_size, name,
-         	inner_color, outer_color, text_color, parent_id
-         	<if test='type.equals("Relation")'>
-         		, one_id, other_id
-         	</if>
-         	)
+         	inner_color, outer_color, text_color, parent_id)
          SELECT sub.*
            from
          <foreach open="(" collection="insertList" item="obj" separator=" union all " close=")">
@@ -97,12 +95,19 @@
          		#{obj.outerColor} as outer_color,
          		#{obj.textColor} as text_color,
          		#{objectId} as parent_id
-         		<if test='type.equals("Relation")'>
-					 ,
-         			#{obj.oneId} as one_id,
-         			#{obj.otherId} as other_id
-				</if>
-         </foreach> sub
+         </foreach> sub;
+         
+         <if test='type.equals("Relation")'>
+         	INSERT INTO t_custom_rel (id, one_id, other_id)
+         	Select sub.id id, sub.one_id one_id, sub.other_id other_id
+         	  from
+         	<foreach open="(" collection="insertList" item="rel" separator=" union all " close=")">
+				SELECT 
+					#{rel.id} as id,
+					#{rel.oneId} as one_id,
+         			#{rel.otherId} as other_id
+		 	</foreach> sub;
+		 </if>
     </insert>
 	
 	<!-- public int insertPropsToSync(@Param("objectId") String objectId, @Param("offset") int offset,
@@ -181,7 +186,13 @@
 		 where obj.id IN
 		<foreach open="(" collection="deleteList" item="obj" separator=", " close=")">
 			#{obj.id}
-		</foreach>
+		</foreach>;
+		DELETE rel.*
+		  FROM t_custom_rel rel
+		 where rel.id IN
+		<foreach open="(" collection="deleteList" item="rel" separator=", " close=")">
+			#{rel.id}
+		</foreach>;
 	</delete>
 	
 	<!-- public int deletePropsToSync(@Param("objectId") String objectId,
