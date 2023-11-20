@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
+import www.wonder.vatory.security.anno.ForManagerOrSelf;
 import www.wonder.vatory.work.model.GenreVO;
 import www.wonder.vatory.work.model.PostVO;
 import www.wonder.vatory.work.model.ReadVO;
@@ -159,8 +160,15 @@ public class WorkController {
 	/** hid like로 지우기 */
 	// @RequestMapping("/post/{id}")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Integer> deleteReply(@PathVariable String id) {
-		return new ResponseEntity<>(workService.deleteReply(id), HttpStatus.OK);
+	public ResponseEntity<Integer> deleteReply(@AuthenticationPrincipal AccountVO deleter,
+			@PathVariable String id) {
+		try {
+			int result = workService.deleteReply(deleter, id);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 }

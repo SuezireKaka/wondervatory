@@ -16,7 +16,7 @@ import www.wonder.vatory.party.model.AccountVO;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ReadVO {
-	AccountVO reader;
-	SemiPostVO readee;
-	Date time;
+	private AccountVO reader;
+	private SemiPostVO readee;
+	private Date time;
 }

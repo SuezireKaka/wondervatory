@@ -22,6 +22,8 @@ public interface PartyMapper extends WonderMapper {
 	public WonderAccountVO findByLoginId(String loginId);
 	public AccountVO findById(String id);
 	
+	public AccountVO findWriterByWorkIdFrom(String id, String table);
+	
 	public boolean isValidLoginId(String loginId);
 	public boolean isValidNick(String nick);
 	public boolean checkUniqueVal(String key, String val);

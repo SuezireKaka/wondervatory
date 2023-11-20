@@ -135,6 +135,15 @@
 		 where acc.id = #{id}
 	</select>
 	
+	<!-- public AccountVO findWriterByWorkIdFrom(String id, String table); -->
+	<select id="findWriterByWorkIdFrom" resultMap="rmAccountVO">
+		SELECT acc.id id, acc.descrim descrim
+		  from ${table} w
+		  Left outer join t_account acc
+		    on w.writer_id = acc.id
+		 where w.id = #{id}
+	</select>
+	
 	<!-- public boolean isValidLoginId(String loginId); -->
 	<select id="isValidLoginId" resultType="boolean">
 		SELECT count(1) = 0

@@ -61,7 +61,10 @@ public class PartyService implements UserDetailsService {
 	public AccountVO findByLoginId(String loginId) {
 		return partyMapper.findByLoginId(loginId);
 	}
-	//00000000
+	
+	public AccountVO findWriterByWorkIdFrom(String id, String table) {
+		return partyMapper.findWriterByWorkIdFrom(id, table);
+	}
 
 	public int createOrganization(OrganizationVO organization) {
 		return partyMapper.createOrganization(organization);

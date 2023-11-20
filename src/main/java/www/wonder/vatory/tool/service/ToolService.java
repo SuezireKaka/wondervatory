@@ -7,12 +7,16 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import www.wonder.vatory.framework.exception.BusinessException;
+import www.wonder.vatory.framework.exception.ErrorCode;
 import www.wonder.vatory.framework.model.DreamPair;
 import www.wonder.vatory.framework.model.DreamUtility;
 import www.wonder.vatory.framework.model.Entity;
 import www.wonder.vatory.framework.model.PagingDTO;
+import www.wonder.vatory.framework.service.WonderService;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.party.model.RoleVO;
+import www.wonder.vatory.party.service.PartyService;
 import www.wonder.vatory.tool.mapper.CustomObjectMapper;
 import www.wonder.vatory.tool.mapper.ToolMapper;
 import www.wonder.vatory.tool.model.CustomEntityVO;
@@ -22,12 +26,15 @@ import www.wonder.vatory.tool.model.CustomRelationVO;
 import www.wonder.vatory.tool.model.ToolVO;
 
 @Service
-public class ToolService {
+public class ToolService extends WonderService {
 	@Autowired(required = false)
 	private ToolMapper toolMapper;
 
 	@Autowired(required = false)
 	private CustomObjectMapper customObjectMapper;
+
+	@Autowired(required = false)
+	private PartyService partyService;
 
 	/*
 	 * 시리즈의 모든 툴 직접 붙어있는 조회 public DreamPair<List<ToolVO>, PagingDTO>
@@ -65,14 +72,13 @@ public class ToolService {
 		ToolVO result = toolMapper.getToolById(toolId);
 
 		// 작품이 살아있지 않고, 유저가 익명이거나, 매니저나 어드민이 아니라면
-		boolean condi = ! toolMapper.isAlive(toolId, "t_tool");
-		condi &= askAccount == null || !(askAccount.getRoleList().contains(new RoleVO("Manager"))
-				|| askAccount.getRoleList().contains(new RoleVO("Admin")));
+		boolean condi = !toolMapper.isAlive(toolId, "t_tool");
+		condi &= failToAuth(askAccount);
 		if (condi) {
 			// 되돌아가세요
 			return null;
 		}
-		
+
 		List<CustomEntityVO> resEntityList = customObjectMapper.listAllEntity(toolId);
 		resEntityList.stream().forEach(entity -> {
 			entity.getCustomPropertiesList().addAll(customObjectMapper.listPropertiesOf(entity.getId()));
@@ -85,6 +91,11 @@ public class ToolService {
 		});
 		result.getCustomRelationList().addAll(resRelationList);
 		return result;
+	}
+
+	public boolean failToAuth(AccountVO account) {
+		return account == null || !(account.getRoleList().contains(new RoleVO("Manager"))
+				|| account.getRoleList().contains(new RoleVO("Admin")));
 	}
 
 	public ToolVO manageToolSkin(AccountVO writer, String seriesId, ToolVO toolSkin) {
@@ -243,7 +254,16 @@ public class ToolService {
 		return result;
 	}
 
-	public int deleteTool(String id) {
+	public int deleteTool(AccountVO deleter, String id) {
+		AccountVO writer = partyService.findWriterByWorkIdFrom(id, "t_tool");
+		
+		// 삭제자가 작성자와 다르거나, 유저가 익명이거나, 매니저나 어드민이 아니라면
+		boolean condi = ! deleter.getId().equals(writer.getId());
+		condi &= failToAuth(deleter);
+		
+		if (condi) {
+			throw new BusinessException(ErrorCode.INVAID_UPDATE);
+		}
 		return toolMapper.deleteTool(id);
 	}
 

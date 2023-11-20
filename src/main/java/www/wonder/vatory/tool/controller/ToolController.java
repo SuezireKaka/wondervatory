@@ -21,7 +21,6 @@ import www.wonder.vatory.framework.model.PagingDTO;
 import www.wonder.vatory.party.model.AccountVO;
 import www.wonder.vatory.tool.model.ToolVO;
 import www.wonder.vatory.tool.service.ToolService;
-import www.wonder.vatory.work.model.SeriesVO;
 
 @RestController
 @CrossOrigin
@@ -119,10 +118,18 @@ public class ToolController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	// @RequestMapping("/post/{id}")
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Integer> deleteTool(@PathVariable String id) {
-		return new ResponseEntity<>(toolService.deleteTool(id), HttpStatus.OK);
+	// @RequestMapping("/tool/deleteTool/{id}")
+	@DeleteMapping("/deleteTool/{id}")
+	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	public ResponseEntity<Integer> deleteTool(@AuthenticationPrincipal AccountVO deleter,
+			@PathVariable String id) {
+		try {
+			int result = toolService.deleteTool(deleter, id);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 }
