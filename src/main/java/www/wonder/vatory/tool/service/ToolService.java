@@ -158,13 +158,13 @@ public class ToolService extends WonderService {
 		// 마지막으로 insert
 		insertNewObjects(toolId, newEntityList, newRelationList);
 
-		// 해부되어 나온 애들을 또 해부해서 담아보자
-		List<List<CustomPropertyVO>> entityPropList = entityList.stream().map(entity -> {
-			return entity.getCustomPropertiesList();
-		}).collect(Collectors.toList());
-		List<List<CustomPropertyVO>> relationPropList = relationList.stream().map(relation -> {
-			return relation.getCustomPropertiesList();
-		}).collect(Collectors.toList());
+		// 각 객체마다 id와 customPropertiesList를 이용해서 DB에 싱크
+		entityList.stream().forEach(entity -> {
+			syncPropertiesOf(entity.getId(), entity.getCustomPropertiesList());
+		});
+		relationList.stream().forEach(relation -> {
+			syncPropertiesOf(relation.getId(), relation.getCustomPropertiesList());
+		});
 
 		return toolData;
 	}
@@ -229,23 +229,35 @@ public class ToolService extends WonderService {
 	}
 
 	private int syncPropertiesOf(String objectId, List<CustomPropertyVO> requestList) {
-		int result = 0;
+		int result = 1;
 		int requestCount = requestList.size();
 		// 현재 들어있는 개수랑 비교해서 판단
 		int prevCount = customObjectMapper.countPropertiesOf(objectId);
 
-		if (requestCount > prevCount) {
-			// 늘어났으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
+		if (requestCount >= prevCount) {
+			// 늘어났거나 개수가 같으면 prevCount만큼 리스트를 분할해서 업데이트 이후 추가
 			int border = prevCount;
 
-			List<List<CustomPropertyVO>> listOfLists = new ArrayList<>(requestList.stream()
-					.collect(Collectors.groupingBy(s -> requestList.indexOf(s) >= border)).values());
+			List<CustomPropertyVO> updateList = new ArrayList<>();
+			List<CustomPropertyVO> insertList = new ArrayList<>();
+			
+			for (int i = 0; i < requestCount; i++) {
+				if (i < prevCount) {
+					updateList.add(requestList.get(i));
+				}
+				else {
+					insertList.add(requestList.get(i));
+				}
+			}
+			
+			if (updateList.size() > 0) {
+				result &= customObjectMapper.updateAllPropsFrom(objectId, updateList);
+			}
+			
+			if (insertList.size() > 0) {
+				result &= customObjectMapper.insertPropsToSync(objectId, updateList.size(), insertList);
+			}
 
-			List<CustomPropertyVO> updateList = listOfLists.get(0);
-			List<CustomPropertyVO> insertList = listOfLists.get(1);
-
-			result = customObjectMapper.updateAllPropsFrom(objectId, updateList)
-					& customObjectMapper.insertPropsToSync(objectId, updateList.size(), insertList);
 		} else {
 			result = customObjectMapper.deletePropsToSync(objectId, requestCount)
 					& customObjectMapper.updateAllPropsFrom(objectId, requestList);

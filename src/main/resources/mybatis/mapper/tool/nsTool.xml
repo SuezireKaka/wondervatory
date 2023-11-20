@@ -73,6 +73,16 @@
 	    VALUES (#{toolSkin.id}, 't_tool');
 	</insert>
 	
+	<!-- public int updateToolSkin(@Param("toolSkin") ToolVO toolSkin); -->
+	<update id="updateToolSkin">
+		UPDATE t_tool
+		   SET name = #{toolSkin.name},
+		       x_tool_size = #{toolSkin.xToolSize},
+		       y_tool_size = #{toolSkin.yToolSize},
+		       upt_dt = current_timestamp()
+		 WHERE id = #{toolSkin.id}
+	</update>
+	
 	<!-- public int public int deleteTool(String id);-->
 	<delete id="deleteTool">
 	update t_alive
