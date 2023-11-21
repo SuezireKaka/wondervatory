@@ -542,6 +542,8 @@ create table t_custom_obj(
 	other_id		char(4)
 );
 
+-- 2023-11-15 -----------------------------
+
 
 
 

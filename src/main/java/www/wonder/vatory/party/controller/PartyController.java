@@ -44,9 +44,7 @@ public class PartyController {
 	// /party/findById/0003
 	@GetMapping("/findById/{id}")
 	@ForManagerOrSelf
-	public ResponseEntity<AccountVO> findById(
-			@AuthenticationPrincipal AccountVO account,
-			@PathVariable String id) {
+	public ResponseEntity<AccountVO> findById(@AuthenticationPrincipal AccountVO account, @PathVariable String id) {
 		AccountVO result = partyService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -109,9 +107,7 @@ public class PartyController {
 			@PathVariable String loginResultCode) {
 		return ResponseEntity.ok(partyService.updateStatus(memberId, loginResultCode));
 	}
-	
 
-	
 	// /party/deleteMember/닉
 	@GetMapping("/deleteMember/{id}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
