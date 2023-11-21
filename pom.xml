@@ -144,6 +144,9 @@
 				</configuration>
 			</plugin>
 		</plugins>
+	<!-- ./mvnw 실행을 위해 추가 -->
+		<defaultGoal>install</defaultGoal>
+
 	</build>
 
 </project>
