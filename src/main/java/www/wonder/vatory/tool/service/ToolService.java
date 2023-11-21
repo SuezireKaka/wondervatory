@@ -72,9 +72,9 @@ public class ToolService extends WonderService {
 		ToolVO result = toolMapper.getToolById(toolId);
 
 		// 작품이 살아있지 않고, 유저가 익명이거나, 매니저나 어드민이 아니라면
-		boolean condi = !toolMapper.isAlive(toolId, "t_tool");
-		condi &= failToAuth(askAccount);
-		if (condi) {
+		boolean failToAuth = ! toolMapper.isAlive(toolId, "t_tool");
+		failToAuth &= failToAuth(askAccount);
+		if (failToAuth) {
 			// 되돌아가세요
 			return null;
 		}
@@ -91,11 +91,6 @@ public class ToolService extends WonderService {
 		});
 		result.getCustomRelationList().addAll(resRelationList);
 		return result;
-	}
-
-	public boolean failToAuth(AccountVO account) {
-		return account == null || !(account.getRoleList().contains(new RoleVO("Manager"))
-				|| account.getRoleList().contains(new RoleVO("Admin")));
 	}
 
 	public ToolVO manageToolSkin(AccountVO writer, String seriesId, ToolVO toolSkin) {

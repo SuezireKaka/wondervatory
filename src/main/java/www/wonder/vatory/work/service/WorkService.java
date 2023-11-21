@@ -174,15 +174,18 @@ public class WorkService extends WonderService {
 			return null;
 		}
 		// 작품이 살아있지 않고, 유저가 익명이거나, 매니저나 어드민이 아니라면
-		boolean condi = !workMapper.isAlive(id, "t_work");
-		condi &= askAccount == null || !(askAccount.getRoleList().contains(new RoleVO("Manager"))
-				|| askAccount.getRoleList().contains(new RoleVO("Admin")));
-		if (condi) {
-			// 여기는 접근금지에요
+		boolean failToAuth = !workMapper.isAlive(id, "t_work");
+		failToAuth &= failToAuth(askAccount);
+		if (failToAuth) {
+			// 되돌아가세요
 			return null;
 		}
 
 		SemiPostVO ret = (SemiPostVO) oneDimList.get(0);
+		
+		if (askAccount != null) {
+			statisticallyRead(askAccount, ret);		
+		}
 
 		ret.incReadCount();
 		workMapper.incReadCount(ret.getId());
@@ -202,6 +205,19 @@ public class WorkService extends WonderService {
 			}
 		}
 		return ret;
+	}
+
+	private void statisticallyRead(AccountVO askAccount, SemiPostVO ret) {
+		/* 원더배토리 규정상 통계적으로 유의미한 읽기 :
+		 * 1. 자신이 읽는 것이 아닐 것
+		 * 2. 하루에 한 번까지만 셀 것
+		*/
+		boolean validRead = ! askAccount.getId().equals(ret.getWriter().getId())
+				&& ! readMapper.hasReadToday(askAccount, ret);
+		
+		if (validRead) {
+			readMapper.read(askAccount, ret);
+		}
 	}
 
 	public DreamPair<PostVO, PostVO> getPrevAndNext(String id) {

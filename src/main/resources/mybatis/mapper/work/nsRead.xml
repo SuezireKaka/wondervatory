@@ -26,5 +26,20 @@
 	    on red.writer_id = wrt.id
 	</select>
 	
+	<!--	public boolean hasReadToday(@Param("reader") AccountVO reader,
+				@Param("readee") SemiPostVO readee); -->
+	<select id="hasReadToday" resultType="boolean">
+		SELECT count(DISTINCT reader_id, readee_id, time)
+		  FROM t_read
+		 WHERE reader_id = #{reader.id}
+		   AND readee_id = #{readee.id}
+		   AND time >= CURDATE();
+	</select>
+	
+	<!--	public int read(@Param("reader") AccountVO reader, @Param("readee") SemiPostVO readee); -->
+	<insert id="read">
+		insert into t_read(reader_id, readee_id)
+		values (#{reader.id}, #{readee.id})
+	</insert>
 
 </mapper>
