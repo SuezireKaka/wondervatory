@@ -25,18 +25,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.AmazonS3;
+
 import www.wonder.vatory.fileattachment.model.PlaybleContentTypes;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileCleaner;
 import www.wonder.vatory.framework.exception.BusinessException;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.party.model.PartyVO;
 
 @RestController		//Container에 담기도록 지정
 @RequestMapping("/attach")
 public class FileAttachController {
 	@Autowired
 	private AttachFileCleaner attachFileCleaner;
+
 	
 	/**
 	 * 게시글 등록 이전에 미리 첨부파일 전송의 목적은?

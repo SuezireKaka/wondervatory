@@ -3,14 +3,21 @@ package www.wonder.vatory.fileattachment.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.repository.AttachFileRepository;
 
 @Service
 public class AttachFileService {
+    
 	@Autowired
 	private AttachFileRepository attachFileRepository;
 
