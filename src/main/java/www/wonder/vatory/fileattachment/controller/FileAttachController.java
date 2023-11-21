@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +26,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import lombok.RequiredArgsConstructor;
 import www.wonder.vatory.fileattachment.model.PlaybleContentTypes;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.service.AttachFileCleaner;
 import www.wonder.vatory.framework.exception.BusinessException;
 import www.wonder.vatory.party.model.AccountVO;
-import www.wonder.vatory.party.model.PartyVO;
 
 @RestController		//Container에 담기도록 지정
+@RequiredArgsConstructor
 @RequestMapping("/attach")
 public class FileAttachController {
+    private final AmazonS3Client amazonS3Client;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+	
 	@Autowired
 	private AttachFileCleaner attachFileCleaner;
+
 	
 	/**
 	 * 게시글 등록 이전에 미리 첨부파일 전송의 목적은?
@@ -54,6 +66,11 @@ public class FileAttachController {
 			uploadPath.mkdirs();	//여러 계층의 Folder를 한번에 만들기
 		}
 
+		/*
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentLength(attachFiles.getSize());
+		metadata.setContentType(attachFiles.getContentType());
+*/
 		for (MultipartFile aFile : attachFiles) {
 			String originalFilename = Normalizer.normalize(aFile.getOriginalFilename(), Normalizer.Form.NFC);
 			// a:\c\b\aa.txt  => aa.txt
@@ -61,12 +78,23 @@ public class FileAttachController {
 			String uuid = UUID.randomUUID().toString().replace("-", "");
 
 			AttachFileDTO attachFileDTO = new AttachFileDTO(pathName, originalFilePureName, uuid);
+			
+	
 
 			File savedOnServerFile = attachFileDTO.findUploadedFile(attachFileCleaner.getUploadDir());
 			PlaybleContentTypes contentType = null;
 			try {
 				aFile.transferTo(savedOnServerFile);
 				InputStream inputStream = new FileInputStream(savedOnServerFile);
+				
+				
+				/*
+				 amazonS3Client.putObject(new PutObjectRequest(bucket, originalFilePureName, inputStream, metadata)
+		                    .withCannedAcl(CannedAccessControlList.PublicRead));
+		         amazonS3Client.getUrl(bucket, originalFilePureName).toString();  //s3풋
+		            */
+		            
+		            
 				contentType = PlaybleContentTypes.createThumbnail(inputStream, savedOnServerFile, attachFileCleaner.getUploadDir(), attachFileDTO);
 				attachFileDTO.setContentType(contentType);
 				inputStream.close();
