@@ -19,7 +19,7 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	//   /bb/anonymous/listAll
+	// /bb/anonymous/listAll  //ㅁㄴㅇㄹㅁㄴㅇ
 	@GetMapping("/anonymous/listAll")
 	public ResponseEntity<List<BoardVO>> listAll() {
 		List<BoardVO> list = boardService.listAll();
