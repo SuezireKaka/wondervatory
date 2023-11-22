@@ -22,11 +22,11 @@ public class ElasticController {
 	ElasticService elasticService;
 	
 	
-	// /work/anonymous/listLatestReadOf/0056/7/sex_male-age_any
+	// /elastic/anonymous/listLatestReadOf/0056/7/sex_male-age_any
 	@GetMapping("/anonymous/listLatestReadOf/{workId}/{daynum}/{condi}")
-	public ResponseEntity<List<ReadVO>> listLatestRead(@PathVariable String workId,
+	public ResponseEntity<String> listLatestRead(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		List<ReadVO> list = elasticService.listLatestRead(workId, daynum, condi);
+		String list = elasticService.listLatestRead(workId, daynum, condi);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 

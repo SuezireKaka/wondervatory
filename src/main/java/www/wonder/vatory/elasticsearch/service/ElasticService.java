@@ -1,22 +1,17 @@
 package www.wonder.vatory.elasticsearch.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import www.wonder.vatory.elasticsearch.api.ElasticApi;
 import www.wonder.vatory.elasticsearch.model.condition.Condition;
 import www.wonder.vatory.elasticsearch.model.condition.MatchCondition;
 import www.wonder.vatory.elasticsearch.model.condition.RangeCondition;
@@ -34,16 +29,18 @@ import www.wonder.vatory.work.model.ReadVO;
 @Service
 public class ElasticService {
 	@Autowired
-	RestClient restClient;
+	ElasticApi elasticApi;
 	
-	public List<ReadVO> listLatestRead(String workId, int daynum, String condi) {
+	private final String ELASTIC_INDEX = "logstash_maria_read";
+	private final String ELASTIC_TYPE = "_search";
+	
+	public String listLatestRead(String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String request = buildElasticJSON(workId, daynum, condi);
 		// json 받아서 실행
+		String statisticalReadList = getElasticResult(request);
 		
-		String aaa = "111";
-		
-		return null;
+		return statisticalReadList;
 	}
 	
 	private String buildElasticJSON(String workId, int daynum, String condi) {
@@ -85,7 +82,7 @@ public class ElasticService {
 		}
 		
 		List<String> sort = new ArrayList<>();
-		sort.add("Time");
+		sort.add("time");
 		
 		Bool bool = new Bool(must);
 		Query query = new Query(bool);
@@ -130,24 +127,13 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private List<ReadVO> getElasticResult(String requestJSON) {
-		
-		Request request = new Request("GET", "logstash_maria_read");
+	private String getElasticResult(String requestJSON) {
+		String url = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
-		NStringEntity entity = new NStringEntity(requestJSON, ContentType.APPLICATION_JSON);
-		request.setEntity(entity);
-
-		Response response;
-		try {
-			response = restClient.performRequest(request);
-			List<ReadVO> result = response.getEntity();
-			
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Map<String, Object> result = elasticApi.callElasticApi("GET", url, null, requestJSON);
 		
+		String success = "성공~";
 		
-		return null;
+		return (String) result.get("resultBody");
 	}
 }
