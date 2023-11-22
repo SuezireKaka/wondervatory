@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BirthRangeCore {
+public class BirthRangeCore extends RangeCore {
 	private TimeRange birth;
 }

@@ -10,6 +10,6 @@ import www.wonder.vatory.elasticsearch.model.searchCore.MatchCore;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchCondtion extends Condition {
+public class MatchCondition extends Condition {
 	private MatchCore match;
 }

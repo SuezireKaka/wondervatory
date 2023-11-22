@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeRangeCore {
+public class TimeRangeCore extends RangeCore {
 	private TimeRange time;
 }
