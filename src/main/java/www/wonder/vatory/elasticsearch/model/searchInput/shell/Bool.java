@@ -1,4 +1,4 @@
-package www.wonder.vatory.elasticsearch.model.shell;
+package www.wonder.vatory.elasticsearch.model.searchInput.shell;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import www.wonder.vatory.elasticsearch.model.condition.Condition;
+import www.wonder.vatory.elasticsearch.model.searchInput.condition.Condition;
 
 @Getter
 @Setter

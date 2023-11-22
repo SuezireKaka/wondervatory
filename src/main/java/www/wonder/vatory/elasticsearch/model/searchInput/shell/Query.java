@@ -1,4 +1,4 @@
-package www.wonder.vatory.elasticsearch.model.shell;
+package www.wonder.vatory.elasticsearch.model.searchInput.shell;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

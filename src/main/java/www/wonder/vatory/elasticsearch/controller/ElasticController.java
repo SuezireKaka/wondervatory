@@ -24,9 +24,9 @@ public class ElasticController {
 	
 	// /elastic/anonymous/listLatestReadOf/0056/7/sex_male-age_any
 	@GetMapping("/anonymous/listLatestReadOf/{workId}/{daynum}/{condi}")
-	public ResponseEntity<String> listLatestRead(@PathVariable String workId,
+	public ResponseEntity<Object> listLatestRead(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		String list = elasticService.listLatestRead(workId, daynum, condi);
+		Object list = elasticService.listLatestRead(workId, daynum, condi);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 

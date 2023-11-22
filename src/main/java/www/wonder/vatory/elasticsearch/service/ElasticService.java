@@ -12,18 +12,18 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
-import www.wonder.vatory.elasticsearch.model.condition.Condition;
-import www.wonder.vatory.elasticsearch.model.condition.MatchCondition;
-import www.wonder.vatory.elasticsearch.model.condition.RangeCondition;
-import www.wonder.vatory.elasticsearch.model.condition.RegExpCondition;
-import www.wonder.vatory.elasticsearch.model.searchCore.BirthRangeCore;
-import www.wonder.vatory.elasticsearch.model.searchCore.MatchCore;
-import www.wonder.vatory.elasticsearch.model.searchCore.RegExpCore;
-import www.wonder.vatory.elasticsearch.model.searchCore.TimeRange;
-import www.wonder.vatory.elasticsearch.model.searchCore.TimeRangeCore;
-import www.wonder.vatory.elasticsearch.model.shell.Bool;
-import www.wonder.vatory.elasticsearch.model.shell.ElasticQueryDTO;
-import www.wonder.vatory.elasticsearch.model.shell.Query;
+import www.wonder.vatory.elasticsearch.model.searchInput.condition.Condition;
+import www.wonder.vatory.elasticsearch.model.searchInput.condition.MatchCondition;
+import www.wonder.vatory.elasticsearch.model.searchInput.condition.RangeCondition;
+import www.wonder.vatory.elasticsearch.model.searchInput.condition.RegExpCondition;
+import www.wonder.vatory.elasticsearch.model.searchInput.searchCore.BirthRangeCore;
+import www.wonder.vatory.elasticsearch.model.searchInput.searchCore.MatchCore;
+import www.wonder.vatory.elasticsearch.model.searchInput.searchCore.RegExpCore;
+import www.wonder.vatory.elasticsearch.model.searchInput.searchCore.TimeRange;
+import www.wonder.vatory.elasticsearch.model.searchInput.searchCore.TimeRangeCore;
+import www.wonder.vatory.elasticsearch.model.searchInput.shell.Bool;
+import www.wonder.vatory.elasticsearch.model.searchInput.shell.ElasticQueryDTO;
+import www.wonder.vatory.elasticsearch.model.searchInput.shell.Query;
 import www.wonder.vatory.work.model.ReadVO;
 
 @Service
@@ -34,11 +34,11 @@ public class ElasticService {
 	private final String ELASTIC_INDEX = "logstash_maria_read";
 	private final String ELASTIC_TYPE = "_search";
 	
-	public String listLatestRead(String workId, int daynum, String condi) {
+	public Object listLatestRead(String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String request = buildElasticJSON(workId, daynum, condi);
 		// json 받아서 실행
-		String statisticalReadList = getElasticResult(request);
+		Object statisticalReadList = getElasticResult(request);
 		
 		return statisticalReadList;
 	}
@@ -127,13 +127,13 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private String getElasticResult(String requestJSON) {
+	private Object getElasticResult(String requestJSON) {
 		String url = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
 		Map<String, Object> result = elasticApi.callElasticApi("GET", url, null, requestJSON);
 		
 		String success = "성공~";
 		
-		return (String) result.get("resultBody");
+		return result.get("resultBody");
 	}
 }

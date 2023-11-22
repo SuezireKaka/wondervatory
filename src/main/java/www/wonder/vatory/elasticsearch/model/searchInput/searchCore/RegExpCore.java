@@ -1,15 +1,15 @@
-package www.wonder.vatory.elasticsearch.model.searchCore;
+package www.wonder.vatory.elasticsearch.model.searchInput.searchCore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import www.wonder.vatory.elasticsearch.model.shell.Bool;
+import www.wonder.vatory.elasticsearch.model.searchInput.shell.Bool;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegExpCore {
-	private String readee_id;
+	private String readeeId;
 }
