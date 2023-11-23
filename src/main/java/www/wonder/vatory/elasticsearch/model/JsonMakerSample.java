@@ -138,10 +138,10 @@ public class JsonMakerSample {
 		
 		
 		// making "dto.query.bool.mustList[0].range_0.time.gte" and closing...
-		JsonMaker gte_0_Maker = JsonMaker.builder().type("String").selfVal("now-3d/d").build();
+		JsonMaker gte_0_Maker = JsonMaker.builder().type("String").selfVal("now-10y").build();
 
 		// making "dto.query.bool.mustList[0].range_0.time.lt" and closing...
-		JsonMaker lt_0_Maker = JsonMaker.builder().type("String").selfVal("now").build();
+		JsonMaker lt_0_Maker = JsonMaker.builder().type("String").selfVal("now-20y").build();
 
 		
 		
