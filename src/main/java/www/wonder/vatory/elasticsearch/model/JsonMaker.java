@@ -56,7 +56,7 @@ public class JsonMaker {
 		
 		return result;
 	}
-	
+
 	private String makeListJson(int level) {
 		// 일단 리스트니까 대괄호 열고 시작
 		String result = "[\n";
@@ -75,7 +75,7 @@ public class JsonMaker {
 		result += outerTab(level) + "]";
 		return result;
 	}
-	
+
 	private String makeObjectJson(int level) {
 		// 일단 객체니까 중괄호 열고 시작
 		String result = "{\n";
@@ -108,6 +108,7 @@ public class JsonMaker {
 		result += outerTab(level) + "}";
 		return result;
 	}
+<<<<<<< HEAD
 	
 	private String finallizeElemDeco(String result, int listSize, int i) {
 		// 마지막이 아니면 콤마 찍고
@@ -116,6 +117,14 @@ public class JsonMaker {
 		}
 		// 엔터로 마무리
 		result += "\n";
+=======
+	*/
+	private List<String> takeAllKeys(Map<String, Object> map) {
+		List<String> result = new ArrayList<>();
+		map.forEach((key, v) -> {
+			result.add(key);
+		});
+>>>>>>> bc6a5d0040db081645c7b73ec3091ca665084304
 		return result;
 	}
 

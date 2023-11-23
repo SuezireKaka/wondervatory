@@ -1,5 +1,6 @@
 package www.wonder.vatory.security.config;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,8 @@ public class DreamSecurityConfiguration {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-		//configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://nasms018.github.io"));// 주소변경 https://nasms018.github.io  // http://localhost:3000
+		//configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://nasms018.github.io/wv_front2"));// 주소변경 https://nasms018.github.io  // http://localhost:3000
 		configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(
 				List.of("Content-Type", "x-auth-token", "Access-Control-Allow-Origin", "Cache-control", "X-PINGOTHER"));
