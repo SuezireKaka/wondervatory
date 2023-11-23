@@ -22,7 +22,7 @@ public class JsonMaker {
 	private List<JsonMaker> childList;
 
 	private Map<String, JsonMaker> subMap;
-
+	/*
 	public String makeJson(int level) {
 		String result = "";
 		
@@ -43,7 +43,7 @@ public class JsonMaker {
 		
 		return result;
 	}
-	
+
 	private String makeListJson(int level) {
 		// 일단 리스트니까 대괄호 열고 시작
 		String result = "[\n";
@@ -67,7 +67,7 @@ public class JsonMaker {
 		result += outerTab(level) + "]";
 		return result;
 	}
-	
+
 	private String makeObjectJson(int level) {
 		// 일단 객체니까 중괄호 열고 시작
 		String result = "{\n";
@@ -88,7 +88,7 @@ public class JsonMaker {
 		result += outerTab(level) + "}";
 		return result;
 	}
-	
+	*/
 	private List<String> takeAllKeys(Map<String, Object> map) {
 		List<String> result = new ArrayList<>();
 		map.forEach((key, v) -> {
