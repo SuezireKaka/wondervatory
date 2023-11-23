@@ -48,7 +48,7 @@ public enum PlaybleContentTypes {
 			if (playbleContentType != null && playbleContentType.isThumbnailTarget) {
 				File thumdFile = attachFileDTO.findThumnailFile(uploadDir);
 
-				FileOutputStream thumbnailOutputStream = new FileOutputStream(thumdFile);
+				FileOutputStream thumbnailOutputStream = new FileOutputStream(thumdFile);  //여기서 에러 발생
 				if (playbleContentType == image) {
 					Thumbnailator.createThumbnail(is, thumbnailOutputStream, 100, 100);
 				} else if (playbleContentType == video) {

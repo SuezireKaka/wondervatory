@@ -29,8 +29,8 @@ import www.wonder.vatory.work.model.SeriesVO;
 import www.wonder.vatory.work.service.WorkService;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/work")
+@CrossOrigin(origins = "*")
 public class WorkController {
 	@Autowired
 	private WorkService workService;
