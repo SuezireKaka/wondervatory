@@ -108,7 +108,6 @@ public class JsonMaker {
 		result += outerTab(level) + "}";
 		return result;
 	}
-<<<<<<< HEAD
 	
 	private String finallizeElemDeco(String result, int listSize, int i) {
 		// 마지막이 아니면 콤마 찍고
@@ -117,14 +116,6 @@ public class JsonMaker {
 		}
 		// 엔터로 마무리
 		result += "\n";
-=======
-	*/
-	private List<String> takeAllKeys(Map<String, Object> map) {
-		List<String> result = new ArrayList<>();
-		map.forEach((key, v) -> {
-			result.add(key);
-		});
->>>>>>> bc6a5d0040db081645c7b73ec3091ca665084304
 		return result;
 	}
 
