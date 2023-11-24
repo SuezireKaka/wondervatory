@@ -31,7 +31,7 @@ public class ElasticService {
 	@Autowired
 	ElasticApi elasticApi;
 	
-	private final String ELASTIC_INDEX = "logstash_maria_read";
+	private final String ELASTIC_INDEX = "wondervatory_read";
 	private final String ELASTIC_TYPE = "_search";
 	
 	public Object listLatestRead(String workId, int daynum, String condi) {
@@ -44,6 +44,10 @@ public class ElasticService {
 	}
 	
 	private String buildElasticJSON(String workId, int daynum, String condi) {
+		
+		
+		
+		
 		Map<String, String> condiMapping = mapCondi(condi);
 		
 		List<Condition> must = new ArrayList<>();

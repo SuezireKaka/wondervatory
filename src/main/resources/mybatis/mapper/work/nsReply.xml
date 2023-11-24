@@ -173,9 +173,13 @@
 			a.kakao_id acc_kakao_id, a.kakao_nick acc_kakao_nick,
 			a.owner_id acc_owner_id, a.response_id acc_response_id, a.intro acc_intro,
 			a.login_code a_login_code, a.reg_dt a_reg_dt, a.upt_dt a_upt_dt
-	  from T_work w LEFT OUTER JOIN T_account a
+	  from T_work w
+	  Left outer join t_alive alive
+	    on w.id = alive.target_id
+	  LEFT OUTER JOIN T_account a
 	       ON w.writer_id = a.id
 	 where w.id like CONCAT(#{id}, '%')
+	   and alive.alive = 1
 	</select>
 	
 	<!-- 	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,

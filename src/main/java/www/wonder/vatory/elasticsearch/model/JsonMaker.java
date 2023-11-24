@@ -10,7 +10,7 @@ import lombok.Setter;
 
 /**
  * Rest_Body를 자유롭게(= 직접적인 클래스를 구현하지 않고) JSON 형태로 만들어주는 클래스
- * 바깥부터 Builder로 만들고 안쪽부터 Setter로 만드는 것을 권장
+ * 안쪽부터 만드는 것을 권장
  */
 @Getter
 @Setter
@@ -28,6 +28,28 @@ public class JsonMaker {
 	private String[] propertyArray;
 	
 	private List<JsonMaker> childList;
+	
+	public static JsonMaker makeSimpleMaker(String type, String selfVal) {
+		return JsonMaker.builder()
+				.type(type)
+				.selfVal(selfVal)
+				.build();
+	}
+	
+	public static JsonMaker makeListMaker(List<JsonMaker> childList) {
+		return JsonMaker.builder()
+				.type("List")
+				.childList(childList)
+				.build();
+	}
+	
+	public static JsonMaker makeObjectMaker(String[] propertyArray, List<JsonMaker> childList) {
+		return JsonMaker.builder()
+				.type("Object")
+				.propertyArray(propertyArray)
+				.childList(childList)
+				.build();
+	}
 
 	public String makeJson(int level) {
 		if (this.type.equals(null)) {

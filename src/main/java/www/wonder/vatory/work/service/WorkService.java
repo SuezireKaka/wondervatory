@@ -192,6 +192,7 @@ public class WorkService extends WonderService {
 
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);
+		
 		if (id.length() == 8) {
 			Map<String, ReplyVO> map = new HashMap<>();
 			for (ReplyVO reply : oneDimList) {
@@ -207,11 +208,12 @@ public class WorkService extends WonderService {
 		return ret;
 	}
 
+	/**
+	 * 원더배토리 규정상 통계적으로 유의미한 읽기 :
+	 * 1. 자신이 읽는 것이 아닐 것
+	 * 2. 하루에 한 번까지만 셀 것
+	*/
 	private void statisticallyRead(AccountVO askAccount, SemiPostVO ret) {
-		/* 원더배토리 규정상 통계적으로 유의미한 읽기 :
-		 * 1. 자신이 읽는 것이 아닐 것
-		 * 2. 하루에 한 번까지만 셀 것
-		*/
 		boolean validRead = ! askAccount.getId().equals(ret.getWriter().getId())
 				&& ! readMapper.hasReadToday(askAccount, ret);
 		
