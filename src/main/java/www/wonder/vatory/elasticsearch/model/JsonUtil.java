@@ -1,12 +1,13 @@
 package www.wonder.vatory.elasticsearch.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class JsonUtil {
 	private static final String STRING_TYPE = "String";
 	private static final String OBJECT_TYPE = "Object";
-	private static final String LIST_TYPE = "list";
+	private static final String LIST_TYPE = "List";
 	private static final String INT_TYPE = "int";
 	
 	private static final String ASC_SORT = "asc";
@@ -71,7 +72,7 @@ public abstract class JsonUtil {
 	public static JsonMaker makeConditionJsonMaker(String type, String columnName, String gte, String lt) {
 		switch (type) {
 		case "range" :
-			break;
+			return makeRangeJsonMaker(columnName, gte, lt);
 		case "match" :
 			break;
 		case "regexp" :
@@ -83,6 +84,30 @@ public abstract class JsonUtil {
 		
 	}
 	
+	private static JsonMaker makeRangeJsonMaker(String columnName, String gte, String lt) {
+		
+		JsonMaker condiRangeColumnGte = JsonMaker.makeSimpleMaker(STRING_TYPE, gte);
+		JsonMaker condiRangeColumnlt = JsonMaker.makeSimpleMaker(STRING_TYPE, lt);
+
+		String[] condiRangeColumnPropArray = {"gte", "lt"};
+		List<JsonMaker> condiRangeColumnChildList = new ArrayList<>();
+		condiRangeColumnChildList.addAll(Arrays.asList(condiRangeColumnGte, condiRangeColumnlt));
+		JsonMaker condiRangeColumn = JsonMaker.makeObjectMaker
+				(condiRangeColumnPropArray, condiRangeColumnChildList);
+		
+		String[] condiRangePropArray = {columnName};
+		List<JsonMaker> condiRangeChildList = new ArrayList<>();
+		condiRangeChildList.add(condiRangeColumn);
+		JsonMaker condiRange = JsonMaker.makeObjectMaker(condiRangePropArray, condiRangeChildList);
+		
+		String[] condiPropArray = {columnName};
+		List<JsonMaker> condiChildList = new ArrayList<>();
+		condiChildList.add(condiRange);
+		JsonMaker condi = JsonMaker.makeObjectMaker(condiPropArray, condiChildList);
+		
+		return condi;
+	}
+
 	public static JsonMaker makeAggregationJsonMaker() {
 		
 		return JsonMaker.builder().build();

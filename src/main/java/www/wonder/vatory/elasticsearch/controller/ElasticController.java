@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.wonder.vatory.elasticsearch.service.ElasticService;
+import www.wonder.vatory.work.model.ReadTableDTO;
 
 @RestController
 @CrossOrigin
@@ -21,10 +22,10 @@ public class ElasticController {
 	
 	// /elastic/anonymous/listLatestReadOf/0056/7/sex_male-age_any
 	@GetMapping("/anonymous/listLatestReadOf/{workId}/{daynum}/{condi}")
-	public ResponseEntity<Object> listLatestRead(@PathVariable String workId,
+	public ResponseEntity<ReadTableDTO> listLatestRead(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		Object list = elasticService.listLatestRead(workId, daynum, condi);
-		return new ResponseEntity<>(list, HttpStatus.OK);
+		ReadTableDTO table = elasticService.listLatestRead(workId, daynum, condi);
+		return new ResponseEntity<>(table, HttpStatus.OK);
 	}
 
 }
