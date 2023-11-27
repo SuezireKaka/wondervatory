@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
 import www.wonder.vatory.elasticsearch.model.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.JsonUtil;
+import www.wonder.vatory.work.model.ReadCountVO;
 import www.wonder.vatory.work.model.ReadTableDTO;
 
 @Service
@@ -27,48 +28,69 @@ public class ElasticService {
 	
 	private final String NOW_DATE = "now";
 	private final String FROM_NOW_DATE = NOW_DATE + "-";
-	private final String DAY_START_POINT = "d/d";
+	private final String DAY = "d";
+	private final String DAY_START_POINT = DAY + "/" + DAY;
 	private final String YEAR_START_POINT = "y/y";
 	
+	private final String ID_REG_EXP = "(....)*";
+	
+	private final String READEE_COLUMN = "readeeId";
+	private final String SEX_COLUMN = "sex";
 	private final String TIME_COLUMN = "time";
 	private final String BIRTH_COLUMN = "birth";
 	
-	private final String RANGE_CONDI = "range";
-	private final String MATCH_CONDI = "match";
-	private final String REGEXP_CONDI = "regexp";
+	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
-	public ReadTableDTO listLatestRead(String workId, int daynum, String condi) {
-		ReadTableDTO result = new ReadTableDTO();
-		
+	public String listLatestRead(String workId, int daynum, String condi) {
+
 		// json 만들어주세요!!!
 		String request = buildElasticJSON(workId, daynum, condi);
 		// json 받아서 실행
-		Object statisticalRead = getElasticResult(request);
+		String statisticalRead = getElasticResult(request);
 		
-		return result;
+		return statisticalRead;
 	}
 	
 	private String buildElasticJSON(String workId, int daynum, String condi) {
 		
 		Map<String, String> condiMapping = mapCondi(condi);
 		
+		// id 검색
+		JsonMaker idRegExpCondi = JsonUtil.makeRegExpJsonMaker(READEE_COLUMN, workId + ID_REG_EXP);
+		
+		// 시간 검색
 		String timeGte = FROM_NOW_DATE + Integer.toString(daynum) + DAY_START_POINT;
 		String timeLt = NOW_DATE;
 		
-		JsonMaker timeRangeCondi = JsonUtil.makeConditionJsonMaker
-				(RANGE_CONDI, TIME_COLUMN, timeGte, timeLt);
-		
-		String gteAge = Integer.toString(Integer.parseInt(condiMapping.get(AGE_KEY)) + 10);
-		
-		String birthGte = FROM_NOW_DATE + gteAge + YEAR_START_POINT;
-		String birthLt = FROM_NOW_DATE + condiMapping.get(AGE_KEY) + YEAR_START_POINT;
-		
-		JsonMaker birthRangeCondi = JsonUtil.makeConditionJsonMaker
-				(RANGE_CONDI, BIRTH_COLUMN, birthGte, birthLt);
+		JsonMaker timeRangeCondi = JsonUtil.makeRangeJsonMaker(TIME_COLUMN, timeGte, timeLt);
 		
 		List<JsonMaker> mustList = new ArrayList<>();
 		
-		mustList.addAll(Arrays.asList(timeRangeCondi, birthRangeCondi));
+		// must 생성
+		mustList.addAll(Arrays.asList(idRegExpCondi, timeRangeCondi));
+		
+		// 성별
+		if (condiMapping.get(SEX_KEY) != null) {
+			JsonMaker sexMatchCondi = JsonUtil.makeMatchJsonMaker(SEX_COLUMN, condiMapping.get(SEX_KEY));
+			
+			mustList.add(sexMatchCondi);
+		}
+				
+		// 나이 검색
+		if (condiMapping.get(AGE_KEY) != null) {
+			String gteAge = Integer.toString(Integer.parseInt(condiMapping.get(AGE_KEY)) + 10);
+			String birthGte = FROM_NOW_DATE + gteAge + YEAR_START_POINT;
+			String birthLt = FROM_NOW_DATE + condiMapping.get(AGE_KEY) + YEAR_START_POINT;
+			
+			JsonMaker birthRangeCondi = JsonUtil.makeRangeJsonMaker(BIRTH_COLUMN, birthGte, birthLt);
+			
+			mustList.add(birthRangeCondi);
+		}
+		
+		// agg 생성
+		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT);
+		
+		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs);
 		
 		return json;
 	}
@@ -96,13 +118,11 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private Object getElasticResult(String requestJSON) {
+	private String getElasticResult(String requestJSON) {
 		String url = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
 		Map<String, Object> result = elasticApi.callElasticApi("GET", url, null, requestJSON);
 		
-		String success = "성공~";
-		
-		return result.get("resultBody");
+		return (String) result.get("resultBody");
 	}
 }

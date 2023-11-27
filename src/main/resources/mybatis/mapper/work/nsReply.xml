@@ -119,7 +119,8 @@
 	
 	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
-	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId, @Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
+	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId,
+		@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
 	<select id="searchByTfIdf" resultMap="rmPostVO">
 	select SQL_CALC_FOUND_ROWS
 			w.*, a.id acc_id, a.kakao_id acc_kakao_id, a.descrim acc_descrim, a.login_id acc_login_id

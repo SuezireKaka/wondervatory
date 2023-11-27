@@ -13,21 +13,39 @@ public abstract class JsonUtil {
 	private static final String ASC_SORT = "asc";
 	private static final String DESC_SORT = "desc";
 	
-	private static final String MAX_SEARCH = "10000";
+	private static final String SIZE = "0";
 	
-	public static String makeWorkQuaryShell(List<JsonMaker> must, JsonMaker agg) {
+	private static final String RANGE_CONDI = "range";
+	private static final String MATCH_CONDI = "match";
+	private static final String REGEXP_CONDI = "regexp";
+	
+	
+	private static final String BY_DAY_AGGS = "byDay";
+	private static final String HISTOGRAM = "date_histogram";
+	
+	public static String makeWorkQuaryShell(List<JsonMaker> must, JsonMaker aggs) {
 
+		JsonMaker dto;
 		
-		String[] dtoPropArray = {"size", "sort", "query", "agg"};
-		JsonMaker dto = JsonMaker.builder().type(OBJECT_TYPE)
+		if (aggs.getChildList().size() == 0) {
+			String[] dtoPropArray = {"size", "sort", "query"};
+			dto = JsonMaker.builder().type(OBJECT_TYPE)
 				.propertyArray(dtoPropArray)
 				.build();
+		}
+		else {
+			String[] dtoPropArray = {"size", "sort", "query", "aggs"};
+			dto = JsonMaker.builder().type(OBJECT_TYPE)
+					.propertyArray(dtoPropArray)
+					.build();
+		}
+		
 		
 		List<JsonMaker> dtoChildList = new ArrayList<>();
 		
 		
 		
-		JsonMaker dtoSize = JsonMaker.makeSimpleMaker(INT_TYPE, MAX_SEARCH);
+		JsonMaker dtoSize = JsonMaker.makeSimpleMaker(INT_TYPE, SIZE);
 		
 		dtoChildList.add(dtoSize);
 		
@@ -62,29 +80,16 @@ public abstract class JsonUtil {
 		
 		dtoChildList.add(dtoQuery);
 		
-		
+		if (aggs.getChildList().size() > 0) {
+			dtoChildList.add(aggs);
+		}
 		
 		dto.setChildList(dtoChildList);
 		
 		return dto.makeJson(0);
 	};
 	
-	public static JsonMaker makeConditionJsonMaker(String type, String columnName, String gte, String lt) {
-		switch (type) {
-		case "range" :
-			return makeRangeJsonMaker(columnName, gte, lt);
-		case "match" :
-			break;
-		case "regexp" :
-			break;
-		default :
-			return JsonMaker.builder().build();
-		}
-		return JsonMaker.builder().build();
-		
-	}
-	
-	private static JsonMaker makeRangeJsonMaker(String columnName, String gte, String lt) {
+	public static JsonMaker makeRangeJsonMaker(String columnName, String gte, String lt) {
 		
 		JsonMaker condiRangeColumnGte = JsonMaker.makeSimpleMaker(STRING_TYPE, gte);
 		JsonMaker condiRangeColumnlt = JsonMaker.makeSimpleMaker(STRING_TYPE, lt);
@@ -100,16 +105,74 @@ public abstract class JsonUtil {
 		condiRangeChildList.add(condiRangeColumn);
 		JsonMaker condiRange = JsonMaker.makeObjectMaker(condiRangePropArray, condiRangeChildList);
 		
-		String[] condiPropArray = {columnName};
+		String[] condiPropArray = {RANGE_CONDI};
 		List<JsonMaker> condiChildList = new ArrayList<>();
 		condiChildList.add(condiRange);
 		JsonMaker condi = JsonMaker.makeObjectMaker(condiPropArray, condiChildList);
 		
 		return condi;
 	}
-
-	public static JsonMaker makeAggregationJsonMaker() {
+	
+	public static JsonMaker makeMatchJsonMaker(String columnName, String val) {
 		
-		return JsonMaker.builder().build();
+		JsonMaker condiMatchColumn = JsonMaker.makeSimpleMaker(STRING_TYPE, val);
+		
+		String[] condiMatchPropArray = {columnName};
+		List<JsonMaker> condiMatchChildList = new ArrayList<>();
+		condiMatchChildList.add(condiMatchColumn);
+		JsonMaker condiMatch = JsonMaker.makeObjectMaker(condiMatchPropArray, condiMatchChildList);
+		
+		String[] condiPropArray = {MATCH_CONDI};
+		List<JsonMaker> condiChildList = new ArrayList<>();
+		condiChildList.add(condiMatch);
+		JsonMaker condi = JsonMaker.makeObjectMaker(condiPropArray, condiChildList);
+		
+		return condi;
+	}
+	
+	public static JsonMaker makeRegExpJsonMaker(String columnName, String regexp) {
+		
+		JsonMaker condiRegExpColumn = JsonMaker.makeSimpleMaker(STRING_TYPE, regexp);
+		
+		String[] condiRegExpPropArray = {columnName};
+		List<JsonMaker> condiRegExpChildList = new ArrayList<>();
+		condiRegExpChildList.add(condiRegExpColumn);
+		JsonMaker condiRegExp = JsonMaker.makeObjectMaker(condiRegExpPropArray, condiRegExpChildList);
+		
+		String[] condiPropArray = {REGEXP_CONDI};
+		List<JsonMaker> condiChildList = new ArrayList<>();
+		condiChildList.add(condiRegExp);
+		JsonMaker condi = JsonMaker.makeObjectMaker(condiPropArray, condiChildList);
+		
+		return condi;
+	}
+	
+	public static JsonMaker makeAggsJsonMaker(String columnName, String interval, String format) {
+		
+		JsonMaker aggsByDayDateHistogramField = JsonMaker.makeSimpleMaker(STRING_TYPE, columnName);
+		JsonMaker aggsByDayDateHistogramCalan = JsonMaker.makeSimpleMaker(STRING_TYPE, interval);
+		JsonMaker aggsByDayDateHistogramFormat = JsonMaker.makeSimpleMaker(STRING_TYPE, format);
+		
+		String[] aggsByDayDateHistogramPropArray = {"field", "calendar_interval", "format"};
+		List<JsonMaker> aggsByDayDateHistogramChildList = new ArrayList<>();
+		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramField);
+		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramCalan);
+		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramFormat);
+		
+		
+		JsonMaker aggsByDayDateHistogram = JsonMaker.makeObjectMaker(
+				aggsByDayDateHistogramPropArray, aggsByDayDateHistogramChildList);
+		
+		String[] aggsByDayPropArray = {HISTOGRAM};
+		List<JsonMaker> aggsByDayChildList = new ArrayList<>();
+		aggsByDayChildList.add(aggsByDayDateHistogram);
+		JsonMaker aggsByDay = JsonMaker.makeObjectMaker(aggsByDayPropArray, aggsByDayChildList);
+		
+		String[] aggsPropArray = {BY_DAY_AGGS};
+		List<JsonMaker> aggsChildList = new ArrayList<>();
+		aggsChildList.add(aggsByDay);
+		JsonMaker aggs = JsonMaker.makeObjectMaker(aggsPropArray, aggsChildList);
+		
+		return aggs;
 	}
 }
