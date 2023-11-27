@@ -22,10 +22,10 @@ public class ElasticController {
 	
 	// /elastic/anonymous/listLatestReadOf/0056/7/sex_male-age_any
 	@GetMapping("/anonymous/listLatestReadOf/{workId}/{daynum}/{condi}")
-	public ResponseEntity<ReadTableDTO> listLatestRead(@PathVariable String workId,
+	public ResponseEntity<String> listLatestRead(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		ReadTableDTO table = elasticService.listLatestRead(workId, daynum, condi);
-		return new ResponseEntity<>(table, HttpStatus.OK);
+		String result = elasticService.listLatestRead(workId, daynum, condi);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 }
