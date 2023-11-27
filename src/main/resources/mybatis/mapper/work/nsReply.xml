@@ -29,6 +29,7 @@
 	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
 		type="www.wonder.vatory.work.model.SemiPostVO">
 		<result property="title" column="title" />
+		<result property="readCount" column="read_cnt" />
 		<result property="isComplete" column="complete" />
 	</resultMap>
 	
@@ -40,7 +41,7 @@
 	<resultMap id="rmSeriesVO" extends="rmSemiPostVO"
 		type="www.wonder.vatory.work.model.SeriesVO">
 		<result property="seriesState" column="series_status" />
-		<result property="readCount" column="read_cnt" />
+
 		<collection property="genreList" columnPrefix="gen_"
 			resultMap="www.wonder.vatory.work.mapper.GenreMapper.rmGenreVO">
 		</collection>
