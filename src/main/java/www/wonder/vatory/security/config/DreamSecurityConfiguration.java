@@ -69,15 +69,5 @@ public class DreamSecurityConfiguration implements WebMvcConfigurer {
 
 		return source;
 	}
-	 @Override
-	    public void addCorsMappings(final CorsRegistry registry) {
-	       registry.addMapping("/**")
-           .allowedOrigins("*")
-           .allowedMethods("GET", "POST", "PUT", "DELETE")
-           .allowedHeaders("Authorization", "Content-Type")
-           .exposedHeaders("Custom-Header")
-           .allowCredentials(true)
-           .maxAge(3600);
 
-	    }
 }
