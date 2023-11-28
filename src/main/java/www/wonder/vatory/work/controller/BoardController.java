@@ -23,6 +23,7 @@ public class BoardController {
 	
 	// /bb/anonymous/listAll  //ㅁㄴㅇㄹㅁㄴㅇ
 	@GetMapping("/anonymous/listAll")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<BoardVO>> listAll() {
 		List<BoardVO> list = boardService.listAll();
 		return new ResponseEntity<>(list, HttpStatus.OK);
