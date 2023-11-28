@@ -16,13 +16,14 @@ import www.wonder.vatory.work.service.BoardService;
 
 @RestController		//Container에 담기도록 지정
 @RequestMapping("/bb")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
 	// /bb/anonymous/listAll  //ㅁㄴㅇㄹㅁㄴㅇ
 	@GetMapping("/anonymous/listAll")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<BoardVO>> listAll() {
 		List<BoardVO> list = boardService.listAll();
 		return new ResponseEntity<>(list, HttpStatus.OK);

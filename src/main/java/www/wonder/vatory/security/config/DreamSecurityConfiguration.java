@@ -17,12 +17,14 @@ import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity
-public class DreamSecurityConfiguration {
+public class DreamSecurityConfiguration implements WebMvcConfigurer {
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
@@ -56,7 +58,7 @@ public class DreamSecurityConfiguration {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		//configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://nasms018.github.io/wv_front2", "http://ec2-52-78-208-249.ap-northeast-2.compute.amazonaws.com:3000"));// 주소변경 https://nasms018.github.io  // http://localhost:3000
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://nasms018.github.io/wv_front2","https://nasms018.github.io", "http://ec2-52-78-208-249.ap-northeast-2.compute.amazonaws.com:3000", "http://52.78.208.249:3000", "http://52.78.208.249:8080"));// 주소변경 https://nasms018.github.io  // http://localhost:3000
 		configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(
 				List.of("Content-Type", "x-auth-token", "Access-Control-Allow-Origin", "Cache-control", "X-PINGOTHER"));
@@ -67,4 +69,17 @@ public class DreamSecurityConfiguration {
 
 		return source;
 	}
+	/*
+	 @Override
+	    public void addCorsMappings(final CorsRegistry registry) {
+	       registry.addMapping("/**")
+        .allowedOrigins("*")
+        .allowedMethods("GET", "POST", "PUT", "DELETE")
+        .allowedHeaders("Authorization", "Content-Type")
+        .exposedHeaders("Custom-Header")
+        .allowCredentials(true)
+        .maxAge(3600);
+
+	    }
+*/
 }
