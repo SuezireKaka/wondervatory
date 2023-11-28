@@ -28,6 +28,9 @@ public interface WorkMapper extends WonderMapper {
 	
 	public List<SemiPostVO> findSeriesById(String id);
 	public List<SemiPostVO> findPostById(String id);
+	
+	public PostVO findPostByEpinum(String seriesId, int offset);
+	
 	public void incReadCount(String id);
 	
 	public PostVO getPrev(String parentId, String id);
@@ -35,6 +38,8 @@ public interface WorkMapper extends WonderMapper {
 	
 	public int onLike(String id);
 	public int onDisLike(String id);
+	
+	public int countPostsOf(String seriesId);
 	
 	public boolean isFirstFavorites(String ownerId, String responseId);
 	public boolean isFavorites(String ownerId, String responseId);
@@ -50,9 +55,6 @@ public interface WorkMapper extends WonderMapper {
 	public int toggleFavorites(String ownerId, String responseId);
 	
 	public int deleteReply(String id);
-
-
-	
 
 	
 }

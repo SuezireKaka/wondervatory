@@ -188,6 +188,20 @@
 	   and alive.alive = 1
 	</select>
 	
+	<!-- public PostVO findPostByEpinum(String seriesId, int offset); -->
+	<select id="findPostByEpinum" resultMap="rmPostVO">
+	select w.*, w.id acc_id, acc.descrim acc_descrim
+	  from T_work w
+	  left outer join t_alive alive
+	    on alive.target_id = w.id
+	  left outer join t_account acc
+	    on acc.id = w.writer_id
+	 where w.id like CONCAT(#{seriesId}, '____')
+	   and alive.target_table = 't_work'
+	   and alive.alive = 1
+	 limit 1 offset ${offset}
+	</select>
+	
 	<!-- 	public List<SeriesVO> favoritesAll(@Param("ownerId") String ownerId,
 			@Param("paging") PagingDTO paging); -->
 	<select id="favoritesAll" resultMap="rmReplyVO">
@@ -203,6 +217,8 @@
 	 order by w.id DESC
 	 LIMIT #{paging.seriesLimit} offset #{paging.offset}
 	</select>
+	
+	
 	<!-- public PostVO getPrev(String parentId, String id); -->
 	<select id="getPrev" resultMap="rmReplyVO">
 	SELECT w.*, a.descrim acc_descrim <!-- association에 discriminator가 있으면 무조건 acc_descrim -->
@@ -254,6 +270,14 @@
 			dis_cnt = dis_cnt + 1
 	 where id = #{id}
 	</update>
+	
+	<!-- public int countPostsOf(String seriesId); -->
+	<select id="countPostsOf" resultType="integer">
+		SELECT count(*)
+		  FROM t_work
+		 WHERE id like concat(#{seriesId}, '____')
+	</select>
+	
 	<!-- 	public boolean isFirstFavorites(String ownerId, String responseId); -->
 	<select id="isFirstFavorites" resultType="boolean">
 		SELECT count(*) = 0 

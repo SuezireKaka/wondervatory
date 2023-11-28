@@ -125,6 +125,10 @@ public class WorkService extends WonderService {
 
 		return new DreamPair(listResult, paging);
 	}
+	
+	public int countPostsOf(String seriesId) {
+		return workMapper.countPostsOf(seriesId);
+	}
 
 	public boolean isFavorites(String ownerId, String responseId) {
 		return workMapper.isFavorites(ownerId, responseId);

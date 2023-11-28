@@ -147,17 +147,33 @@ public abstract class JsonUtil {
 		return condi;
 	}
 	
-	public static JsonMaker makeAggsJsonMaker(String columnName, String interval, String format) {
+	public static JsonMaker makeAggsJsonMaker(
+			String columnName, String interval, String format, String min, String max) {
+		
+		
+		JsonMaker aggsByDayDateHistogramExBoundsMin = JsonMaker.makeSimpleMaker(STRING_TYPE, min);
+		JsonMaker aggsByDayDateHistogramExBoundsMax = JsonMaker.makeSimpleMaker(STRING_TYPE, max);
+		
+		String[] aggsByDayDateHistogramExBoundsPropArray = {"min", "max"};
+		List<JsonMaker> aggsByDayDateHistogramExBoundsChildList = new ArrayList<>();
+		aggsByDayDateHistogramExBoundsChildList.add(aggsByDayDateHistogramExBoundsMin);
+		aggsByDayDateHistogramExBoundsChildList.add(aggsByDayDateHistogramExBoundsMax);
+		
+		JsonMaker aggsByDayDateHistogramExBounds = JsonMaker.makeObjectMaker(
+				aggsByDayDateHistogramExBoundsPropArray, aggsByDayDateHistogramExBoundsChildList);
+		
 		
 		JsonMaker aggsByDayDateHistogramField = JsonMaker.makeSimpleMaker(STRING_TYPE, columnName);
 		JsonMaker aggsByDayDateHistogramCalan = JsonMaker.makeSimpleMaker(STRING_TYPE, interval);
 		JsonMaker aggsByDayDateHistogramFormat = JsonMaker.makeSimpleMaker(STRING_TYPE, format);
 		
-		String[] aggsByDayDateHistogramPropArray = {"field", "calendar_interval", "format"};
+		String[] aggsByDayDateHistogramPropArray =
+			{"field", "calendar_interval", "format", "extended_bounds"};
 		List<JsonMaker> aggsByDayDateHistogramChildList = new ArrayList<>();
 		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramField);
 		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramCalan);
 		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramFormat);
+		aggsByDayDateHistogramChildList.add(aggsByDayDateHistogramExBounds);
 		
 		
 		JsonMaker aggsByDayDateHistogram = JsonMaker.makeObjectMaker(

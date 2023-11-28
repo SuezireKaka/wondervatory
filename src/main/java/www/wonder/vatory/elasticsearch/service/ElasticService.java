@@ -10,14 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
+import www.wonder.vatory.elasticsearch.model.ElasticPostResultDTO;
 import www.wonder.vatory.elasticsearch.model.ElasticResultDTO;
+import www.wonder.vatory.elasticsearch.model.ElasticSeriesResultDTO;
 import www.wonder.vatory.elasticsearch.model.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.JsonUtil;
+import www.wonder.vatory.work.mapper.WorkMapper;
+import www.wonder.vatory.work.model.PostVO;
 
 @Service
 public class ElasticService {
 	@Autowired
 	ElasticApi elasticApi;
+	
+	@Autowired
+	WorkMapper workMapper;
 	
 	private final String ELASTIC_INDEX = "wondervatory_read";
 	private final String ELASTIC_TYPE = "_search";
@@ -41,23 +48,27 @@ public class ElasticService {
 	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
-	public ElasticResultDTO getLatestReadOf(String workId, int daynum, String condi) {
+	public ElasticResultDTO getLatestReadOf(int requestNum,
+			String workId, int daynum, String condi) {
 
 		// json 만들어주세요!!!
-		String[] request = buildElasticJSON(workId, daynum, condi, mapCondi(condi));
+		String[] request = buildElasticJSON(requestNum, workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
 		ElasticResultDTO result = getElasticResult(request);
 		
 		return result;
 	}
 	
-	private String[] buildElasticJSON(String workId, int daynum, String condi, Map<String, String> condiMapping) {
+	private String[] buildElasticJSON(int requestNum,
+			String workId, int daynum, String condi, Map<String, String> condiMapping) {
 		
-		String[] result = new String[2];
+		String[] result = new String[requestNum];
 		
 		result[0] = makeElasticJson(workId, daynum, condiMapping);
 		
-		result[1] = makeElasticJson(workId + ID_REG_EXP, daynum, condiMapping);
+		if (requestNum > 1) {
+			result[1] = makeElasticJson(workId + ID_REG_EXP, daynum, condiMapping);
+		}
 		
 		return result;
 	}
@@ -95,8 +106,9 @@ public class ElasticService {
 			mustList.add(birthRangeCondi);
 		}
 		
-		// agg 생성
-		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT);
+		// 집계 부분 생성
+		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(
+				TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, timeGte, timeLt);
 		
 		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs);
 		return json;
@@ -126,14 +138,38 @@ public class ElasticService {
 	}
 	
 	private ElasticResultDTO getElasticResult(String[] requestArray) {
-		ElasticResultDTO result = new ElasticResultDTO();
+		ElasticResultDTO result;
 
-		Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
-		result.setSeriesReadData((String) seriesMap.get("resultBody"));
 		
-		Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
-		result.setAllPostsReadData((String) allPostsMap.get("resultBody"));
+		// 요청이 하나만 오면 포스트 아니면 시리즈랑 전체
+		if (requestArray.length == 1) {
+			ElasticPostResultDTO lemma = new ElasticPostResultDTO();
+			
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			lemma.setPostReadData((String) seriesMap.get("resultBody"));
+			
+			result = (ElasticResultDTO) lemma;
+		}
+		else {
+			ElasticSeriesResultDTO lemma = new ElasticSeriesResultDTO();
+			
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			lemma.setSeriesReadData((String) seriesMap.get("resultBody"));
+			
+			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
+			lemma.setAllPostsReadData((String) allPostsMap.get("resultBody"));
+			
+			result = (ElasticResultDTO) lemma;
+		}
 		
 		return result;
+	}
+
+	public ElasticResultDTO getLatestReadByEpinum(String seriesId,
+			int epinum, int daynum, String condi) {
+		PostVO target = workMapper.findPostByEpinum(seriesId, epinum - 1);
+		String postId = target.getId();
+		
+		return getLatestReadOf(1, postId, daynum, condi);
 	}
 }

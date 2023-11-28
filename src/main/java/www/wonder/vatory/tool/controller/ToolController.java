@@ -96,7 +96,7 @@ public class ToolController {
 
 	// /tool/manageToolSkin/0000
 	@PostMapping("/manageToolSkin/{seriesId}")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('writer','manager', 'admin')")
 	public ResponseEntity<ToolVO> manageToolSkin(@AuthenticationPrincipal AccountVO writer,
 			@RequestBody ToolVO toolSkin, @PathVariable String seriesId) {
 		if (writer.getId().equals(toolSkin.getWriter().getId())) {
@@ -108,7 +108,7 @@ public class ToolController {
 
 	// /tool/saveToolDetails/
 	@PostMapping("/saveToolDetails/")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('writer','manager', 'admin')")
 	public ResponseEntity<ToolVO> saveToolDetails(@AuthenticationPrincipal AccountVO writer,
 			@RequestBody ToolVO toolData) {
 		if (writer.getId().equals(toolData.getWriter().getId())) {
@@ -120,7 +120,7 @@ public class ToolController {
 	
 	// @RequestMapping("/tool/deleteTool/{id}")
 	@DeleteMapping("/deleteTool/{id}")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
+	@PreAuthorize("hasAnyAuthority('writer','manager', 'admin')")
 	public ResponseEntity<Integer> deleteTool(@AuthenticationPrincipal AccountVO deleter,
 			@PathVariable String id) {
 		try {
