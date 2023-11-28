@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
+import www.wonder.vatory.elasticsearch.model.ElasticResultDTO;
 import www.wonder.vatory.elasticsearch.model.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.JsonUtil;
-import www.wonder.vatory.work.model.ReadCountVO;
-import www.wonder.vatory.work.model.ReadTableDTO;
 
 @Service
 public class ElasticService {
@@ -22,6 +21,7 @@ public class ElasticService {
 	
 	private final String ELASTIC_INDEX = "wondervatory_read";
 	private final String ELASTIC_TYPE = "_search";
+	private final String URL = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
 	private final String SEX_KEY = "sex";
 	private final String AGE_KEY = "age";
@@ -32,7 +32,7 @@ public class ElasticService {
 	private final String DAY_START_POINT = DAY + "/" + DAY;
 	private final String YEAR_START_POINT = "y/y";
 	
-	private final String ID_REG_EXP = "(....)*";
+	private final String ID_REG_EXP = "(....)+";
 	
 	private final String READEE_COLUMN = "readeeId";
 	private final String SEX_COLUMN = "sex";
@@ -41,22 +41,30 @@ public class ElasticService {
 	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
-	public String listLatestRead(String workId, int daynum, String condi) {
+	public ElasticResultDTO getLatestReadOf(String workId, int daynum, String condi) {
 
 		// json 만들어주세요!!!
-		String request = buildElasticJSON(workId, daynum, condi);
+		String[] request = buildElasticJSON(workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
-		String statisticalRead = getElasticResult(request);
+		ElasticResultDTO result = getElasticResult(request);
 		
-		return statisticalRead;
+		return result;
 	}
 	
-	private String buildElasticJSON(String workId, int daynum, String condi) {
+	private String[] buildElasticJSON(String workId, int daynum, String condi, Map<String, String> condiMapping) {
 		
-		Map<String, String> condiMapping = mapCondi(condi);
+		String[] result = new String[2];
 		
+		result[0] = makeElasticJson(workId, daynum, condiMapping);
+		
+		result[1] = makeElasticJson(workId + ID_REG_EXP, daynum, condiMapping);
+		
+		return result;
+	}
+
+	private String makeElasticJson(String workId, int daynum, Map<String, String> condiMapping) {
 		// id 검색
-		JsonMaker idRegExpCondi = JsonUtil.makeRegExpJsonMaker(READEE_COLUMN, workId + ID_REG_EXP);
+		JsonMaker idRegExpCondi = JsonUtil.makeRegExpJsonMaker(READEE_COLUMN, workId);
 		
 		// 시간 검색
 		String timeGte = FROM_NOW_DATE + Integer.toString(daynum) + DAY_START_POINT;
@@ -91,7 +99,6 @@ public class ElasticService {
 		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT);
 		
 		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs);
-		
 		return json;
 	}
 
@@ -118,11 +125,15 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private String getElasticResult(String requestJSON) {
-		String url = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
+	private ElasticResultDTO getElasticResult(String[] requestArray) {
+		ElasticResultDTO result = new ElasticResultDTO();
 
-		Map<String, Object> result = elasticApi.callElasticApi("GET", url, null, requestJSON);
+		Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+		result.setSeriesReadData((String) seriesMap.get("resultBody"));
 		
-		return (String) result.get("resultBody");
+		Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
+		result.setAllPostsReadData((String) allPostsMap.get("resultBody"));
+		
+		return result;
 	}
 }

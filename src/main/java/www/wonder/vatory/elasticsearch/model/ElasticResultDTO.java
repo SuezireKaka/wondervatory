@@ -1,14 +1,17 @@
-package www.wonder.vatory.elasticsearch.model.searchInput.shell;
+package www.wonder.vatory.elasticsearch.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Query {
-	private Bool bool;
+public class ElasticResultDTO {
+	String seriesReadData;
+	String allPostsReadData;
 }

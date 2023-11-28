@@ -14,7 +14,6 @@
 	<resultMap id="rmReplyVO" extends="rmWorkVO"
 		type="www.wonder.vatory.work.model.ReplyVO">
 		<result property="content" column="content" />
-		<result property="readCount" column="read_cnt" />
 		<result property="likeCount" column="like_cnt" />
 		<result property="dislikeCount" column="dis_cnt" />
 		<result property="favorites" column="favorites" />
@@ -28,6 +27,7 @@
 	<!-- extends : 확장하기 = 상속 -->
 	<resultMap id="rmSemiPostVO" extends="rmReplyVO"
 		type="www.wonder.vatory.work.model.SemiPostVO">
+		<result property="readCount" column="read_cnt" />
 		<result property="title" column="title" />
 		<result property="isComplete" column="complete" />
 	</resultMap>
@@ -81,7 +81,7 @@
 	</select>
 	
 	<!-- public List<PostVO> listAllPost(@Param("seriesId") String seriesId, @Param("paging") PagingDTO paging); -->
-	<select id="listAllPost" resultMap="rmReplyVO">
+	<select id="listAllPost" resultMap="rmPostVO">
 	select SQL_CALC_FOUND_ROWS w.*, b.id bb_id, b.name bb_name, b.descrip bb_descrip,
 			a.id acc_id, a.descrim acc_descrim,
 			a.login_id acc_login_id, a.nick acc_nick,
