@@ -16,7 +16,7 @@ import www.wonder.vatory.work.service.BoardService;
 
 @RestController		//Container에 담기도록 지정
 @RequestMapping("/bb")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
