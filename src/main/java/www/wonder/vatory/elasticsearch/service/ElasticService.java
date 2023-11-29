@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonUtil;
-import www.wonder.vatory.elasticsearch.model.result.ElasticPostResultDTO;
-import www.wonder.vatory.elasticsearch.model.result.ElasticResultDTO;
-import www.wonder.vatory.elasticsearch.model.result.ElasticSeriesResultDTO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticPostResultVO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticResultVO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticSeriesResultVO;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.PostVO;
 
@@ -48,11 +48,11 @@ public class ElasticService {
 	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
-	private ElasticResultDTO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
+	private ElasticResultVO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String[] request = buildElasticJSON(requestNum, workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
-		ElasticResultDTO result = getElasticResult(request);
+		ElasticResultVO result = getElasticResult(request);
 		
 		return result;
 	}
@@ -135,21 +135,21 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private ElasticResultDTO getElasticResult(String[] requestArray) {
-		ElasticResultDTO result;
+	private ElasticResultVO getElasticResult(String[] requestArray) {
+		ElasticResultVO result;
 
 		
 		// 요청이 하나만 오면 포스트 아니면 시리즈랑 전체
 		if (requestArray.length == 1) {
-			ElasticPostResultDTO lemma = new ElasticPostResultDTO();
+			ElasticPostResultVO lemma = new ElasticPostResultVO();
 			
 			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
 			lemma.setPostReadData((String) seriesMap.get("resultBody"));
 			
-			result = (ElasticResultDTO) lemma;
+			result = (ElasticResultVO) lemma;
 		}
 		else {
-			ElasticSeriesResultDTO lemma = new ElasticSeriesResultDTO();
+			ElasticSeriesResultVO lemma = new ElasticSeriesResultVO();
 			
 			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
 			lemma.setSeriesReadData((String) seriesMap.get("resultBody"));
@@ -157,20 +157,20 @@ public class ElasticService {
 			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
 			lemma.setAllPostsReadData((String) allPostsMap.get("resultBody"));
 			
-			result = (ElasticResultDTO) lemma;
+			result = (ElasticResultVO) lemma;
 		}
 		
 		return result;
 	}
 	
-	public ElasticResultDTO getLatestReadOfSeries(String seriesId, int daynum, String condi) {
+	public ElasticResultVO getLatestReadOfSeries(String seriesId, int daynum, String condi) {
 		// 시리즈 자체 클릭 수와 시리즈가 갖고 있는 포스트 조회 수의 총합을 가져와야 하니까 두 개
 		final int REQUEST_NUM = 2;
 		
 		return getLatestReadOf(REQUEST_NUM, seriesId, daynum, condi);
 	}
 
-	public ElasticResultDTO getLatestReadOfEpinum(String seriesId,
+	public ElasticResultVO getLatestReadOfEpinum(String seriesId,
 			int epinum, int daynum, String condi) {
 		// 주어진 포스트에 대해서만 가져오면 되니까 1
 		final int REQUEST_NUM = 1;

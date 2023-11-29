@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import www.wonder.vatory.elasticsearch.model.result.ElasticResultDTO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticResultVO;
 import www.wonder.vatory.elasticsearch.service.ElasticService;
 
 @RestController
@@ -23,18 +23,18 @@ public class ElasticController {
 	// /elastic/getLatestReadOf/0056/7/sex_male-age_any
 	@GetMapping("/getLatestReadOf/{workId}/{daynum}/{condi}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer', 'manager', 'admin')")
-	public ResponseEntity<ElasticResultDTO> getLatestReadOf(@PathVariable String workId,
+	public ResponseEntity<ElasticResultVO> getLatestReadOf(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		ElasticResultDTO result = elasticService.getLatestReadOfSeries(workId, daynum, condi);
+		ElasticResultVO result = elasticService.getLatestReadOfSeries(workId, daynum, condi);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	// /elastic/getLatestReadByEpinum/0056/1/7/sex_male-age_any
 	@GetMapping("/getLatestReadByEpinum/{seriesId}/{epinum}/{daynum}/{condi}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer', 'manager', 'admin')")
-	public ResponseEntity<ElasticResultDTO> getLatestReadByEpinum(@PathVariable String seriesId,
+	public ResponseEntity<ElasticResultVO> getLatestReadByEpinum(@PathVariable String seriesId,
 			@PathVariable int epinum, @PathVariable int daynum, @PathVariable String condi) {
-		ElasticResultDTO result = elasticService.getLatestReadOfEpinum(seriesId, epinum, daynum, condi);
+		ElasticResultVO result = elasticService.getLatestReadOfEpinum(seriesId, epinum, daynum, condi);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

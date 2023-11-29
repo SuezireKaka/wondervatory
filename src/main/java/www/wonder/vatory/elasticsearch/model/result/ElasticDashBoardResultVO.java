@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticPostResultVO extends ElasticResultVO {	
-	String postReadData;
+public class ElasticDashBoardResultVO extends ElasticResultVO {
+	String accumulateAccountData;
+	String accumulateWorkData;
 }

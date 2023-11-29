@@ -5,4 +5,4 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-public abstract class ElasticResultDTO {}
+public abstract class ElasticResultVO {}
