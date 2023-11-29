@@ -26,7 +26,7 @@ public interface WorkMapper extends WonderMapper {
 			@Param("paging") PagingDTO paging);
 
 	public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
-			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging);
+			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging, String descrim);
 	
 	public List<SemiPostVO> findSeriesById(String id);
 	public List<SemiPostVO> findPostById(String id);

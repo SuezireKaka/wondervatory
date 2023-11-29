@@ -125,7 +125,7 @@
 	<!-- public List<ReplyVO> searchByTfIdf(@Param("boardId") String boardId,
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
 	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId,
-		@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
+		@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging, String descrim); -->
 	<select id="searchByTfIdf" resultMap="rmPostVO">
 	select SQL_CALC_FOUND_ROWS
 			w.*, a.id acc_id, a.kakao_id acc_kakao_id, a.descrim acc_descrim, a.login_id acc_login_id
@@ -148,7 +148,7 @@
 	       ON w.writer_id = a.id
 	 where alive.target_table = 't_work'
 	   and alive.alive = 1
-	   AND w.descrim = 'Series'
+	   AND w.descrim = #{descrim}
 	   and pst.wid = w.id
 	 order by pst.importance desc
 	 limit #{paging.seriesLimit} offset #{paging.offset}

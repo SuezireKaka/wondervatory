@@ -113,7 +113,9 @@ public class WorkService extends WonderService {
 			return new DreamPair(new ArrayList<>(), paging);
 		}
 		PagingDTO paging = new PagingDTO(page);
-		List<ReplyVO> listResult = workMapper.searchByTfIdf(boardId, arrSearch, paging);
+		List<ReplyVO> listResult = workMapper.searchByTfIdf(boardId, arrSearch, paging, 
+				(boardId.equals("0000")||boardId.equals("0001"))?"Post":"Series"); //boardId가 일반게시판일경우 포스트 아니면 시리즈
+
 		long dataCount = workMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 
