@@ -1,8 +1,10 @@
-package www.wonder.vatory.elasticsearch.model;
+package www.wonder.vatory.elasticsearch.model.jsonmaker;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.util.ReflectionUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,12 +55,72 @@ public class JsonMaker {
 				.build();
 	}
 	
-	public String makeJsonFromObject(Object obj) {
-		Arrays.stream(obj.getClass().getFields());
+	public static JsonMaker makeObjectMakerFromObject(Object obj) {
 		
-		Field s;
+		List<String> propNameList = new ArrayList<>();
+		List<String> propAddressList = new ArrayList<>();
+		List<Annotation[]> annotationArrList = new ArrayList<>();
+		List<Object> propValList = new ArrayList<>();
+		
+		// 이게 스프링 리플렉션이다 ㄷㄷ
+		ReflectionUtils.doWithFields(obj.getClass(), field -> {
+			// 강제로 열어놓고
+			field.setAccessible(true);
 			
-		return "result";
+			// 이름, 클래스 주소, 애너테이션, 값 저장
+			String name = field.getName();
+			propNameList.add(name);
+			
+			String address = field.getType().getName();
+			propAddressList.add(address);
+			
+			Annotation[] annoArray = field.getAnnotations();
+			annotationArrList.add(annoArray);
+			
+			Object val = field.get(obj);
+			propValList.add(val);
+		});
+
+		return makeJsonMakerFromDissectedField(
+				propNameList, propAddressList, annotationArrList, propValList);
+	}
+	
+	/**
+	 * 예상 결과물 :
+	 * {
+	 *     condiType : "match", @ElasticCondi
+	 *     condiMapping : "sex", @ElasticMapping
+	 *     condiVal : "남성" @ElasticRange
+	 * }
+	 * => {
+	 *     match : {
+	 *         sex : "남성"
+	 *     }
+	 * }
+	 * 
+	 * {
+	 *     condiType : "range", @ElasticCondi
+	 *     condiMapping : "time", @ElasticMapping
+	 *     condiVal : "now-7d/d~now" @ElasticRange
+	 * }
+	 * => {
+	 *     range : {
+	 *         sex : {
+	 *             gte : "now-7d/d",
+	 *             lt : "now"
+	 *         }
+	 *     }
+	 * }
+	 * 
+	 */
+	private static JsonMaker makeJsonMakerFromDissectedField(List<String> name,
+			List<String> address, List<Annotation[]> annoArray, List<Object> val) {
+		
+		JsonMaker result = new JsonMaker();
+		
+		
+			
+		return null;
 	}
 
 	public String makeJson(int level) {

@@ -1,18 +1,29 @@
-package www.wonder.vatory.elasticsearch.model;
+package www.wonder.vatory.elasticsearch.model.jsonmaker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import www.wonder.vatory.elasticsearch.model.condi.ElasticCondition;
+
 public class JsonMakerSample {
 
 	public static void main(String[] args) {
 		/*
-		 * 적당한 트리 표현 스트링으로부터 아래 코드에 해당하는 자바 파일을 만드는 프로그램을 짤 수 있을까??
+		 * 적당한 트리 표현 스트링으로부터 아래 코드에 해당하는 자바 파일을 만들어 실행하는 프로그램을 짤 수 있을까??
 		 */
+		sampleMakingFromObject();
 
-		System.out.println(JsonUtil.makeWorkQuaryShell(new ArrayList<>(), new JsonMaker()));
+	}
 
+
+	private static void sampleMakingFromObject() {
+		ElasticCondition condi = new ElasticCondition();
+		condi.setType("regexp");
+		condi.setMapping("readerId");
+		condi.setValue("readerId");
+
+		System.out.println(JsonMaker.makeObjectMakerFromObject(condi));
 	}
 
 	
@@ -220,5 +231,7 @@ public class JsonMakerSample {
 
 		System.out.println(dto_Maker.makeJson(0));
 	}
+	
+	
 
 }

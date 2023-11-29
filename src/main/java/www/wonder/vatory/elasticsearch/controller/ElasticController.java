@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import www.wonder.vatory.elasticsearch.model.ElasticResultDTO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticResultDTO;
 import www.wonder.vatory.elasticsearch.service.ElasticService;
 
 @RestController

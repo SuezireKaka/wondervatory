@@ -1,4 +1,4 @@
-package www.wonder.vatory.elasticsearch.model;
+package www.wonder.vatory.elasticsearch.model.result;
 
 import lombok.Data;
 import lombok.Getter;

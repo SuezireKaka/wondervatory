@@ -1,4 +1,4 @@
-package www.wonder.vatory.elasticsearch.model;
+package www.wonder.vatory.elasticsearch.model.jsonmaker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public abstract class JsonUtil {
 	private static final String BY_DAY_AGGS = "byDay";
 	private static final String HISTOGRAM = "date_histogram";
 	
-	public static String makeWorkQuaryShell(List<JsonMaker> must, JsonMaker aggs) {
+	public static JsonMaker makeWorkQuaryShell(List<JsonMaker> must, JsonMaker aggs) {
 
 		JsonMaker dto;
 		
@@ -86,7 +86,7 @@ public abstract class JsonUtil {
 		
 		dto.setChildList(dtoChildList);
 		
-		return dto.makeJson(0);
+		return dto;
 	};
 	
 	public static JsonMaker makeRangeJsonMaker(String columnName, String gte, String lt) {

@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
-import www.wonder.vatory.elasticsearch.model.ElasticPostResultDTO;
-import www.wonder.vatory.elasticsearch.model.ElasticResultDTO;
-import www.wonder.vatory.elasticsearch.model.ElasticSeriesResultDTO;
-import www.wonder.vatory.elasticsearch.model.JsonMaker;
-import www.wonder.vatory.elasticsearch.model.JsonUtil;
+import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonMaker;
+import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonUtil;
+import www.wonder.vatory.elasticsearch.model.result.ElasticPostResultDTO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticResultDTO;
+import www.wonder.vatory.elasticsearch.model.result.ElasticSeriesResultDTO;
 import www.wonder.vatory.work.mapper.WorkMapper;
 import www.wonder.vatory.work.model.PostVO;
 
@@ -108,7 +108,7 @@ public class ElasticService {
 		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(
 				TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, timeGte, timeLt);
 		
-		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs);
+		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs).makeJson(0);
 		return json;
 	}
 
