@@ -193,9 +193,6 @@ public class WorkService extends WonderService {
 			statisticallyRead(askAccount, ret);		
 		}
 
-		ret.incReadCount();
-		workMapper.incReadCount(ret.getId());
-
 		List<AttachFileDTO> attachFileList = attachFileService.getAttachFileList(ret);
 		ret.setListAttachFile(attachFileList);
 		
@@ -224,6 +221,8 @@ public class WorkService extends WonderService {
 				&& ! readMapper.hasReadToday(askAccount, ret);
 		
 		if (validRead) {
+			ret.incReadCount();
+			workMapper.incReadCount(ret.getId());
 			readMapper.read(askAccount, ret);
 		}
 	}

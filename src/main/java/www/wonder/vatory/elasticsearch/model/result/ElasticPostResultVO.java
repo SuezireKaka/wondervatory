@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticPostResultDTO extends ElasticResultDTO {	
+public class ElasticPostResultVO extends ElasticResultVO {	
 	String postReadData;
 }

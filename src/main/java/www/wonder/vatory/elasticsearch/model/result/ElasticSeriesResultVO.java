@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticSeriesResultDTO extends ElasticResultDTO {
+public class ElasticSeriesResultVO extends ElasticResultVO {
 	String seriesReadData;
 	String allPostsReadData;
 }
