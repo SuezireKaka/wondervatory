@@ -48,9 +48,7 @@ public class ElasticService {
 	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
-	public ElasticResultDTO getLatestReadOf(int requestNum,
-			String workId, int daynum, String condi) {
-
+	private ElasticResultDTO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String[] request = buildElasticJSON(requestNum, workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
@@ -164,12 +162,22 @@ public class ElasticService {
 		
 		return result;
 	}
+	
+	public ElasticResultDTO getLatestReadOfSeries(String seriesId, int daynum, String condi) {
+		// 시리즈 자체 클릭 수와 시리즈가 갖고 있는 포스트 조회 수의 총합을 가져와야 하니까 두 개
+		final int REQUEST_NUM = 2;
+		
+		return getLatestReadOf(REQUEST_NUM, seriesId, daynum, condi);
+	}
 
-	public ElasticResultDTO getLatestReadByEpinum(String seriesId,
+	public ElasticResultDTO getLatestReadOfEpinum(String seriesId,
 			int epinum, int daynum, String condi) {
+		// 주어진 포스트에 대해서만 가져오면 되니까 1
+		final int REQUEST_NUM = 1;
+		
 		PostVO target = workMapper.findPostByEpinum(seriesId, epinum - 1);
 		String postId = target.getId();
 		
-		return getLatestReadOf(1, postId, daynum, condi);
+		return getLatestReadOf(REQUEST_NUM, postId, daynum, condi);
 	}
 }

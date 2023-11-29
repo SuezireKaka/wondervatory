@@ -1,5 +1,7 @@
 package www.wonder.vatory.elasticsearch.model;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -49,6 +51,14 @@ public class JsonMaker {
 				.propertyArray(propertyArray)
 				.childList(childList)
 				.build();
+	}
+	
+	public String makeJsonFromObject(Object obj) {
+		Arrays.stream(obj.getClass().getFields());
+		
+		Field s;
+			
+		return "result";
 	}
 
 	public String makeJson(int level) {

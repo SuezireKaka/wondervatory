@@ -25,7 +25,7 @@ public class ElasticController {
 	@PreAuthorize("hasAnyAuthority('reader', 'writer', 'manager', 'admin')")
 	public ResponseEntity<ElasticResultDTO> getLatestReadOf(@PathVariable String workId,
 			@PathVariable int daynum, @PathVariable String condi) {
-		ElasticResultDTO result = elasticService.getLatestReadOf(2, workId, daynum, condi);
+		ElasticResultDTO result = elasticService.getLatestReadOfSeries(workId, daynum, condi);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
@@ -34,7 +34,7 @@ public class ElasticController {
 	@PreAuthorize("hasAnyAuthority('reader', 'writer', 'manager', 'admin')")
 	public ResponseEntity<ElasticResultDTO> getLatestReadByEpinum(@PathVariable String seriesId,
 			@PathVariable int epinum, @PathVariable int daynum, @PathVariable String condi) {
-		ElasticResultDTO result = elasticService.getLatestReadByEpinum(seriesId, epinum, daynum, condi);
+		ElasticResultDTO result = elasticService.getLatestReadOfEpinum(seriesId, epinum, daynum, condi);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
