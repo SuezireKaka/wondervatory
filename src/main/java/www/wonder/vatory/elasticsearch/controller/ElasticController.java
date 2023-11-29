@@ -37,5 +37,14 @@ public class ElasticController {
 		ElasticResultVO result = elasticService.getLatestReadOfEpinum(seriesId, epinum, daynum, condi);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	// /getDashBoard/wondervatory_read/2023-10-21/2023-11-21
+	@GetMapping("/anonymous/getDashBoard/{index}/{startTime}/{endTime}")
+	// @PreAuthorize("hasAnyAuthority('manager', 'admin')")
+		public ResponseEntity<ElasticResultVO> getDashBoard(@PathVariable String index,
+				@PathVariable String startTime, @PathVariable String endTime) {
+		ElasticResultVO result = elasticService.getDashBoard(index, startTime, endTime);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 }

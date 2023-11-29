@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonUtil;
+import www.wonder.vatory.elasticsearch.model.result.ElasticDashBoardResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticPostResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticSeriesResultVO;
@@ -25,10 +26,6 @@ public class ElasticService {
 	
 	@Autowired
 	WorkMapper workMapper;
-	
-	private final String ELASTIC_INDEX = "wondervatory_read";
-	private final String ELASTIC_TYPE = "_search";
-	private final String URL = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
 	private final String SEX_KEY = "sex";
 	private final String AGE_KEY = "age";
@@ -48,11 +45,36 @@ public class ElasticService {
 	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
+	private final String CUMULATIVE_SUM_AGGS
+		= "  \"aggs\": {\r\n"
+		+ "    \"months\": {\r\n"
+		+ "      \"date_histogram\": {\r\n"
+		+ "        \"field\": \"regDt\",\r\n"
+		+ "        \"interval\": \"day\"\r\n"
+		+ "      },\r\n"
+		+ "      \"aggs\": {\r\n"
+		+ "        \"cnt_psg\": {\r\n"
+		+ "          \"count\": {\r\n"
+		+ "            \"field\": \"id\"\r\n"
+		+ "          }\r\n"
+		+ "        },\r\n"
+		+ "        \"cum_result\": {\r\n"
+		+ "          \"cumulative_sum\": {\r\n"
+		+ "            \"buckets_path\": \"cnt_psg\"\r\n"
+		+ "          }\r\n"
+		+ "        }\r\n"
+		+ "      }\r\n"
+		+ "    }\r\n"
+		+ "  }\r\n"
+		+ "}";
+	
 	private ElasticResultVO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String[] request = buildElasticJSON(requestNum, workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
-		ElasticResultVO result = getElasticResult(request);
+		
+		String[] url = {"wondervatory_read/_search", "wondervatory_read/_search"};
+		ElasticResultVO result = getElasticResult(request, url);
 		
 		return result;
 	}
@@ -135,7 +157,12 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private ElasticResultVO getElasticResult(String[] requestArray) {
+	private ElasticResultVO getElasticResult(String[] requestArray, String[] url) {
+		return getElasticResult(requestArray, url, false);
+	}
+
+	private ElasticResultVO getElasticResult(
+			String[] requestArray, String[] url, boolean isDashBoard) {
 		ElasticResultVO result;
 
 		
@@ -143,18 +170,29 @@ public class ElasticService {
 		if (requestArray.length == 1) {
 			ElasticPostResultVO lemma = new ElasticPostResultVO();
 			
-			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
 			lemma.setPostReadData((String) seriesMap.get("resultBody"));
 			
 			result = (ElasticResultVO) lemma;
 		}
-		else {
+		else if (isDashBoard) {
+			ElasticDashBoardResultVO lemma = new ElasticDashBoardResultVO();
+			
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
+			lemma.setUpData((String) seriesMap.get("resultBody"));
+			
+			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", url[1], null, requestArray[1]);
+			lemma.setDownData((String) allPostsMap.get("resultBody"));
+			
+			result = (ElasticResultVO) lemma;
+		}
+		else {		
 			ElasticSeriesResultVO lemma = new ElasticSeriesResultVO();
 			
-			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
 			lemma.setSeriesReadData((String) seriesMap.get("resultBody"));
 			
-			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
+			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", url[1], null, requestArray[1]);
 			lemma.setAllPostsReadData((String) allPostsMap.get("resultBody"));
 			
 			result = (ElasticResultVO) lemma;
@@ -180,4 +218,37 @@ public class ElasticService {
 		
 		return getLatestReadOf(REQUEST_NUM, postId, daynum, condi);
 	}
+
+	public ElasticResultVO getDashBoard(String index, String startTime, String endTime) {
+		
+		JsonMaker regRangeCondi = JsonUtil.makeRangeJsonMaker(TIME_COLUMN, startTime, endTime);
+		
+		List<JsonMaker> mustList = new ArrayList<>();
+		
+		mustList.add(regRangeCondi);
+		
+		JsonMaker useless = JsonMaker.builder().childList(new ArrayList<>()).build();
+		
+		JsonMaker queryShell = JsonUtil.makeWorkQuaryShell(mustList, useless);
+		
+		String result = queryShell.makeJson(0);
+		
+		// 두 개를 지워 뚜껑을 열고
+		result = result.substring(0, result.length() - 2);
+		
+		// 미리 준비한 agg를 덧붙인다
+		result += ",\n" + CUMULATIVE_SUM_AGGS;
+		
+		return null;
+	}
 }
+
+
+
+
+
+
+
+
+
+
