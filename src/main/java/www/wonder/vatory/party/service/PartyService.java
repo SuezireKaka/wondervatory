@@ -115,8 +115,10 @@ public class PartyService implements UserDetailsService {
 		if (ObjectUtils.isEmpty(signUpRequest.getAccountId())) {
 			cnt &= partyMapper.createPerson(person);
 			cnt &= partyMapper.createAccount(account)
-					& partyMapper.createRole(account, new RoleVO("reader"))
-					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
+					& partyMapper.createRole(account, new RoleVO("reader"));
+			if (signUpRequest.getListContactPoint().size() > 0) {
+				cnt &= partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
+			}
 			return cnt;
 		}
 		else {
@@ -124,8 +126,10 @@ public class PartyService implements UserDetailsService {
 			account.setId(signUpRequest.getAccountId());
 			cnt &= partyMapper.updatePerson(person)
 					& partyMapper.updateAccount(account)
-					& partyMapper.deleteAllCpOf(person.getId())
-					& partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
+					& partyMapper.deleteAllCpOf(person.getId());
+			if (signUpRequest.getListContactPoint().size() > 0) {
+				cnt &= partyMapper.createAllCpOf(person.getId(), signUpRequest.getListContactPoint());
+			}
 			return cnt;
 		}
 		
