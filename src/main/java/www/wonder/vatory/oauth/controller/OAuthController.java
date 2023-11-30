@@ -1,7 +1,6 @@
 package www.wonder.vatory.oauth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import www.wonder.vatory.oauth.model.KakaoAccountVO;
 import www.wonder.vatory.oauth.model.OauthToken;
 import www.wonder.vatory.oauth.service.OAuthService;
-import www.wonder.vatory.party.service.PartyService;
 import www.wonder.vatory.security.model.SignInResultDto;
 
 @RestController
@@ -21,8 +19,6 @@ public class OAuthController {
 
     @Autowired
     private OAuthService oauthService;
-    @Autowired
-    private PartyService partyService;
 
 
     // 프론트에서 인가코드 돌려 받는 주소
@@ -35,7 +31,7 @@ public class OAuthController {
         OauthToken oauthToken = oauthService.getAccessToken(code, "kakao");
 
         // 발급 받은 accessToken 으로 카카오 회원 정보 DB 저장
-        SignInResultDto result = oauthService.SaveUserAndLogin(oauthToken.getAccess_token());
+        SignInResultDto result = oauthService.saveUserAndLogin(oauthToken.getAccess_token());
 
         return ResponseEntity.ok(result);
     }

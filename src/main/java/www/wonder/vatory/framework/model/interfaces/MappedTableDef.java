@@ -1,4 +1,4 @@
-package www.wonder.vatory.fileattachment.model;
+package www.wonder.vatory.framework.model.interfaces;
 
 import java.util.List;
 

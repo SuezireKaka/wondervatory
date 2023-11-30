@@ -11,9 +11,9 @@ import com.amazonaws.services.s3.AmazonS3Client;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.fileattachment.repository.AttachFileRepository;
+import www.wonder.vatory.framework.model.interfaces.MappedTableDef;
 
 @Service
 public class AttachFileService {

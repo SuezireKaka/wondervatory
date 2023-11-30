@@ -13,9 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import www.wonder.vatory.fileattachment.model.MappedTableDef;
 import www.wonder.vatory.fileattachment.model.dto.AttachFileDTO;
 import www.wonder.vatory.framework.model.TimeEntity;
+import www.wonder.vatory.framework.model.interfaces.MappedTableDef;
 
 @SuperBuilder
 @Getter
