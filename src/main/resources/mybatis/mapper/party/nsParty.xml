@@ -17,10 +17,6 @@
 	<resultMap id="rmPersonVO" extends="rmPartyVO"
 		type="www.wonder.vatory.party.model.PersonVO" >
 		<result property="sex" column="sex" />
-
-		<collection property="accountList" columnPrefix="acc_"
-			resultMap="rmAccountVO">
-		</collection>
 	</resultMap>
 	
 	<resultMap id="rmOrganizationVO" extends="rmPartyVO"
