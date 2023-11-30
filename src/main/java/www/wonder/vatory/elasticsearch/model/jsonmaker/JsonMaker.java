@@ -31,7 +31,7 @@ public class JsonMaker {
 	
 	private String[] propertyArray;
 	
-	private List<JsonMaker> childList;
+	private List<JsonMaker> childList = new ArrayList<>();
 	
 	public static JsonMaker makeSimpleMaker(String type, String selfVal) {
 		return JsonMaker.builder()

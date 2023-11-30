@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import www.wonder.vatory.elasticsearch.api.ElasticApi;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonMaker;
 import www.wonder.vatory.elasticsearch.model.jsonmaker.JsonUtil;
+import www.wonder.vatory.elasticsearch.model.result.ElasticDashBoardResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticPostResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticResultVO;
 import www.wonder.vatory.elasticsearch.model.result.ElasticSeriesResultVO;
@@ -25,10 +26,6 @@ public class ElasticService {
 	
 	@Autowired
 	WorkMapper workMapper;
-	
-	private final String ELASTIC_INDEX = "wondervatory_read";
-	private final String ELASTIC_TYPE = "_search";
-	private final String URL = ELASTIC_INDEX + "/" + ELASTIC_TYPE;
 
 	private final String SEX_KEY = "sex";
 	private final String AGE_KEY = "age";
@@ -39,6 +36,7 @@ public class ElasticService {
 	private final String DAY_START_POINT = DAY + "/" + DAY;
 	private final String YEAR_START_POINT = "y/y";
 	
+	private final String ID_COLUMN = "id";
 	private final String ID_REG_EXP = "(....)+";
 	
 	private final String READEE_COLUMN = "readeeId";
@@ -46,13 +44,18 @@ public class ElasticService {
 	private final String TIME_COLUMN = "time";
 	private final String BIRTH_COLUMN = "birth";
 	
+	private final String REG_DT_COLUMN = "regDt";
+	private final String DESC_COLUMN = "descrim";
+	
 	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
 	private ElasticResultVO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
 		String[] request = buildElasticJSON(requestNum, workId, daynum, condi, mapCondi(condi));
 		// json 받아서 실행
-		ElasticResultVO result = getElasticResult(request);
+		
+		String[] url = {"wondervatory_read/_search", "wondervatory_read/_search"};
+		ElasticResultVO result = getElasticResult(request, url);
 		
 		return result;
 	}
@@ -105,10 +108,10 @@ public class ElasticService {
 		}
 		
 		// 집계 부분 생성
-		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(
+		JsonMaker aggs = JsonUtil.makeHistogramAggsJsonMaker(
 				TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, timeGte, timeLt);
 		
-		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs).makeJson(0);
+		String json = JsonUtil.makeQuaryShell(TIME_COLUMN, mustList, aggs).makeJson(0);
 		return json;
 	}
 
@@ -135,7 +138,12 @@ public class ElasticService {
 		return condiMapping;
 	}
 	
-	private ElasticResultVO getElasticResult(String[] requestArray) {
+	private ElasticResultVO getElasticResult(String[] requestArray, String[] url) {
+		return getElasticResult(requestArray, url, false);
+	}
+
+	private ElasticResultVO getElasticResult(
+			String[] requestArray, String[] url, boolean isDashBoard) {
 		ElasticResultVO result;
 
 		
@@ -143,18 +151,29 @@ public class ElasticService {
 		if (requestArray.length == 1) {
 			ElasticPostResultVO lemma = new ElasticPostResultVO();
 			
-			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
 			lemma.setPostReadData((String) seriesMap.get("resultBody"));
 			
 			result = (ElasticResultVO) lemma;
 		}
-		else {
+		else if (isDashBoard) {
+			ElasticDashBoardResultVO lemma = new ElasticDashBoardResultVO();
+			
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
+			lemma.setUpData((String) seriesMap.get("resultBody"));
+			
+			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", url[1], null, requestArray[1]);
+			lemma.setDownData((String) allPostsMap.get("resultBody"));
+			
+			result = (ElasticResultVO) lemma;
+		}
+		else {		
 			ElasticSeriesResultVO lemma = new ElasticSeriesResultVO();
 			
-			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", URL, null, requestArray[0]);
+			Map<String, Object> seriesMap = elasticApi.callElasticApi("GET", url[0], null, requestArray[0]);
 			lemma.setSeriesReadData((String) seriesMap.get("resultBody"));
 			
-			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", URL, null, requestArray[1]);
+			Map<String, Object> allPostsMap = elasticApi.callElasticApi("GET", url[1], null, requestArray[1]);
 			lemma.setAllPostsReadData((String) allPostsMap.get("resultBody"));
 			
 			result = (ElasticResultVO) lemma;
@@ -180,4 +199,60 @@ public class ElasticService {
 		
 		return getLatestReadOf(REQUEST_NUM, postId, daynum, condi);
 	}
+
+	public ElasticResultVO getDashBoard(String index, String startTime, String endTime) {
+		
+		String[] urlArray = new String[2];
+		
+		urlArray[0] = urlArray[1] = index + "/_search";
+		
+		String[] descrimArray = new String[2];
+		
+		descrimArray[0] = index.endsWith("account") ? "kakao" : "Series";
+		descrimArray[1] = index.endsWith("account") ? "wonder" : "Post";
+		
+		String[] requestArr = new String[2];
+		
+		requestArr[0] = makeCumulativeQuery(startTime, endTime, descrimArray[0]);
+		requestArr[1] = makeCumulativeQuery(startTime, endTime, descrimArray[1]);
+		
+		ElasticResultVO dashBoard = getElasticResult(requestArr, urlArray, true);
+		
+		return dashBoard;
+	}
+
+	private String makeCumulativeQuery(String startTime, String endTime, String descrim) {
+		List<JsonMaker> mustList = new ArrayList<>();
+		
+		JsonMaker regRangeCondi = JsonUtil.makeRangeJsonMaker(REG_DT_COLUMN, startTime, endTime);
+		mustList.add(regRangeCondi);
+		
+		JsonMaker descrimMatchCondi = JsonUtil.makeMatchJsonMaker(DESC_COLUMN, descrim);
+		mustList.add(descrimMatchCondi);
+		
+		
+		
+		JsonMaker cumul = JsonUtil.makeCumulCountAggsJsonMaker(ID_COLUMN, "cnt");
+		
+		JsonMaker aggs = JsonUtil.makeHistogramAggsJsonMaker(
+				REG_DT_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, startTime, endTime, cumul);
+		
+		
+		
+		String json = JsonUtil.makeQuaryShell(REG_DT_COLUMN, mustList, aggs).makeJson(0);
+		
+		return json;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+

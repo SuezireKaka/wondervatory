@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElasticDashBoardResultVO extends ElasticResultVO {
-	private String accumulateAccountData;
-	private String accumulateWorkData;
+	String upData;
+	String downData;
 }
