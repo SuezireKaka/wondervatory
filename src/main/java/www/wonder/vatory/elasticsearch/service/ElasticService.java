@@ -36,6 +36,7 @@ public class ElasticService {
 	private final String DAY_START_POINT = DAY + "/" + DAY;
 	private final String YEAR_START_POINT = "y/y";
 	
+	private final String ID_COLUMN = "id";
 	private final String ID_REG_EXP = "(....)+";
 	
 	private final String READEE_COLUMN = "readeeId";
@@ -43,30 +44,10 @@ public class ElasticService {
 	private final String TIME_COLUMN = "time";
 	private final String BIRTH_COLUMN = "birth";
 	
-	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+	private final String REG_DT_COLUMN = "regDt";
+	private final String DESC_COLUMN = "descrim";
 	
-	private final String CUMULATIVE_SUM_AGGS
-		= "  \"aggs\": {\r\n"
-		+ "    \"months\": {\r\n"
-		+ "      \"date_histogram\": {\r\n"
-		+ "        \"field\": \"regDt\",\r\n"
-		+ "        \"interval\": \"day\"\r\n"
-		+ "      },\r\n"
-		+ "      \"aggs\": {\r\n"
-		+ "        \"cnt_psg\": {\r\n"
-		+ "          \"count\": {\r\n"
-		+ "            \"field\": \"id\"\r\n"
-		+ "          }\r\n"
-		+ "        },\r\n"
-		+ "        \"cum_result\": {\r\n"
-		+ "          \"cumulative_sum\": {\r\n"
-		+ "            \"buckets_path\": \"cnt_psg\"\r\n"
-		+ "          }\r\n"
-		+ "        }\r\n"
-		+ "      }\r\n"
-		+ "    }\r\n"
-		+ "  }\r\n"
-		+ "}";
+	private final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	
 	private ElasticResultVO getLatestReadOf(int requestNum, String workId, int daynum, String condi) {
 		// json 만들어주세요!!!
@@ -127,10 +108,10 @@ public class ElasticService {
 		}
 		
 		// 집계 부분 생성
-		JsonMaker aggs = JsonUtil.makeAggsJsonMaker(
+		JsonMaker aggs = JsonUtil.makeHistogramAggsJsonMaker(
 				TIME_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, timeGte, timeLt);
 		
-		String json = JsonUtil.makeWorkQuaryShell(mustList, aggs).makeJson(0);
+		String json = JsonUtil.makeQuaryShell(TIME_COLUMN, mustList, aggs).makeJson(0);
 		return json;
 	}
 
@@ -221,26 +202,49 @@ public class ElasticService {
 
 	public ElasticResultVO getDashBoard(String index, String startTime, String endTime) {
 		
-		JsonMaker regRangeCondi = JsonUtil.makeRangeJsonMaker(TIME_COLUMN, startTime, endTime);
+		String[] urlArray = new String[2];
 		
+		urlArray[0] = urlArray[1] = index + "/_search";
+		
+		String[] descrimArray = new String[2];
+		
+		descrimArray[0] = index.endsWith("account") ? "kakao" : "Series";
+		descrimArray[1] = index.endsWith("account") ? "wonder" : "Post";
+		
+		String[] requestArr = new String[2];
+		
+		requestArr[0] = makeCumulativeQuery(startTime, endTime, descrimArray[0]);
+		requestArr[1] = makeCumulativeQuery(startTime, endTime, descrimArray[1]);
+		
+		ElasticResultVO dashBoard = getElasticResult(requestArr, urlArray, true);
+		
+		return dashBoard;
+	}
+
+	private String makeCumulativeQuery(String startTime, String endTime, String descrim) {
 		List<JsonMaker> mustList = new ArrayList<>();
 		
+		JsonMaker regRangeCondi = JsonUtil.makeRangeJsonMaker(REG_DT_COLUMN, startTime, endTime);
 		mustList.add(regRangeCondi);
 		
-		JsonMaker useless = JsonMaker.builder().childList(new ArrayList<>()).build();
+		JsonMaker descrimMatchCondi = JsonUtil.makeMatchJsonMaker(DESC_COLUMN, descrim);
+		mustList.add(descrimMatchCondi);
 		
-		JsonMaker queryShell = JsonUtil.makeWorkQuaryShell(mustList, useless);
 		
-		String result = queryShell.makeJson(0);
 		
-		// 두 개를 지워 뚜껑을 열고
-		result = result.substring(0, result.length() - 2);
+		JsonMaker cumul = JsonUtil.makeCumulCountAggsJsonMaker(ID_COLUMN, "cnt");
 		
-		// 미리 준비한 agg를 덧붙인다
-		result += ",\n" + CUMULATIVE_SUM_AGGS;
+		JsonMaker aggs = JsonUtil.makeHistogramAggsJsonMaker(
+				REG_DT_COLUMN, "1" + DAY, DEFAULT_DATE_FORMAT, startTime, endTime, cumul);
 		
-		return null;
+		
+		
+		String json = JsonUtil.makeQuaryShell(REG_DT_COLUMN, mustList, aggs).makeJson(0);
+		
+		return json;
 	}
+
+
 }
 
 

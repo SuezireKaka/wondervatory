@@ -21,9 +21,14 @@ public abstract class JsonUtil {
 	
 	
 	private static final String BY_DAY_AGGS = "byDay";
-	private static final String HISTOGRAM = "date_histogram";
 	
-	public static JsonMaker makeWorkQuaryShell(List<JsonMaker> must, JsonMaker aggs) {
+	private static final String DATE_HISTOGRAM = "date_histogram";
+	
+	private static final String[] HISTOGRAM_SIMPLE = {DATE_HISTOGRAM};
+	private static final String[] HISTOGRAM_WITH_INNER = {DATE_HISTOGRAM, "aggs"};
+	
+	
+	public static JsonMaker makeQuaryShell(String time, List<JsonMaker> must, JsonMaker aggs) {
 
 		JsonMaker dto;
 		
@@ -53,7 +58,7 @@ public abstract class JsonUtil {
 		
 		JsonMaker dtoSort_0_Time = JsonMaker.makeSimpleMaker(STRING_TYPE, DESC_SORT);
 		
-		String[] dtoSort_0_PropArray = {"time"};
+		String[] dtoSort_0_PropArray = {time};
 		List<JsonMaker> dtoSort_0_ChildList = new ArrayList<>();
 		dtoSort_0_ChildList.add(dtoSort_0_Time);
 		JsonMaker dtoSort_0 = JsonMaker.makeObjectMaker(dtoSort_0_PropArray, dtoSort_0_ChildList);
@@ -147,8 +152,14 @@ public abstract class JsonUtil {
 		return condi;
 	}
 	
-	public static JsonMaker makeAggsJsonMaker(
-			String columnName, String interval, String format, String min, String max) {
+	public static JsonMaker makeHistogramAggsJsonMaker(String columnName,
+			String interval, String format, String min, String max) {
+		
+		return makeHistogramAggsJsonMaker(columnName, interval, format, min, max, null);
+	}
+	
+	public static JsonMaker makeHistogramAggsJsonMaker(String columnName,
+			String interval, String format, String min, String max, JsonMaker innerAggs) {
 		
 		
 		JsonMaker aggsByDayDateHistogramExBoundsMin = JsonMaker.makeSimpleMaker(STRING_TYPE, min);
@@ -179,14 +190,78 @@ public abstract class JsonUtil {
 		JsonMaker aggsByDayDateHistogram = JsonMaker.makeObjectMaker(
 				aggsByDayDateHistogramPropArray, aggsByDayDateHistogramChildList);
 		
-		String[] aggsByDayPropArray = {HISTOGRAM};
 		List<JsonMaker> aggsByDayChildList = new ArrayList<>();
 		aggsByDayChildList.add(aggsByDayDateHistogram);
+		
+		String[] aggsByDayPropArray;
+		
+		if (innerAggs == null) {
+			aggsByDayPropArray = HISTOGRAM_SIMPLE;
+		}
+		else {
+			aggsByDayPropArray = HISTOGRAM_WITH_INNER;
+			aggsByDayChildList.add(innerAggs);
+		}
+		
 		JsonMaker aggsByDay = JsonMaker.makeObjectMaker(aggsByDayPropArray, aggsByDayChildList);
 		
+		
 		String[] aggsPropArray = {BY_DAY_AGGS};
+		
 		List<JsonMaker> aggsChildList = new ArrayList<>();
 		aggsChildList.add(aggsByDay);
+		JsonMaker aggs = JsonMaker.makeObjectMaker(aggsPropArray, aggsChildList);
+		
+		return aggs;
+	}
+	
+	public static JsonMaker makeCumulCountAggsJsonMaker(String columnName, String path) {
+		
+		String[] aggsPropArray = {path, "cumulative_count"};
+		List<JsonMaker> aggsChildList = new ArrayList<>();
+		
+		
+		JsonMaker aggsPathValueCountField = JsonMaker.makeSimpleMaker(STRING_TYPE, columnName);
+		
+		String[] aggsPathValueCountPropArray = {"field"};
+		List<JsonMaker> aggsPathValueCountChildList = new ArrayList<>();
+		aggsPathValueCountChildList.add(aggsPathValueCountField);
+		
+		JsonMaker aggsPathValueCount = JsonMaker.makeObjectMaker(
+				aggsPathValueCountPropArray, aggsPathValueCountChildList);
+		
+		String[] aggsCntPropArray = {"value_count"};
+		List<JsonMaker> aggsCntChildList = new ArrayList<>();
+		aggsCntChildList.add(aggsPathValueCount);
+		
+		JsonMaker aggsCnt = JsonMaker.makeObjectMaker(aggsCntPropArray, aggsCntChildList);
+		
+		aggsChildList.add(aggsCnt);
+		
+		
+		
+		JsonMaker aggsCumulativeCountCumulativeSumBucketsPath =
+				JsonMaker.makeSimpleMaker(STRING_TYPE, path);
+		
+		String[] aggsCumulativeCountCumulativeSumPropArray = {"buckets_path"};
+		List<JsonMaker> aggsCumulativeCountCumulativeSumChildList = new ArrayList<>();
+		aggsCumulativeCountCumulativeSumChildList.add(aggsCumulativeCountCumulativeSumBucketsPath);
+		
+		JsonMaker aggsCumulativeCountCumulativeSum = JsonMaker.makeObjectMaker(
+				aggsCumulativeCountCumulativeSumPropArray,
+				aggsCumulativeCountCumulativeSumChildList);
+		
+		String[] aggsCumulativeCountPropArray = {"cumulative_sum"};
+		List<JsonMaker> aggsCumulativeCountChildList = new ArrayList<>();
+		aggsCumulativeCountChildList.add(aggsCumulativeCountCumulativeSum);
+		
+		JsonMaker aggsCumulativeCount = JsonMaker.makeObjectMaker(
+				aggsCumulativeCountPropArray, aggsCumulativeCountChildList);
+		
+		aggsChildList.add(aggsCumulativeCount);
+		
+		
+		
 		JsonMaker aggs = JsonMaker.makeObjectMaker(aggsPropArray, aggsChildList);
 		
 		return aggs;
