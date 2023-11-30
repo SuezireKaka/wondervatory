@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RoleVO {
-	String role;
-	String manual;
-	List<ActVO> allowedActsList;
+	private String role;
+	private String manual;
+	private List<ActVO> allowedActsList;
 	
 	public RoleVO(String role) {
 		this.role = role;

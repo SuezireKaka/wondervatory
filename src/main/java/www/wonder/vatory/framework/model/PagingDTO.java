@@ -13,10 +13,10 @@ public class PagingDTO {
 	private int page;
 	private long offset;
 
-	int lastPage;
-	int startPage;
-	boolean prev;
-	boolean next;
+	private int lastPage;
+	private int startPage;
+	private boolean prev;
+	private boolean next;
 	
 	public PagingDTO(int page) {
 		this.page = page;

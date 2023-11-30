@@ -12,8 +12,8 @@ import www.wonder.vatory.framework.model.SpaceEntity;
 @Setter
 @NoArgsConstructor
 public class CustomObjectVO extends SpaceEntity {
-	String name;
-	boolean isEdited;
+	private String name;
+	private boolean isEdited;
 	
 	List<CustomPropertyVO> customPropertiesList = new ArrayList<>();
 }

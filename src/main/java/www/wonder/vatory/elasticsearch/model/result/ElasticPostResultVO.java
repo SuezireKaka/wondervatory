@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElasticPostResultVO extends ElasticResultVO {	
-	String postReadData;
+	private String postReadData;
 }

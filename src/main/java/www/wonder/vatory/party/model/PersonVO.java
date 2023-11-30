@@ -18,9 +18,10 @@ public class PersonVO extends PartyVO {
 	public static final int MAX_WONDER_ACCOUNT_NUMBER = 1;
 	
 	private String sex; // Male or Female
-	List<AccountVO> accountList;
-	
+	//private List<AccountVO> accountList;
+	/*
 	public void addAccount(AccountVO acc) {
 		accountList.add(acc);
 	}
+	*/
 }

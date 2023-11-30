@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElasticSeriesResultVO extends ElasticResultVO {
-	String seriesReadData;
-	String allPostsReadData;
+	private String seriesReadData;
+	private String allPostsReadData;
 }

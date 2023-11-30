@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CustomEntityVO extends CustomObjectVO {
-	ToolVO childTool;
+	private ToolVO childTool;
 }

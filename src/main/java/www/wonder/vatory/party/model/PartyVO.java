@@ -19,9 +19,9 @@ import www.wonder.vatory.framework.model.Entity;
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PartyVO extends Entity {	
-	String name;
-	Date birthDate; // 회사의 경우 설립일
-	List<ContactPointVO> contactPointList;
+	private String name;
+	private Date birthDate; // 회사의 경우 설립일
+	private List<ContactPointVO> contactPointList;
 	
 	public void addCP(ContactPointVO cp) {
 		contactPointList.add(cp);

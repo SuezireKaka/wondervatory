@@ -12,6 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReadCountVO {
-	Date time;
-	int readCnt;
+	private Date time;
+	private int readCnt;
 }
