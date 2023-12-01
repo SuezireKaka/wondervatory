@@ -102,6 +102,7 @@ public class ToolService extends WonderService {
 		} else {
 			toolMapper.updateToolSkin(toolSkin);
 		}
+		
 		return toolSkin;
 	}
 
@@ -244,6 +245,10 @@ public class ToolService extends WonderService {
 					insertList.add(requestList.get(i));
 				}
 			}
+			
+			updateList = updateList.stream()
+					.filter(prop -> prop.isEdited())
+					.collect(Collectors.toList());
 			
 			if (updateList.size() > 0) {
 				result &= customObjectMapper.updateAllPropsFrom(objectId, updateList);

@@ -36,6 +36,11 @@ public class ElasticService {
 	private final String DAY_START_POINT = DAY + "/" + DAY;
 	private final String YEAR_START_POINT = "y/y";
 	
+	private final String INDEX_SUFFIX = "wondervatory_";
+	private final String READ_INDEX = "read";
+	private final String WORK_INDEX = "work";
+	private final String ACCOUNT_INDEX = "account";
+	
 	private final String ID_COLUMN = "id";
 	private final String ID_REG_EXP = "(....)+";
 	
@@ -207,6 +212,8 @@ public class ElasticService {
 		urlArray[0] = urlArray[1] = index + "/_search";
 		
 		String[] descrimArray = new String[2];
+		
+		// 차트에서 위에 올릴 것 먼저
 		
 		descrimArray[0] = index.endsWith("account") ? "kakao" : "Series";
 		descrimArray[1] = index.endsWith("account") ? "wonder" : "Post";

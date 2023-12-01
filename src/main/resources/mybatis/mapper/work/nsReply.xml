@@ -126,7 +126,7 @@
 			@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging); -->
 	<!-- public List<PostVO> searchByTfIdf(@Param("boardId") String boardId,
 		@Param("arrSearch") String[] arrSearch, @Param("paging") PagingDTO paging, String descrim); -->
-	<select id="searchByTfIdf" resultMap="rmPostVO">
+	<select id="searchByTfIdf" resultMap="rmSemiPostVO">
 	select SQL_CALC_FOUND_ROWS
 			w.*, a.id acc_id, a.kakao_id acc_kakao_id, a.descrim acc_descrim, a.login_id acc_login_id
 	  from (select w.id wid, sum(r.tf) * log(b.post_cnt / (count(w.id) + 1)) importance
