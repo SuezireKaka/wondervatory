@@ -138,7 +138,7 @@ public class OAuthService extends PartyService {
         return user;
     }
 
-    public SignInResultDto SaveUserAndLogin(String token) {
+    public SignInResultDto saveUserAndLogin(String token) {
         KakaoProfile profile = findProfile(token);
         
         if (profile == null) {
