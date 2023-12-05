@@ -221,15 +221,19 @@
 	
 	<!-- public PostVO getPrev(String parentId, String id); -->
 	<select id="getPrev" resultMap="rmReplyVO">
-	SELECT w.*, a.descrim acc_descrim <!-- association에 discriminator가 있으면 무조건 acc_descrim -->
+	 SELECT w.*, a.descrim acc_descrim <!-- association에 discriminator가 있으면 무조건 acc_descrim -->
 	  FROM t_work w
+	  left outer join t_alive alive
+	    ON alive.target_id = w.id
 	  left outer join t_account a
-	    ON w.writer_id = a.id
+	    ON a.id = w.writer_id
 	 WHERE w.id like CONCAT(#{parentId}, '%')
+	   AND alive.target_table = 't_work'
+	   AND alive.alive = 1
 	   AND w.descrim = 'Post'
 	   <![CDATA[AND w.id < #{id}]]>
-	   AND w.complete = 1
-	 ORDER BY w.id DESC
+	   and w.complete = 1
+	 order by w.id desc
 	 LIMIT 1
 	 </select>
 
@@ -237,9 +241,13 @@
 	<select id="getNext" resultMap="rmReplyVO">
 	SELECT w.*, a.descrim acc_descrim
 	  FROM t_work w
+	  left outer join t_alive alive
+	    ON alive.target_id = w.id
 	  left outer join t_account a
-	    ON w.writer_id = a.id
+	    ON a.id = w.writer_id
 	 WHERE w.id like CONCAT(#{parentId}, '%')
+	   AND alive.target_table = 't_work'
+	   AND alive.alive = 1
 	   AND w.descrim = 'Post'
 	   AND w.id > #{id}
 	   and w.complete = 1

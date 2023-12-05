@@ -107,6 +107,7 @@ public class WorkService extends WonderService {
 
 	public DreamPair<List<ReplyVO>, PagingDTO> search(String boardId, String search, int page, String genreId) {
 		String[] arrSearch = search.split(" ");
+		// 
 		if (arrSearch.length == 0) {
 			PagingDTO paging = new PagingDTO(page);
 			paging.buildPagination(0);
